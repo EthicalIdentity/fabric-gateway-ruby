@@ -8,3 +8,12 @@ Hyperledger Fabric Gateway gRPC SDK generated directly from protos found at: htt
 $ git submodule update --init --recursive
 $ grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/gateway/gateway.proto
 ```
+
+## TODO
+
+~~everything~~
+
+- [ ] Create Gem
+- [ ] Add usage instructions
+- [ ] Add testing?
+
