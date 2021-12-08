@@ -1,0 +1,59 @@
+
+lib/fabric/gateway.rb,202
+module FabricFabric5,0
+  module GatewayGateway6,0
+  module GatewayFabric::Gateway6,0
+    class Error < StandardError; endError7,0
+    class Error < StandardError; endFabric::Gateway::Error7,0
+
+lib/fabric/gateway/version.rb,176
+module FabricFabric1,0
+  module GatewayGateway2,0
+  module GatewayFabric::Gateway2,0
+    VERSION = "0.0.1"VERSION3,0
+    VERSION = "0.0.1"Fabric::Gateway::VERSION3,0
+
+lib/gateway/gateway_services_pb.rb,283
+module GatewayGateway12,0
+  module GatewayGateway13,0
+  module GatewayGateway::Gateway13,0
+    class ServiceService20,0
+    class ServiceGateway::Gateway::Service20,0
+    Stub = Service.rpc_stub_classStub56,0
+    Stub = Service.rpc_stub_classGateway::Gateway::Stub56,0
+
+lib/gateway/gateway_pb.rb,4471
+module GatewayGateway83,0
+  EndorseRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EndorseRequest").msgclassEndorseRequest84,0
+  EndorseRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EndorseRequest").msgclassGateway::EndorseRequest84,0
+  EndorseResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EndorseResponse").msgclassEndorseResponse85,0
+  EndorseResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EndorseResponse").msgclassGateway::EndorseResponse85,0
+  SubmitRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SubmitRequest").msgclassSubmitRequest86,0
+  SubmitRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SubmitRequest").msgclassGateway::SubmitRequest86,0
+  SubmitResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SubmitResponse").msgclassSubmitResponse87,0
+  SubmitResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SubmitResponse").msgclassGateway::SubmitResponse87,0
+  SignedCommitStatusRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SignedCommitStatusRequest").msgclassSignedCommitStatusRequest88,0
+  SignedCommitStatusRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SignedCommitStatusRequest").msgclassGateway::SignedCommitStatusRequest88,0
+  CommitStatusRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.CommitStatusRequest").msgclassCommitStatusRequest89,0
+  CommitStatusRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.CommitStatusRequest").msgclassGateway::CommitStatusRequest89,0
+  CommitStatusResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.CommitStatusResponse").msgclassCommitStatusResponse90,0
+  CommitStatusResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.CommitStatusResponse").msgclassGateway::CommitStatusResponse90,0
+  EvaluateRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EvaluateRequest").msgclassEvaluateRequest91,0
+  EvaluateRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EvaluateRequest").msgclassGateway::EvaluateRequest91,0
+  EvaluateResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EvaluateResponse").msgclassEvaluateResponse92,0
+  EvaluateResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.EvaluateResponse").msgclassGateway::EvaluateResponse92,0
+  SignedChaincodeEventsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SignedChaincodeEventsRequest").msgclassSignedChaincodeEventsRequest93,0
+  SignedChaincodeEventsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.SignedChaincodeEventsRequest").msgclassGateway::SignedChaincodeEventsRequest93,0
+  ChaincodeEventsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ChaincodeEventsRequest").msgclassChaincodeEventsRequest94,0
+  ChaincodeEventsRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ChaincodeEventsRequest").msgclassGateway::ChaincodeEventsRequest94,0
+  ChaincodeEventsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ChaincodeEventsResponse").msgclassChaincodeEventsResponse95,0
+  ChaincodeEventsResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ChaincodeEventsResponse").msgclassGateway::ChaincodeEventsResponse95,0
+  ErrorDetail = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ErrorDetail").msgclassErrorDetail96,0
+  ErrorDetail = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ErrorDetail").msgclassGateway::ErrorDetail96,0
+  ProposedTransaction = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ProposedTransaction").msgclassProposedTransaction97,0
+  ProposedTransaction = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.ProposedTransaction").msgclassGateway::ProposedTransaction97,0
+  PreparedTransaction = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.PreparedTransaction").msgclassPreparedTransaction98,0
+  PreparedTransaction = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("gateway.PreparedTransaction").msgclassGateway::PreparedTransaction98,0
+
+greeter_client.rb,19
+def mainmain28,0
