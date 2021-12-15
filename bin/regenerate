@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if ! which grpc_tools_ruby_protoc > /dev/null; then
+  echo "grpc_tools_ruby_protoc missing, installing from ruby-gems..."
+  gem install grpc-tools
+fi
+
+git submodule update --init --recursive
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/gateway/gateway.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/peer/chaincode.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/peer/chaincode_event.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/peer/proposal_response.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/peer/proposal.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/peer/transaction.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/common/common.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/orderer/ab.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/gossip/message.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/msp/msp_principal.proto
