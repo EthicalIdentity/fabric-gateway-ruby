@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Requires gem install gem-release
+gem bump -t -r $@
