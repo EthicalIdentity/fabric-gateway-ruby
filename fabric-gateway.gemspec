@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.add_dependency('google-protobuf', '>= 3.19.1')
   spec.add_dependency('grpc', '~> 1.42')
+  spec.add_development_dependency('grpc-tools','~> 1.42')
 end

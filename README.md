@@ -18,20 +18,56 @@ Or install it yourself as:
 
     $ gem install fabric-gateway
 
+### ISSUES
+
+Note, there is an issue with the grpc library for MacOS (https://github.com/grpc/grpc/issues/28271). It results in a segfault in ruby when trying to make a connection. 
+
+Workaround: Either run on linux or use a docker container as a workaround.
+
+Will update to new version of grpc when fix is released.
+
 ## Usage
 
-This is a pre-alpha library. None of the code has been tested or confirmed working yet.
-
-
-non-working notes...
+This is a alpha stage library. This library is barely working.
 
 ```
 $ bin/console
 
-# how in the world do we grab a certificate and connect to the peer properly?
-stub=Gateway::Gateway::Stub.new('localhost:7051', :this_channel_is_insecure)
-stub.submit(Gateway::SubmitRequest.new(transaction_id: "123", channel_id: "2", prepared_transaction: Common::Envelope.new()))
 
+def load_certs
+  data_dir ='/your/certs/directory' # aka test-network/organizations
+  files = [
+      'peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem',
+      'peerOrganizations/org1.example.com/users/Admin\@org1.example.com/msp/keystore/9f7c67dd4dd6562d258593c0d5011a3bff9121e65e67ff7fd3212919ae400a88_sk',
+      'peerOrganizations/org1.example.com/users/Admin\@org1.example.com/msp/signcerts/cert.pem'
+    ]
+  files.map { |f| File.open(File.join(data_dir, f)).read }
+end
+
+# needed if you are connecting via a different dns name or IP address
+client_opts = {
+  channel_args: {
+    GRPC::Core::Channel::SSL_TARGET => 'peer0.org1.example.com'
+  }
+}
+
+user_identity = Fabric::Gateway::Identity.new(
+  {
+    username: "admin",
+    affiliation: "org1.department1",
+    mspid: 'Org1MSP',
+    private_key: Fabric::Gateway.crypto_suite.key_from_pem(load_certs[1]),
+    pem_certificate: load_certs[2],
+  }
+)
+
+creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
+client=Gateway::Gateway::Stub.new('localhost:7051', creds, **client_opts)
+proposal = Fabric::Gateway::Proposal.new(user_identity, {channel_id: 'your_channel', chaincode_id: 'basic', args: [ 'GetAllAssets' ]})
+
+response = client.evaluate(Gateway::EvaluateRequest.new(channel_id: "your_channel", proposed_transaction: proposal.signed_proposal))
+
+pp response
 ```
 
 ## Development
@@ -56,14 +92,17 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 
 - [x] Add license
 - [x] Add ChangeLog
-- [ ] Create Gem
+- [x] Create Gem
 - [ ] Add usage instructions
+- [ ] Abstract connection and calls such that the protos aren't being interacted directly
 - [ ] Add testing?
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+Portions of the code was utilized from https://github.com/kirshin/hyperledger-fabric-sdk.
 
 ## Code of Conduct
 

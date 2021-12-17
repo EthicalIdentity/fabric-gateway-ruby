@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fabric-gateway (0.0.1)
+    fabric-gateway (0.0.2)
       google-protobuf (>= 3.19.1)
       grpc (~> 1.42)
 
@@ -15,6 +15,7 @@ GEM
     grpc (1.42.0)
       google-protobuf (~> 3.18)
       googleapis-common-protos-types (~> 1.0)
+    grpc-tools (1.42.0)
     rake (12.3.2)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
@@ -35,6 +36,7 @@ PLATFORMS
 
 DEPENDENCIES
   fabric-gateway!
+  grpc-tools (~> 1.42)
   rake (~> 12.0)
   rspec (~> 3.0)
 

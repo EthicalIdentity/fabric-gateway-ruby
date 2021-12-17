@@ -16,3 +16,4 @@ grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fa
 grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/orderer/ab.proto
 grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/gossip/message.proto
 grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/msp/msp_principal.proto
+grpc_tools_ruby_protoc -I ./fabric-protos --ruby_out=./lib --grpc_out=./lib ./fabric-protos/msp/identities.proto
