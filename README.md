@@ -95,14 +95,18 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Create Gem
 - [ ] Add usage instructions
 - [ ] Abstract connection and calls such that the protos aren't being interacted directly
-- [ ] Add testing?
+- [ ] Add testing & CI/CD
+- [ ] Implement, Document & Test Endorse
+- [ ] Implement, Document & Test Submit
+- [ ] Implement, Document & Test CommitStatus
+- [ ] Implement, Document & Test ChaincodeEvents
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
-Portions of the code was utilized from https://github.com/kirshin/hyperledger-fabric-sdk.
+Portions of the code are from https://github.com/kirshin/hyperledger-fabric-sdk.
 
 ## Code of Conduct
 

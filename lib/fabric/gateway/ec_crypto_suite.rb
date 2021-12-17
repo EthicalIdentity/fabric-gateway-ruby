@@ -70,11 +70,6 @@ module Fabric
         [string].pack('H*')
       end
     
-      def keccak256(bytes)
-        OpenSSL::Digest.new('SHA3-256').digest bytes
-      end
-
-    
       def restore_public_key(private_key)
         private_bn = OpenSSL::BN.new private_key, 16
         group = OpenSSL::PKey::EC::Group.new curve
@@ -86,7 +81,7 @@ module Fabric
     
       def address_from_public_key(public_key)
         bytes = decode_hex public_key
-        address_bytes = keccak256(bytes[1..-1])[-20..-1]
+        address_bytes = digest(bytes[1..-1])[-20..-1]
     
         encode_hex address_bytes
       end
