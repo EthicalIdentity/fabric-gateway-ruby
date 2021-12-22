@@ -3,7 +3,11 @@ require 'base64'
 
 # Adapted from:
 # https://github.com/kirshin/hyperledger-fabric-sdk/blob/95a5a1a37001852312df25946e960a9ff149207e/lib/fabric/identity.rb
+
 module Fabric
+  #
+  # @TODO missing tests
+  #
   class Identity
     attr_reader :private_key,
                 :public_key,
@@ -13,7 +17,7 @@ module Fabric
     attr_accessor :pem_certificate, :certificate, :mspid
 
     def initialize(opts = {})
-      @crypto_suite = opts[:crypto_suite] || Fabric::Gateway.crypto_suite
+      @crypto_suite = opts[:crypto_suite] || Fabric.crypto_suite
 
       @private_key = opts[:private_key] || @crypto_suite.generate_private_key
       @public_key = opts[:public_key] || @crypto_suite.restore_public_key(private_key)
@@ -42,6 +46,19 @@ module Fabric
 
     def serialize
       Msp::SerializedIdentity.new(mspid: mspid, id_bytes: pem_certificate).to_proto
+    end
+
+
+    
+    #
+    # Creates a new gateway passing in the current identity
+    #
+    # @param [Gateway::Gateway::Stub] connection <description>
+    #
+    # @return [Fabric::Gateway] <description>
+    #
+    def new_gateway(client)
+      Fabric::Gateway.new(self, client)
     end
   end
 end

@@ -99,7 +99,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Create Gem
 - [ ] Add usage instructions
 - [ ] Abstract connection and calls such that the protos aren't being interacted directly
-- [ ] Add testing & CI/CD
+- [x] Add testing & CI/CD
 - [ ] Implement, Document & Test Endorse
 - [ ] Implement, Document & Test Submit
 - [ ] Implement, Document & Test CommitStatus

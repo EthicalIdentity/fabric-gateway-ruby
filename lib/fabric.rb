@@ -18,6 +18,6 @@ module Fabric
   class InvalidArgument < Error; end
 
   def self.crypto_suite(opts = {})
-    @crypto_suite ||= Fabric::Gateway::ECCryptoSuite.new opts
+    @crypto_suite ||= Fabric::ECCryptoSuite.new opts
   end
 end
