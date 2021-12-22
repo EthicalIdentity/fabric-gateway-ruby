@@ -1,6 +1,8 @@
 # Fabric::Gateway
 
-![Rspec Tests](https://github.com/EthicalIdentity/fabric-gateway-ruby/actions/workflows/rspec.yml/badge.svg) ![Downloads](https://img.shields.io/gem/dt/fabric-gateway) [![GitHub license](https://img.shields.io/github/license/EthicalIdentity/fabric-gateway-ruby)](https://github.com/EthicalIdentity/fabric-gateway-ruby/blob/master/LICENSE.txt) [![Maintainability](https://api.codeclimate.com/v1/badges/84bab9bb5911d3564df6/maintainability)](https://codeclimate.com/github/EthicalIdentity/fabric-gateway-ruby/maintainability)
+![Rspec Tests](https://github.com/EthicalIdentity/fabric-gateway-ruby/actions/workflows/rspec.yml/badge.svg) [![codecov](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby/branch/master/graph/badge.svg?token=AXHQEN0R2R)](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/84bab9bb5911d3564df6/maintainability)](https://codeclimate.com/github/EthicalIdentity/fabric-gateway-ruby/maintainability) ![Gem](https://img.shields.io/gem/v/fabric-gateway) ![Downloads](https://img.shields.io/gem/dt/fabric-gateway)  [![GitHub license](https://img.shields.io/github/license/EthicalIdentity/fabric-gateway-ruby)](https://github.com/EthicalIdentity/fabric-gateway-ruby/blob/master/LICENSE.txt) 
+
+
 
 Hyperledger Fabric Gateway gRPC SDK generated directly from protos found at: https://github.com/hyperledger/fabric-protos.
 
@@ -104,6 +106,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [ ] Implement, Document & Test Submit
 - [ ] Implement, Document & Test CommitStatus
 - [ ] Implement, Document & Test ChaincodeEvents
+- [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
 
 
 ## License
