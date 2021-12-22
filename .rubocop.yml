@@ -1,6 +1,7 @@
 require:
   - rubocop-rspec
 AllCops:
+  NewCops: enable
   Exclude:
     # exclude protoc generated code
     - 'lib/gateway/*'
