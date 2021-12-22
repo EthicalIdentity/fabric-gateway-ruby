@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{Hyperledger Fabric Gateway gRPC SDK generated directly from protos found at: https://github.com/hyperledger/fabric-protos.}
   spec.homepage      = "https://github.com/ethicalidentity/fabric-gateway-ruby"
   spec.license       = "MIT"
-  spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
 
   spec.metadata["allowed_push_host"] = 'https://rubygems.org'
 
