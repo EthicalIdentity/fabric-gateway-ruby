@@ -108,7 +108,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [ ] Implement, Document & Test ChaincodeEvents
 - [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
 - [x] Add rubocop and linting
-- [ ] Setup auto-generation of API docs - http://floryn.tech/documentation/2021/02/02/static-docs-on-github.html
+- [ ] Setup auto-generation of API docs - http://floryn.tech/documentation/2021/02/02/static-docs-on-github.html or rubydoc.info
 
 
 ## License

@@ -41,7 +41,7 @@ RSpec.describe Fabric::Client do
     end
 
     context 'when params are passed' do
-      context 'as simple args' do
+      context 'with simple args' do
         it 'creates a client instance passing params to Gateway::Gateway::Stub' do
           # not a big deal
           if RUBY_VERSION.start_with?('2.6')
@@ -54,7 +54,7 @@ RSpec.describe Fabric::Client do
         end
       end
 
-      context 'as extended args' do
+      context 'with extended args' do
         it 'creates a client and passes all args to Gateway::Gateway::Stub' do
           creds = GRPC::Core::ChannelCredentials.new('')
           client_opts = {
