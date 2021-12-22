@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'msp/identities_pb'
 require 'base64'
 
@@ -48,8 +50,6 @@ module Fabric
       Msp::SerializedIdentity.new(mspid: mspid, id_bytes: pem_certificate).to_proto
     end
 
-
-    
     #
     # Creates a new gateway passing in the current identity
     #

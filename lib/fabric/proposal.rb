@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Adapted from:
 # https://github.com/kirshin/hyperledger-fabric-sdk/blob/95a5a1a37001852312df25946e960a9ff149207e/lib/fabric/proposal.rb
 module Fabric
@@ -28,7 +30,7 @@ module Fabric
     end
 
     def args
-      request[:args].compact.map &:to_s
+      request[:args].compact.map(&:to_s)
     end
 
     def transient
@@ -45,7 +47,7 @@ module Fabric
 
     def proposal
       @proposal ||= Protos::Proposal.new header: header.to_proto,
-                                        payload: chaincode_proposal.to_proto
+                                         payload: chaincode_proposal.to_proto
     end
 
     def signed_proposal
@@ -57,7 +59,7 @@ module Fabric
 
     def header
       Common::Header.new channel_header: channel_header.to_proto,
-                        signature_header: signature_header.to_proto
+                         signature_header: signature_header.to_proto
     end
 
     def channel_header
@@ -88,8 +90,8 @@ module Fabric
       id = Protos::ChaincodeID.new name: chaincode_id
       chaincode_input = Protos::ChaincodeInput.new args: args
       chaincode_spec = Protos::ChaincodeSpec.new type: Protos::ChaincodeSpec::Type::NODE,
-                                                chaincode_id: id,
-                                                input: chaincode_input
+                                                 chaincode_id: id,
+                                                 input: chaincode_input
       input = Protos::ChaincodeInvocationSpec.new chaincode_spec: chaincode_spec
 
       Protos::ChaincodeProposalPayload.new input: input.to_proto, TransientMap: transient

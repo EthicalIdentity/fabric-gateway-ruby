@@ -1,2 +1,13 @@
 require:
   - rubocop-rspec
+AllCops:
+  Exclude:
+    # exclude protoc generated code
+    - 'lib/gateway/*'
+    - 'lib/common/*'
+    - 'lib/gossip/*'
+    - 'lib/msp/*'
+    - 'lib/orderer/*'
+    - 'lib/peer/*'
+
+

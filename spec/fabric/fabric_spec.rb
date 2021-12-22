@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 RSpec.describe Fabric do
-  it "has a version number" do
+  it 'has a version number' do
     expect(Fabric::VERSION).not_to be nil
   end
 
