@@ -5,4 +5,3 @@ gemspec
 
 gem "rake", "~> 12.3.3"
 gem "rspec", "~> 3.0"
-gem "factory_bot"
