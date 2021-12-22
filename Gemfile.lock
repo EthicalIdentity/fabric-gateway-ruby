@@ -59,7 +59,7 @@ PLATFORMS
 DEPENDENCIES
   codecov (~> 0.6.0)
   fabric-gateway!
-  factory_bot (~> 6.2.0)
+  factory_bot
   grpc-tools (~> 1.42)
   rake (~> 12.3.3)
   rspec (~> 3.0)
