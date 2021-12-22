@@ -17,14 +17,20 @@ RSpec.describe Fabric::Client do
     end
 
     context 'when params are passed' do
-      context 'simple args' do
+      context 'as simple args' do
         it 'creates a client instance passing params to Gateway::Gateway::Stub' do
-          expect(Gateway::Gateway::Stub).to receive(:new).with("localhost:1234", :this_channel_is_insecure)
+          # not a big deal
+          if RUBY_VERSION.start_with?('2.6')
+            expect(Gateway::Gateway::Stub).to receive(:new).with("localhost:1234", :this_channel_is_insecure, {})
+          else
+            expect(Gateway::Gateway::Stub).to receive(:new).with("localhost:1234", :this_channel_is_insecure)
+          end
+
           client=Fabric::Client.new("localhost:1234", :this_channel_is_insecure)
         end
       end
       
-      context 'extended args' do
+      context 'as extended args' do
         it 'creates a client and passes all args to Gateway::Gateway::Stub' do
           creds = GRPC::Core::ChannelCredentials.new('')
           client_opts = {
