@@ -1,5 +1,7 @@
 # Fabric::Gateway
 
+![Rspec Tests](https://github.com/EthicalIdentity/fabric-gateway-ruby/actions/workflows/rspec.yml/badge.svg) ![Downloads](https://img.shields.io/gem/dt/fabric-gateway) [![GitHub license](https://img.shields.io/github/license/EthicalIdentity/fabric-gateway-ruby)](https://github.com/EthicalIdentity/fabric-gateway-ruby/blob/master/LICENSE.txt)
+
 Hyperledger Fabric Gateway gRPC SDK generated directly from protos found at: https://github.com/hyperledger/fabric-protos.
 
 ## Installation
@@ -81,6 +83,8 @@ To rebuild the proto code, run the regenerate script:
 ```
 $ bin/regenerate
 ```
+
+Effort has been made to follow the design patterns and naming convention where possible from the official [Hyperledger Fabric Gateway SDK](https://github.com/hyperledger/fabric-gateway) while at the same time producing an idiomatic ruby gem. Our intention is to produce a gem that would be compatible with the documentation of the official SDK while natural to use for a seasoned ruby developer.
 
 ## Contributing
 

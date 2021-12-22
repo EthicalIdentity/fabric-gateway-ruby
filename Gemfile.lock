@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    fabric-gateway (0.0.2)
+    fabric-gateway (0.1.0)
       google-protobuf (>= 3.19.1)
       grpc (~> 1.42)
 

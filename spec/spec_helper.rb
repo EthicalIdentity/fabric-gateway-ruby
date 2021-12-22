@@ -1,5 +1,13 @@
 require "bundler/setup"
-require "fabric/gateway"
+
+require 'simplecov'
+SimpleCov.start
+
+require 'codecov'
+SimpleCov.formatter = SimpleCov::Formatter::Codecov
+
+require "fabric"
+
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

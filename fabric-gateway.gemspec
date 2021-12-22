@@ -1,8 +1,8 @@
-require_relative 'lib/fabric/gateway/version'
+require_relative 'lib/fabric/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "fabric-gateway"
-  spec.version       = Fabric::Gateway::VERSION
+  spec.version       = Fabric::VERSION
   spec.authors       = ["Jonathan Chan"]
   spec.email         = ["jonathan.chan@ethicalidentity.com"]
 
@@ -29,4 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency('google-protobuf', '>= 3.19.1')
   spec.add_dependency('grpc', '~> 1.42')
   spec.add_development_dependency('grpc-tools','~> 1.42')
+  spec.add_development_dependency('codecov','~> 0.6.0')
+  spec.add_development_dependency('simplecov','~> 0.21.2')
 end
