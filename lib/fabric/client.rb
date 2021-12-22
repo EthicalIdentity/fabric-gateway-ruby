@@ -3,6 +3,8 @@ module Fabric
   # Gateway Client, holds the raw grpcClient
   #
   class Client
+    attr_accessor :grpc_client
+
     #
     # Initializes a client
     #
@@ -13,15 +15,16 @@ module Fabric
     # @param [GRPC::Core::ChannelCredentials|GRPC::Core::XdsChannelCredentials|Symbol] channel credentials (usually the CA certificate)
     # @param [Hash] grpc client_opts
     #
-
-    attr_accessor :grpc_client
     def initialize(*args)
       case args.size
       when 1
         init_stub args[0]
         return
-      when 2, 3
-        init_grpc_args
+      when 2
+        init_grpc_args(args[0], args[1])
+        return
+      when 3
+        init_grpc_args(args[0], args[1], **args[2])
         return
       end
 
@@ -32,14 +35,15 @@ module Fabric
 
     def init_stub stub
       unless stub.is_a? Gateway::Gateway::Stub
-      raise InvalidArgument.new('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
+        raise InvalidArgument.new('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
+      end
       @grpc_client = stub
     end
 
     def init_grpc_args(host, creds, **client_opts)
-      unless args[1].is_a?(GRPC::Core::ChannelCredentials) ||
-        args[1].is_a?(GRPC::Core::XdsChannelCredentials) || 
-        args[1].is_a?(Symbol)
+      unless creds.is_a?(GRPC::Core::ChannelCredentials) ||
+        creds.is_a?(GRPC::Core::XdsChannelCredentials) || 
+        creds.is_a?(Symbol)
           raise InvalidArgument.new('creds is not a ChannelCredentials, XdsChannelCredentials, or Symbol')
       end
 
