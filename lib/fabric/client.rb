@@ -18,22 +18,32 @@ module Fabric
     def initialize(*args)
       case args.size
       when 1
-        if args[0].is_a? Gateway::Gateway::Stub
-          @grpc_client = args[0] 
-          return
-        end
-      when 3
-        unless args[1].is_a?(GRPC::Core::ChannelCredentials) ||
-               args[1].is_a?(GRPC::Core::XdsChannelCredentials) || 
-               args[1].is_a?(Symbol)
-           raise InvalidArgument.new('creds is not a ChannelCredentials, XdsChannelCredentials, or Symbol')
-        end
-
-        @grpc_client = Gateway::Gateway::Stub.new(args[0], args[1], **args[2])
+        init_stub args[0]
+        return
+      when 2, 3
+        init_grpc_args
         return
       end
 
       raise InvalidArgument.new('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
+    end
+
+    private
+
+    def init_stub stub
+      unless stub.is_a? Gateway::Gateway::Stub
+      raise InvalidArgument.new('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
+      @grpc_client = stub
+    end
+
+    def init_grpc_args(host, creds, **client_opts)
+      unless args[1].is_a?(GRPC::Core::ChannelCredentials) ||
+        args[1].is_a?(GRPC::Core::XdsChannelCredentials) || 
+        args[1].is_a?(Symbol)
+          raise InvalidArgument.new('creds is not a ChannelCredentials, XdsChannelCredentials, or Symbol')
+      end
+
+      @grpc_client = Gateway::Gateway::Stub.new(host, creds, **client_opts)
     end
   end
 end
