@@ -3,6 +3,7 @@ require:
 AllCops:
   NewCops: enable
   Exclude:
+    - vendor/bundle/**/*
     # exclude protoc generated code
     - 'lib/gateway/*'
     - 'lib/common/*'
