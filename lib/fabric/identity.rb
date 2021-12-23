@@ -10,13 +10,18 @@ module Fabric
   #
   # @TODO missing tests
   #
+  # @attr_reader [String] private_key raw private key in hex format
+  # @attr_reader [String] public_key raw public key in hex format
+  # @attr_reader [String] certificate raw certificate in pem format
+  # @attr_reader [String] msp_id MSP (Membership Service Provider) Identifier
+  #
   class Identity
     attr_reader :private_key,
                 :public_key,
-                :address,
+                :address, # TODO: possibly unnecessary
                 :crypto_suite
 
-    attr_accessor :pem_certificate, :certificate, :mspid
+    attr_accessor :certificate, :mspid
 
     def initialize(opts = {})
       @crypto_suite = opts[:crypto_suite] || Fabric.crypto_suite
@@ -24,8 +29,7 @@ module Fabric
       @private_key = opts[:private_key] || @crypto_suite.generate_private_key
       @public_key = opts[:public_key] || @crypto_suite.restore_public_key(private_key)
       @certificate = opts[:certificate]
-      @pem_certificate = opts[:pem_certificate]
-      @mspid = opts[:mspid]
+      @msp_id = opts[:msp_id]
 
       @address = @crypto_suite.address_from_public_key public_key
     end
@@ -38,12 +42,9 @@ module Fabric
       @crypto_suite.sign(private_key, message)
     end
 
+    # TODO: Do we need this?
     def shared_secret_by(public_key)
       @crypto_suite.build_shared_key private_key, public_key
-    end
-
-    def decoded_certificate
-      Base64.strict_decode64 certificate
     end
 
     def serialize

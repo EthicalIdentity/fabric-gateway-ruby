@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module Fabric
+  #
+  # Gateway represents the connection of a specific client identity to a Fabric Gateway.
+  #
   class Gateway
     attr_reader :signer, :client
 
@@ -25,6 +28,17 @@ module Fabric
 
       @signer = signer
       @client = client
+    end
+
+    #
+    # Initialize new network from the Gateway
+    #
+    # @param [string] name channel name
+    #
+    # @return [Fabric::Network] returns a new network
+    #
+    def new_network(name)
+      Network.new(client, signer, name)
     end
   end
 end
