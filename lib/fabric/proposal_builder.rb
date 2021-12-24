@@ -40,6 +40,13 @@ module Fabric
     end
 
     #
+    def self.build
+      builder = new
+      yield(builder)
+      
+    end
+
+    #
     # Builds a grpc proposed transaction message
     #
     # @return [Gateway::ProposedTransaction]

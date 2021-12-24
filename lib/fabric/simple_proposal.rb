@@ -71,19 +71,15 @@ module Fabric
     end
 
     def channel_header_extension
-      id =
+      id = Protos::ChaincodeID.new name: chaincode_id
 
-        Protos::ChaincodeHeaderExtension.new chaincode_id: id
+      Protos::ChaincodeHeaderExtension.new chaincode_id: id
     end
 
     def tx_timestamp
       now = Time.now
 
       @tx_timestamp ||= Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.nsec
-    end
-
-    def chaincode_id
-      Protos::ChaincodeID.new name: chaincode_id
     end
 
     def signature_header
