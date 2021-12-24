@@ -1,6 +1,8 @@
-RSpec.describe Fabric::ProposalBuilder do
+RSpec.describe Fabric::ProposedTransaction do
   describe '#new' do
-    subject(:proposal_builder) { described_class.new(client, signer, channel_name, chaincode_name, transaction_name) }
+    subject(:proposed_transaction) do
+      described_class.new(client, signer, channel_name, chaincode_name, transaction_name)
+    end
 
     let(:client) { build(:simple_client) }
     let(:signer) { build(:identity) }

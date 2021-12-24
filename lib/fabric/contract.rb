@@ -14,21 +14,31 @@ module Fabric
   # specified when connecting the Gateway. In cases where an external client holds the signing credentials, a signing
   # implementation can be omitted when connecting the Gateway and off-line signing can be carried out by:
   #
-  # 1. Returning the serialized proposal, transaction or commit status message along with its digest to the client for
+  # 1. Returning the serialized proposal, transaction or commit status   along with its digest to the client for
   # them to generate a signature.
   #
   # 2. With the serialized message and signature received from the client to create a signed proposal, transaction or
   # commit using the Gateway's NewSignedProposal(), NewSignedTransaction() or NewSignedCommit() methods respectively.
   #
   class Contract
-    attr_reader :chaincode_name, :contract_name, :network_name, :signer, :client
+    attr_reader :network, :chaincode_name, :contract_name
 
-    def initialize(client, signer, network_name, chaincode_name, contract_name = '')
-      @client = client
-      @signer = signer
-      @network_name = network_name
+    def initialize(network, chaincode_name, contract_name = '')
+      @network = network
       @chaincode_name = chaincode_name
       @contract_name = contract_name
+    end
+
+    def client
+      network.client
+    end
+
+    def signer
+      network.signer
+    end
+
+    def network_name
+      network.name
     end
 
     # @TODO: Implement Me!
@@ -49,6 +59,17 @@ module Fabric
     # @TODO: Implement Me!
     def submit
       raise NotYetImplemented
+    end
+
+    def new_proposal(transaction_name, arguments: [], transient_data:{}, endorsing_organizations:[])
+      proposed_transaction = ProposedTransaction.new(
+        self,
+        transaction_name,
+        arguments,
+        transient_data,
+        endorsing_organizations
+      )
+      Proposal.new(proposed_transaction)
     end
 
     def qualified_transaction_name(transaction_name)

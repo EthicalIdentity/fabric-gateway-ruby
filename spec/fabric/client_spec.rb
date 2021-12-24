@@ -2,72 +2,78 @@
 
 RSpec.describe Fabric::Client do
   describe 'Initialization' do
-    context 'when invalid params are passed' do
-      it {
-        expect do
-          described_class.new
-        end.to raise_error(Fabric::InvalidArgument).with_message('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
-      }
-
-      it {
-        expect do
-          described_class.new('invalid')
-        end.to raise_error(Fabric::InvalidArgument).with_message('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
-      }
-
-      it {
-        expect do
-          described_class.new('invalid',
-                              'invalid2')
-        end.to raise_error(Fabric::InvalidArgument).with_message('creds is not a ChannelCredentials, XdsChannelCredentials, or Symbol')
-      }
-
-      it { expect { described_class.new('invalid', 'invalid2', 'invalid3') }.to raise_error(TypeError) }
-
-      it {
-        expect do
-          described_class.new('invalid', 'invalid2',
-                              invalid: 'invalid3')
-        end.to raise_error(Fabric::InvalidArgument).with_message('creds is not a ChannelCredentials, XdsChannelCredentials, or Symbol')
-      }
+    context 'when no params are passed' do
+      it 'raises an error' do
+        expect { described_class.new }.to raise_error(Fabric::InvalidArgument)
+          .with_message('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
+      end
     end
 
-    context 'when gateway stub is passed' do
+    context 'when passing invalid grpc client' do
+      it 'raises an error' do
+        expect { described_class.new(grpc_client: 'invalid') }.to raise_error(Fabric::InvalidArgument)
+          .with_message('Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>')
+      end
+    end
+
+    context 'when passing invalid grpc args' do
+      it 'raises an error' do
+        expect { described_class.new(host: 'invalid', creds: 'invalid2') }.to raise_error(Fabric::InvalidArgument)
+          .with_message('creds is not a ChannelCredentials, XdsChannelCredentials, or Symbol')
+      end
+    end
+
+    context 'when passing invalid client_opts' do
+      it 'raises an error' do
+        expect { described_class.new(host: 'localhost:5000', creds: :this_channel_is_insecure, bad_arg: 'wrong') }
+          .to raise_error(ArgumentError)
+          .with_message('unknown keyword: :bad_arg')
+      end
+    end
+
+    context 'when grpc_client is passed' do
       it 'creates a client instance' do
         stub = Gateway::Gateway::Stub.new('localhost:5000', :this_channel_is_insecure)
-        client = described_class.new(stub)
+        client = described_class.new(grpc_client: stub)
         expect(client.grpc_client).to eql(stub)
       end
     end
 
-    context 'when params are passed' do
-      context 'with simple args' do
-        it 'creates a client instance passing params to Gateway::Gateway::Stub' do
-          # not a big deal
-          expectation = if RUBY_VERSION.start_with?('2.6')
-                          ['localhost:1234', :this_channel_is_insecure,
-                           {}]
-                        else
-                          ['localhost:1234', :this_channel_is_insecure]
-                        end
-
-          expect(Gateway::Gateway::Stub).to receive(:new).with(*expectation)
-
-          described_class.new('localhost:1234', :this_channel_is_insecure)
+    context 'when grpc_client host and creds are passed' do
+      let(:expected_args) do
+        if RUBY_VERSION.start_with?('2.6')
+          ['localhost:1234', :this_channel_is_insecure, {}]
+        else
+          ['localhost:1234', :this_channel_is_insecure]
         end
       end
 
-      context 'with extended args' do
-        it 'creates a client and passes all args to Gateway::Gateway::Stub' do
-          creds = GRPC::Core::ChannelCredentials.new('')
-          client_opts = {
-            channel_args: {
-              GRPC::Core::Channel::SSL_TARGET => 'peer0.org1.example.com'
-            }
+      before do
+        allow(Gateway::Gateway::Stub).to receive(:new)
+      end
+
+      it 'creates a client instance passing params to Gateway::Gateway::Stub' do
+        described_class.new(host: 'localhost:1234', creds: :this_channel_is_insecure)
+        expect(Gateway::Gateway::Stub).to have_received(:new).with(*expected_args)
+      end
+    end
+
+    context 'when grpc_client host, creds, and client_opts are passed' do
+      let(:creds) { GRPC::Core::ChannelCredentials.new('') }
+      let(:client_opts) do
+        {
+          channel_args: {
+            GRPC::Core::Channel::SSL_TARGET => 'peer0.org1.example.com'
           }
-          expect(Gateway::Gateway::Stub).to receive(:new).with('localhost:1234', creds, client_opts)
-          described_class.new('localhost:1234', creds, client_opts)
-        end
+        }
+      end
+      subject(:client) { described_class.new(host: 'localhost:1234', creds: creds, **client_opts) }
+      it 'instantiates a Gateway::Gateway::Stub' do
+        expect(client.grpc_client).to be_a(Gateway::Gateway::Stub)
+      end
+
+      it 'honors client_opts' do
+        expect(client.grpc_client.instance_variable_get(:@host)).to eql('peer0.org1.example.com')
       end
     end
   end

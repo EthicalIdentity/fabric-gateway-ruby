@@ -8,7 +8,7 @@ require 'fabric/gateway'
 require 'fabric/identity'
 require 'fabric/network'
 require 'fabric/proposal'
-require 'fabric/proposal_builder'
+require 'fabric/proposed_transaction'
 require 'fabric/simple_proposal'
 require 'fabric/version'
 

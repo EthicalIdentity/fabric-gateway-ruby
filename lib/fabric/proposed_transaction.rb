@@ -1,29 +1,25 @@
 module Fabric
   #
-  # Utility class for generating a proposal message.
+  # Manages the instantiation and creation of the gRPC Gateway::ProposedTransaction.
   #
-  # Adapted from official fabric-gateway SDK and hyperledger-fabric-sdk:
+  # Adapted from official fabric-gateway SDK ProposalBuilder and hyperledger-fabric-sdk:
+  # https://github.com/hyperledger/fabric-gateway/blob/1518e03ed3d6db1b6809e23e61a92744fd18e724/node/src/proposalbuilder.ts
   # https://github.com/kirshin/hyperledger-fabric-sdk/blob/95a5a1a37001852312df25946e960a9ff149207e/lib/fabric/proposal.rb
-  class ProposalBuilder
-    attr_reader :client,
-                :signer,
-                :channel_name,
-                :chaincode_name,
+  class ProposedTransaction
+    attr_reader :contract,
                 :transaction_name,
                 :transaction_context,
                 :transient_data,
-                :arguments
+                :arguments,
+                :proposed_transaction
 
     # Specifies the set of organizations that will attempt to endorse the proposal.
     # No other organizations' peers will be sent this proposal.
     # This is usually used in conjunction with transientData for private data scenarios.
     attr_reader :endorsing_organizations
 
-    def initialize(client, signer, channel_name, chaincode_name, transaction_name, arguments = [], transient_data = {}, endorsing_organizations = [])
-      @client = client
-      @signer = signer
-      @channel_name = channel_name
-      @chaincode_name = chaincode_name
+    def initialize(contract, transaction_name, arguments: [], transient_data: {}, endorsing_organizations: [])
+      @contract = contract
       @transaction_name = transaction_name
       @arguments = arguments
       @transient_data = transient_data
@@ -31,27 +27,11 @@ module Fabric
     end
 
     #
-    # Builds a proposal message.
-    #
-    # @return [Fabric::Proposal] new Proposal
-    #
-    def build
-      Proposal.new(client, signer, channel_name, proposed_transaction)
-    end
-
-    #
-    def self.build
-      builder = new
-      yield(builder)
-      
-    end
-
-    #
     # Builds a grpc proposed transaction message
     #
     # @return [Gateway::ProposedTransaction]
     #
-    def proposed_transaction
+    def generate_proposed_transaction
       Gateway::ProposedTransaction.new(
         transaction_id: transaction_context.transaction_id,
         proposal: signed_proposal,

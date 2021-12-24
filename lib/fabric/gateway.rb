@@ -38,7 +38,7 @@ module Fabric
     # @return [Fabric::Network] returns a new network
     #
     def new_network(name)
-      Network.new(client, signer, name)
+      Network.new(self, name)
     end
   end
 end

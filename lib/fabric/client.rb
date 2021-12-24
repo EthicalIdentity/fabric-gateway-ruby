@@ -2,7 +2,7 @@
 
 module Fabric
   #
-  # Gateway Client, holds the raw grpcClient
+  # Gateway Client represents the connection to a Hyperledger Fabric Gateway.
   #
   class Client
     attr_reader :grpc_client
@@ -10,27 +10,21 @@ module Fabric
     #
     # Initializes a client
     #
-    # @param [Gateway::Gateway::Stub] pass in a grpc client connection
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:initialize
     #
-    # or alternatively
+    # @param [Gateway::Gateway::Stub] grpc_client grpc gateway client stub
     # @param [string] host hostname and port of the gateway
-    # @param [GRPC::Core::ChannelCredentials|GRPC::Core::XdsChannelCredentials|Symbol] channel credentials (usually the CA certificate)
-    # @param [Hash] grpc client_opts
+    # @param [GRPC::Core::ChannelCredentials|GRPC::Core::XdsChannelCredentials|Symbol] creds channel credentials (usually the CA certificate)
+    # @param [<Type>] **client_opts <description>
     #
-    def initialize(*args)
-      case args.size
-      when 1
-        init_stub args[0]
-        return
-      when 2
-        init_grpc_args(args[0], args[1])
-        return
-      when 3
-        init_grpc_args(args[0], args[1], **args[2])
-        return
+    def initialize(grpc_client: nil, host: nil, creds: nil, **client_opts)
+      if grpc_client
+        init_stub grpc_client
+      elsif host && creds
+        init_grpc_args(host, creds, **client_opts)
+      else
+        raise InvalidArgument, 'Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>'
       end
-
-      raise InvalidArgument, 'Must pass a Gateway::Gateway::Stub or <host>, <creds>, <client_opts>'
     end
 
     private

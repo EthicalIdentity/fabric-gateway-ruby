@@ -5,12 +5,15 @@ module Fabric
   # Combined ProposalBuilder with Proposal. Utilizing instance variables and functions in proposal seem adaquate enough
   # to fully create the proposal. ProposalBuilder did not seem like a native ruby design pattern.
   class Proposal
-    attr_reader :client, :signer, :network_name, :proposed_transaction
+    attr_reader :proposed_transaction
 
-    def initialize(client, signer, network_name, proposed_transaction)
-      @client = client
-      @signer = signer
-      @network_name = network_name
+    #
+    # Instantiates a new Proposal
+    #
+    # @param [Fabric::ProposedTransaction] proposed_transaction ProposedTransaction container class
+    #
+    def initialize(proposed_transaction)
+      @contract = contract
       @proposed_transaction = proposed_transaction
     end
 

@@ -8,17 +8,20 @@ module Fabric
   # JChan & THowe believe this should be called a Channel, however Hyperledger Fabric has decided upon the terminology
   # network - https://github.com/hyperledger/fabric-gateway/issues/355#issuecomment-997888071
   #
-  # TODO: original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
-  # https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
-  # https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
-  #
   class Network
-    attr_reader :client, :signer, :name
+    attr_reader :gateway, :name
 
-    def initialize(client, signer, name)
-      @client = client
-      @signer = signer
+    def initialize(gateway, name)
+      @gateway = gateway
       @name = name
+    end
+
+    def client
+      gateway.client
+    end
+
+    def signer
+      gateway.signer
     end
 
     #
@@ -30,7 +33,29 @@ module Fabric
     # @return [Fabric::Contract] new contract instance
     #
     def new_contract(chaincode_name, contract_name = '')
-      Contract.new(client, signer, name, chaincode_name, contract_name)
+      Contract.new(self, chaincode_name, contract_name)
+    end
+
+    #
+    # @TODO: original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
+    # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
+    # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
+    #
+    # @return [?] ?
+    #
+    def new_chaincode_events
+      raise NotYetImplemented
+    end
+
+    #
+    # @TODO: original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
+    # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
+    # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
+    #
+    # @return [?] ?
+    #
+    def new_chaincode_events_request
+      raise NotImplementedError
     end
   end
 end
