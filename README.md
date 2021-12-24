@@ -74,6 +74,8 @@ response = client.evaluate(Gateway::EvaluateRequest.new(channel_id: "your_channe
 pp response
 ```
 
+Please refer to the [full reference documentation](https://rubydoc.info/github/EthicalIdentity/fabric-gateway-ruby) for complete usage information.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
@@ -88,6 +90,15 @@ $ bin/regenerate
 
 Effort has been made to follow the design patterns and naming convention where possible from the official [Hyperledger Fabric Gateway SDK](https://github.com/hyperledger/fabric-gateway) while at the same time producing an idiomatic ruby gem. Our intention is to produce a gem that would be compatible with the documentation of the official SDK while natural to use for a seasoned ruby developer.
 
+## Development References & Resources
+
+These are the libraries and knowledge necessary for developing this gem:
+
+* gRPC - [gRPC Intro](https://grpc.io/docs/what-is-grpc/introduction/) / [gRPC on ruby](https://grpc.io/docs/languages/ruby/)
+* Protocol Buffers (Protobuf) - [overview](https://developers.google.com/protocol-buffers/docs/proto3) / [ruby reference](https://developers.google.com/protocol-buffers/docs/reference/ruby-generated)
+* [Hyperledger Fabric Protocol Specifications](https://openblockchain.readthedocs.io/en/latest/protocol-spec/) 
+* [Hyperledger Fabric Gateway Overview](https://hyperledger-fabric.readthedocs.io/en/latest/gateway.html) / [Fabric Gateway RFC](https://hyperledger.github.io/fabric-rfcs/text/0000-fabric-gateway.html)
+  
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/ethicalidentity/fabric-gateway. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/ethicalidentity/fabric-gateway/blob/master/CODE_OF_CONDUCT.md).
@@ -99,9 +110,11 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Add license
 - [x] Add ChangeLog
 - [x] Create Gem
-- [ ] Add usage instructions
-- [ ] Abstract connection and calls such that the protos aren't being interacted directly
 - [x] Add testing & CI/CD
+- [x] Add rubocop and linting
+- [ ] Add usage instructions
+- [x] Setup auto-generation of API docs on rubydoc.info
+- [ ] Abstract connection and calls such that the protos aren't being interacted directly
 - [ ] Implement, Document & Test Endorse
 - [ ] Implement, Document & Test Submit
 - [ ] Implement, Document & Test CommitStatus
@@ -109,8 +122,8 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [ ] Implement off-line signing - https://github.com/hyperledger/fabric-gateway/blob/1e4a926ddb98ec8ee969da3fc1500642ab389d01/node/src/contract.ts#L63 
 - [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
 - [ ] Support for offline transaction signing - https://github.com/hyperledger/fabric-gateway/blob/cf78fc11a439ced7dfd2f9b55886c55c73119b25/pkg/client/offlinesign_test.go
-- [x] Add rubocop and linting
-- [ ] Setup auto-generation of API docs - http://floryn.tech/documentation/2021/02/02/static-docs-on-github.html or rubydoc.info
+
+
 
 
 ## License
