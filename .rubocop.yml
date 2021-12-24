@@ -1,5 +1,12 @@
 require:
   - rubocop-rspec
+
+Metrics/BlockLength:
+  Exclude:
+    - '*.gemspec'
+    - 'spec/**/*_spec.rb'
+    - spec/factories.rb 
+
 AllCops:
   NewCops: enable
   Exclude:

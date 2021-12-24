@@ -19,25 +19,29 @@ RSpec.describe Fabric::Gateway do
     end
 
     context 'when passing valid params' do
-      let(:gateway) { described_class.new(signer, client) }
+      subject(:gateway) { described_class.new(signer, client) }
 
       let(:signer) { Fabric::Identity.new }
       let(:client) { build(:simple_client) }
 
-      it { expect(gateway).to be_a(described_class) }
-
-      it { expect(gateway.signer).to be(signer) }
-      it { expect(gateway.client).to be(client) }
+      it { is_expected.to be_a(described_class) }
+      it { is_expected.to have_attributes(signer: signer, client: client) }
     end
   end
 
   describe '#new_network' do
-    let(:gateway) { build(:gateway) }
+    subject(:gateway) { build(:gateway) }
 
     let(:network) { gateway.new_network('test123') }
+    let(:expected_attributes) do
+      {
+        client: gateway.client,
+        signer: gateway.signer,
+        name: 'test123'
+      }
+    end
 
-    it { expect(network).to be_a(Fabric::Network) }
-    it { expect(network.client).to be(gateway.client) }
-    it { expect(network.name).to eq('test123') }
+    it { is_expected.to be_a(Fabric::Network) }
+    it { is_expected.to have_attributes(expected_attributes) }
   end
 end

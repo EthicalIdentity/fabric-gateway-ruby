@@ -20,5 +20,17 @@ module Fabric
       @signer = signer
       @name = name
     end
+
+    #
+    # Creates a new contract instance
+    #
+    # @param [string] chaincode_name name of the chaincode
+    # @param [string] contract_name optional name of the contract
+    #
+    # @return [Fabric::Contract] new contract instance
+    #
+    def new_contract(chaincode_name, contract_name = '')
+      Contract.new(client, signer, name, chaincode_name, contract_name)
+    end
   end
 end

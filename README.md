@@ -106,6 +106,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [ ] Implement, Document & Test Submit
 - [ ] Implement, Document & Test CommitStatus
 - [ ] Implement, Document & Test ChaincodeEvents
+- [ ] Implement off-line signing - https://github.com/hyperledger/fabric-gateway/blob/1e4a926ddb98ec8ee969da3fc1500642ab389d01/node/src/contract.ts#L63 
 - [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
 - [x] Add rubocop and linting
 - [ ] Setup auto-generation of API docs - http://floryn.tech/documentation/2021/02/02/static-docs-on-github.html or rubydoc.info

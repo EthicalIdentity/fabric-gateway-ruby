@@ -42,13 +42,17 @@ module Fabric
       @crypto_suite.sign(private_key, message)
     end
 
+    def digest(message)
+      @crypto_suite.digest message
+    end
+
     # TODO: Do we need this?
     def shared_secret_by(public_key)
       @crypto_suite.build_shared_key private_key, public_key
     end
 
     def serialize
-      Msp::SerializedIdentity.new(mspid: mspid, id_bytes: pem_certificate).to_proto
+      Msp::SerializedIdentity.new(mspid: mspid, id_bytes: certificate).to_proto
     end
 
     #
