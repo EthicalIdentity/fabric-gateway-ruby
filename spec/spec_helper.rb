@@ -29,3 +29,5 @@ RSpec.configure do |config|
     FactoryBot.find_definitions
   end
 end
+
+RSPEC_ROOT = File.dirname __FILE__

@@ -38,6 +38,15 @@ module Fabric
       sequence.to_der
     end
 
+    def verify(public_key, message, signature)
+      digest = digest message
+      openssl_pkey = openssl_pkey_from_public_key public_key
+      sequence = OpenSSL::ASN1.decode signature
+      return false unless check_malleability sequence, openssl_pkey.group.order
+
+      openssl_pkey.dsa_verify_asn1(digest, signature)
+    end
+
     def generate_private_key
       key = OpenSSL::PKey::EC.new curve
       key.generate_key!
@@ -139,12 +148,19 @@ module Fabric
 
     def key_from_pem(pem)
       key = OpenSSL::PKey::EC.new(pem)
-      key.private_key.to_s(16)
+      key.private_key.to_s(16).downcase
     end
 
     def pkey_from_x509_certificate(certificate)
       cert = OpenSSL::X509::Certificate.new(certificate)
-      cert.public_key.public_key.to_bn.to_s(16)
+      cert.public_key.public_key.to_bn.to_s(16).downcase
+    end
+
+    def openssl_pkey_from_public_key(public_key)
+      pkey = OpenSSL::PKey::EC.new curve
+      pkey.public_key = OpenSSL::PKey::EC::Point.new(pkey.group, OpenSSL::BN.new(public_key, 16))
+
+      pkey
     end
 
     private
@@ -159,6 +175,8 @@ module Fabric
       key
     end
 
+    # barely understand this code - this link provides a good explanation:
+    # http://coders-errand.com/malleability-ecdsa-signatures/
     def prevent_malleability(sequence, order)
       half_order = order >> 1
 
@@ -167,6 +185,15 @@ module Fabric
       end
 
       sequence
+    end
+
+    # ported from python code, understanding extremely limited.
+    # from what I gather, sequence.value[0] and sequence.value[1]
+    # are the r and s values from the python implementation
+    # https://github.com/hyperledger/fabric-sdk-py/blob/25209f61518873da68d28313582607c29b5bae7d/hfc/util/crypto/crypto.py#L259
+    def check_malleability(sequence, order)
+      half_order = order >> 1
+      !(sequence.value[1].value > half_order)
     end
   end
 end

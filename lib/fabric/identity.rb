@@ -8,8 +8,6 @@ require 'base64'
 
 module Fabric
   #
-  # @TODO missing tests
-  #
   # @attr_reader [String] private_key raw private key in hex format
   # @attr_reader [String] public_key raw public key in hex format
   # @attr_reader [String] certificate raw certificate in pem format
@@ -21,17 +19,33 @@ module Fabric
                 :address, # TODO: possibly unnecessary
                 :crypto_suite
 
-    attr_accessor :certificate, :mspid
+    attr_accessor :certificate, :msp_id
 
-    def initialize(opts = {})
-      @crypto_suite = opts[:crypto_suite] || Fabric.crypto_suite
+    def initialize(private_key: nil, public_key: nil, certificate: nil, msp_id: nil, crypto_suite: nil)
+      @crypto_suite = crypto_suite || Fabric.crypto_suite
 
-      @private_key = opts[:private_key] || @crypto_suite.generate_private_key
-      @public_key = opts[:public_key] || @crypto_suite.restore_public_key(private_key)
-      @certificate = opts[:certificate]
-      @msp_id = opts[:msp_id]
+      @private_key = private_key || @crypto_suite.generate_private_key
+      @public_key = public_key || @crypto_suite.restore_public_key(@private_key)
+      @certificate = certificate
+      @msp_id = msp_id
 
-      @address = @crypto_suite.address_from_public_key public_key
+      @address = @crypto_suite.address_from_public_key @public_key
+
+      return unless @certificate
+
+      raise Fabric::Error, 'Key mismatch (public_key or certificate) for identity' unless validate_key_integrity
+    end
+
+    #
+    # Validates that the private_key, public_key, and certificate are valid and match
+    #
+    # @return [boolean] true if valid, false otherwise
+    #
+    def validate_key_integrity
+      cert_pubkey = @crypto_suite.pkey_from_x509_certificate(certificate)
+      priv_pubkey = @crypto_suite.restore_public_key(@private_key)
+
+      @public_key == cert_pubkey && @public_key == priv_pubkey
     end
 
     def generate_csr(attrs = [])
@@ -51,8 +65,12 @@ module Fabric
       @crypto_suite.build_shared_key private_key, public_key
     end
 
-    def serialize
-      Msp::SerializedIdentity.new(mspid: mspid, id_bytes: certificate).to_proto
+    def as_proto
+      @serialized_identity ||= Msp::SerializedIdentity.new(mspid: msp_id, id_bytes: certificate)
+    end
+
+    def to_proto
+      @serialized_identity ||= Msp::SerializedIdentity.new(mspid: msp_id, id_bytes: certificate).to_proto
     end
 
     #

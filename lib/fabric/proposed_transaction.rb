@@ -1,6 +1,6 @@
 module Fabric
   #
-  # Manages the instantiation and creation of the gRPC Gateway::ProposedTransaction.
+  # Manages the instantiation and creation of the Gateway::ProposedTransaction Protobuf Message.
   #
   # Adapted from official fabric-gateway SDK ProposalBuilder and hyperledger-fabric-sdk:
   # https://github.com/hyperledger/fabric-gateway/blob/1518e03ed3d6db1b6809e23e61a92744fd18e724/node/src/proposalbuilder.ts
@@ -103,6 +103,39 @@ module Fabric
 
     def signature_header
       Common::SignatureHeader.new creator: signer.serialize, nonce: nonce
+    end
+
+    # Dev note: if we have more classes that encapsulate protobuffer messages, consider
+    # creating an EncapsulatedPBMessage to hold the message and expose the following methods
+    # as common interface.
+
+    #
+    # Returns the protobuf message instance
+    #
+    # @return [Gateway::ProposedTransaction] protobuf message instance
+    #
+    def as_proto
+      proposed_transaction
+    end
+
+    #
+    # Returns the serialized Protobuf binary form of the proposed transaction
+    #
+    # @return [String] serialized Protobuf binary form of the proposed transaction
+    #
+    def to_proto
+      proposed_transaction.to_proto
+    end
+
+    #
+    # Returns the serialized JSON form of the proposed transaction
+    #
+    # @param [Hash] options JSON serialization options @see https://ruby-doc.org/stdlib-2.6.3/libdoc/json/rdoc/JSON.html#method-i-generate
+    #
+    # @return [String] serialized JSON form of the proposed transaction
+    #
+    def to_json(options = {})
+      proposed_transaction.to_json(options)
     end
   end
 end

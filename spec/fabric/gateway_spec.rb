@@ -35,13 +35,19 @@ RSpec.describe Fabric::Gateway do
     let(:network) { gateway.new_network('test123') }
     let(:expected_attributes) do
       {
+        gateway: gateway,
         client: gateway.client,
         signer: gateway.signer,
         name: 'test123'
       }
     end
 
-    it { is_expected.to be_a(Fabric::Network) }
-    it { is_expected.to have_attributes(expected_attributes) }
+    it 'creates a Fabric::Network' do
+      expect(network).to be_a(Fabric::Network)
+    end
+
+    it 'assigns the attributes to the network' do
+      expect(network).to have_attributes(expected_attributes)
+    end
   end
 end
