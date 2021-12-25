@@ -1,14 +1,14 @@
 RSpec.describe Fabric::Network do
-  describe '#new' do
-    subject { described_class.new(client, signer, 'test123') }
+  subject(:network) { described_class.new(gateway, 'testnet') }
 
-    let(:client) { build(:simple_client) }
-    let(:signer) { Fabric::Identity.new }
+  let(:signer) { build(:identity, :user1) }
+  let(:gateway) { build(:gateway, signer: signer) }
+
+  describe '#new' do
     let(:expected_attributes) do
       {
-        client: client,
-        signer: signer,
-        name: 'test123'
+        gateway: gateway,
+        name: 'testnet'
       }
     end
 
@@ -16,40 +16,59 @@ RSpec.describe Fabric::Network do
     it { is_expected.to have_attributes(expected_attributes) }
   end
 
+  describe '#client' do
+    it 'returns the client from gateway' do
+      expect(network.client).to eql(gateway.client)
+    end
+  end
+
+  describe '#signer' do
+    it 'returns the signer from gateway' do
+      expect(network.signer).to eql(gateway.signer)
+    end
+  end
+
   describe '#new_contract' do
-    subject(:network) { described_class.new(client, signer, 'test123') }
-
-    let(:client) { build(:simple_client) }
-    let(:signer) { Fabric::Identity.new }
-
     context 'when contract_name is not passed' do
       let(:expected_attributes) do
         {
-          client: client,
+          network: network,
+          client: gateway.client,
+          gateway: gateway,
           signer: signer,
-          network_name: 'test123',
+          network_name: 'testnet',
           contract_name: '',
           chaincode_name: 'testchaincode'
         }
       end
 
-      it { expect(network.new_contract('testchaincode')).to be_a(Fabric::Contract) }
-      it { expect(network.new_contract('testchaincode')).to have_attributes(expected_attributes) }
+      it 'returns a contract' do 
+        expect(network.new_contract('testchaincode')).to be_a(Fabric::Contract)
+      end
+      it 'initializes the contract with the network' do 
+        expect(network.new_contract('testchaincode')).to have_attributes(expected_attributes)
+      end
     end
 
     context 'when contract_name is passed' do
       let(:expected_attributes) do
         {
-          client: client,
+          network: network,
+          client: gateway.client,
+          gateway: gateway,
           signer: signer,
-          network_name: 'test123',
+          network_name: 'testnet',
           chaincode_name: 'testchaincode',
           contract_name: 'testcontract'
         }
       end
 
-      it { expect(network.new_contract('testchaincode', 'testcontract')).to be_a(Fabric::Contract) }
-      it { expect(network.new_contract('testchaincode', 'testcontract')).to have_attributes(expected_attributes) }
+      it 'returns a contract' do 
+        expect(network.new_contract('testchaincode', 'testcontract')).to be_a(Fabric::Contract)
+      end
+      it 'initializes the contract with the network' do 
+        expect(network.new_contract('testchaincode', 'testcontract')).to have_attributes(expected_attributes)
+      end
     end
   end
 end

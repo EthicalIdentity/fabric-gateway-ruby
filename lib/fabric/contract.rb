@@ -37,6 +37,10 @@ module Fabric
       network.signer
     end
 
+    def gateway
+      network.gateway
+    end
+
     def network_name
       network.name
     end
@@ -61,7 +65,7 @@ module Fabric
       raise NotYetImplemented
     end
 
-    def new_proposal(transaction_name, arguments: [], transient_data:{}, endorsing_organizations:[])
+    def new_proposal(transaction_name, arguments: [], transient_data: {}, endorsing_organizations: [])
       proposed_transaction = ProposedTransaction.new(
         self,
         transaction_name,

@@ -11,6 +11,14 @@ FactoryBot.define do
   end
 
   factory :identity, class: 'Fabric::Identity' do
+    trait :user1 do
+      transient do
+        private_key { Fabric.crypto_suite.key_from_pem(File.read("#{RSPEC_ROOT}/fixtures/user1_privkey.pem")) }
+        certificate { File.read("#{RSPEC_ROOT}/fixtures/user1_cert.pem") }
+        msp_id { 'Org1MSP' }
+      end
+    end
+
     transient do
       private_key { nil }
       certificate { nil }
@@ -27,5 +35,14 @@ FactoryBot.define do
     end
 
     initialize_with { Fabric::Gateway.new(signer, client) }
+  end
+
+  factory :network, class: 'Fabric::Network' do
+    transient do
+      gateway { build(:gateway) }
+      name { 'testnet' }
+    end
+
+    initialize_with { Fabric::Network.new(gateway, name) }
   end
 end
