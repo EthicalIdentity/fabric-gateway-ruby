@@ -45,4 +45,15 @@ FactoryBot.define do
 
     initialize_with { Fabric::Network.new(gateway, name) }
   end
+
+  factory :contract, class: 'Fabric::Contract' do
+    transient do
+      network { build(:network) }
+      chaincode_name { 'testchaincode' }
+      contract_name { 'testcontract' }
+    end
+
+    initialize_with { Fabric::Contract.new(network, chaincode_name, contract_name) }
+  end
+
 end

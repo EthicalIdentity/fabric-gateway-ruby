@@ -65,17 +65,29 @@ module Fabric
       raise NotYetImplemented
     end
 
+    #
+    # Creates a fully prepared proposal for the given transaction parameters
+    # based on the current state of the system.
+    #
+    # @param [String] transaction_name transaction name (first argument unshifted into the argument array)
+    # @param [Array<String>] arguments array of arguments to pass to the transaction
+    # @param [Hash] transient_data Private data passed to the transaction function but not recorded on the ledger.
+    # @param [Array<Type>] endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
+    #
+    # @return [Fabric::Proposal] signed unexecuted proposal
+    #
     def new_proposal(transaction_name, arguments: [], transient_data: {}, endorsing_organizations: [])
       proposed_transaction = ProposedTransaction.new(
         self,
         transaction_name,
-        arguments,
-        transient_data,
-        endorsing_organizations
+        arguments: arguments,
+        transient_data: transient_data,
+        endorsing_organizations: endorsing_organizations
       )
       Proposal.new(proposed_transaction)
     end
 
+    # @TODO: untested and currently unused.
     def qualified_transaction_name(transaction_name)
       contract_name.nil? || contract_name.empty? ? transaction_name : "#{contract_name}:#{transaction_name}"
     end

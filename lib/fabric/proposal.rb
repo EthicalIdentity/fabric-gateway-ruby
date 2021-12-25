@@ -13,8 +13,11 @@ module Fabric
     # @param [Fabric::ProposedTransaction] proposed_transaction ProposedTransaction container class
     #
     def initialize(proposed_transaction)
-      @contract = contract
       @proposed_transaction = proposed_transaction
+    end
+
+    def contract
+      @proposed_transaction.contract
     end
 
     #
@@ -22,8 +25,8 @@ module Fabric
     #
     # @return [String] Binary representation of the proposal message.
     #
-    def to_bytes
-      proposed_transaction.as_proto
+    def to_proto
+      proposed_transaction.to_proto
     end
 
     def digest
@@ -35,7 +38,7 @@ module Fabric
     end
 
     #
-    # Returns the proposal message as a gRPC Message class
+    # Returns the proposal message as a protobuf Message object.
     #
     # @return [Protos::SignedProposal|nil] SignedProposal message
     #
