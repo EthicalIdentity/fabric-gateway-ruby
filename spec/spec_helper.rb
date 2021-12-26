@@ -2,6 +2,7 @@
 
 require 'bundler/setup'
 require 'factory_bot'
+require 'timecop'
 if ENV['CI'] == 'true'
   require 'simplecov'
   SimpleCov.start

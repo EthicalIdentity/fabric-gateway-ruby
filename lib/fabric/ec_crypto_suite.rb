@@ -18,12 +18,12 @@ module Fabric
 
     CIPHER = 'aes-256-cbc'
 
-    attr_reader :key_size, :digest_algorithm, :digest, :curve, :cipher
+    attr_reader :key_size, :digest_algorithm, :digest_instance, :curve, :cipher
 
     def initialize(opts = {})
       @key_size = opts[:key_size] || DEFAULT_KEY_SIZE
       @digest_algorithm = opts[:digest_algorithm] || DEFAULT_DIGEST_ALGORITHM
-      @digest = OpenSSL::Digest.new digest_algorithm
+      @digest_instance = OpenSSL::Digest.new digest_algorithm
       @curve = EC_CURVES[key_size]
       @cipher = opts[:cipher] || CIPHER
     end
@@ -60,7 +60,7 @@ module Fabric
       req = OpenSSL::X509::Request.new
       req.public_key = key
       req.subject = OpenSSL::X509::Name.new attrs
-      req.sign key, @digest
+      req.sign key, @digest_instance
 
       req
     end
@@ -70,11 +70,11 @@ module Fabric
     end
 
     def hexdigest(message)
-      @digest.hexdigest message
+      @digest_instance.hexdigest message
     end
 
     def digest(message)
-      @digest.digest message
+      @digest_instance.digest message
     end
 
     def encode_hex(bytes)

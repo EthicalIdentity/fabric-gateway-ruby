@@ -8,7 +8,6 @@ module Fabric
   class ProposedTransaction
     attr_reader :contract,
                 :transaction_name,
-                :transaction_context,
                 :transient_data,
                 :arguments,
                 :proposed_transaction
@@ -24,16 +23,46 @@ module Fabric
       @arguments = arguments
       @transient_data = transient_data
       @endorsing_organizations = endorsing_organizations
+
+      generate_proposed_transaction
+    end
+
+    def network
+      contract.network
+    end
+
+    def client
+      network.client
+    end
+
+    def signer
+      network.signer
+    end
+
+    def gateway
+      network.gateway
+    end
+
+    def network_name
+      network.name
+    end
+
+    def contract_name
+      contract.contract_name
+    end
+
+    def chaincode_name
+      contract.chaincode_name
     end
 
     #
-    # Builds a grpc proposed transaction message
+    # Builds the proposed transaction protobuf message
     #
     # @return [Gateway::ProposedTransaction]
     #
     def generate_proposed_transaction
-      Gateway::ProposedTransaction.new(
-        transaction_id: transaction_context.transaction_id,
+      @proposed_transaction = ::Gateway::ProposedTransaction.new(
+        transaction_id: transaction_id,
         proposal: signed_proposal,
         endorsing_organizations: endorsing_organizations
       )
@@ -41,14 +70,13 @@ module Fabric
 
     def signed_proposal
       Protos::SignedProposal.new(
-        proposal: proposal,
-        signature: new_signature
+        proposal_bytes: proposal.to_proto
       )
     end
 
     def proposal
       @proposal ||= Protos::Proposal.new header: header.to_proto,
-                                         payload: chaincode_proposal.to_proto
+                                         payload: chaincode_proposal_payload.to_proto
     end
 
     def header
@@ -58,10 +86,10 @@ module Fabric
 
     def channel_header
       Common::ChannelHeader.new type: Common::HeaderType::ENDORSER_TRANSACTION,
-                                channel_id: channel_name, tx_id: transaction_id,
+                                channel_id: network_name, tx_id: transaction_id,
                                 extension: channel_header_extension.to_proto,
-                                timestamp: timestamp,
-                                version: Constants::CHANNEL_HEADER_VERSION
+                                timestamp: timestamp, epoch: 0
+      # version: Constants::CHANNEL_HEADER_VERSION # official SDK does not send this.
     end
 
     def channel_header_extension
@@ -73,13 +101,13 @@ module Fabric
     end
 
     def chaincode_proposal_payload
-      chaincode_input = Protos::ChaincodeInput.new args: args
+      chaincode_input = Protos::ChaincodeInput.new args: [transaction_name] + arguments
       chaincode_spec = Protos::ChaincodeSpec.new type: Protos::ChaincodeSpec::Type::NODE,
                                                  chaincode_id: chaincode_id,
                                                  input: chaincode_input
       input = Protos::ChaincodeInvocationSpec.new chaincode_spec: chaincode_spec
 
-      Protos::ChaincodeProposalPayload.new input: input.to_proto, TransientMap: transient
+      Protos::ChaincodeProposalPayload.new input: input.to_proto, TransientMap: transient_data
     end
 
     #
@@ -93,16 +121,32 @@ module Fabric
       @timestamp ||= Google::Protobuf::Timestamp.new seconds: now.to_i, nanos: now.nsec
     end
 
+    #
+    # Generates a random nonce
+    #
+    # @return [String] random nonce
+    #
     def nonce
       @nonce ||= signer.crypto_suite.generate_nonce
     end
 
+    #
+    # Generates a unique transaction ID for the transaction based on a random number and the signer
+    # or returns the existing transaction ID if it has already been generated.
+    #
+    # @return [String] transaction ID
+    #
     def transaction_id
-      @transaction_id ||= signer.crypto_suite.hexdigest(nonce + identity.serialize)
+      @transaction_id ||= signer.crypto_suite.hexdigest(nonce + signer.to_proto)
     end
 
+    #
+    # Generates a SignatureHeader protobuf message from the signer and nonce
+    #
+    # @return [Common::SignatureHeader] signature header protobuf message instance
+    #
     def signature_header
-      Common::SignatureHeader.new creator: signer.serialize, nonce: nonce
+      Common::SignatureHeader.new creator: signer.to_proto, nonce: nonce
     end
 
     # Dev note: if we have more classes that encapsulate protobuffer messages, consider
