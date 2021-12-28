@@ -56,4 +56,23 @@ FactoryBot.define do
     initialize_with { Fabric::Contract.new(network, chaincode_name, contract_name) }
   end
 
+  factory :proposed_transaction, class: 'Fabric::ProposedTransaction' do
+    transient do
+      contract { build(:contract) }
+      transaction_name { 'testtransaction' }
+      arguments { [] }
+      transient_data { {} }
+      endorsing_organizations { [] }
+    end
+
+    initialize_with do
+      Fabric::ProposedTransaction.new(
+        contract,
+        transaction_name,
+        arguments: arguments,
+        transient_data: transient_data,
+        endorsing_organizations: endorsing_organizations
+      )
+    end
+  end
 end

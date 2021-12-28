@@ -69,7 +69,7 @@ module Fabric
     end
 
     def signed_proposal
-      Protos::SignedProposal.new(
+      @signed_proposal ||= Protos::SignedProposal.new(
         proposal_bytes: proposal.to_proto
       )
     end

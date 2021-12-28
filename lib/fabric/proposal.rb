@@ -20,17 +20,32 @@ module Fabric
       @proposed_transaction.contract
     end
 
-    #
-    # Serialized bytes of the proposal message in proto3 format.
-    #
-    # @return [String] Binary representation of the proposal message.
-    #
-    def to_proto
-      proposed_transaction.to_proto
+    def network
+      contract.network
     end
 
-    def digest
-      signer.digest(proposed_transaction)
+    def client
+      network.client
+    end
+
+    def signer
+      network.signer
+    end
+
+    def gateway
+      network.gateway
+    end
+
+    def network_name
+      network.name
+    end
+
+    def contract_name
+      contract.contract_name
+    end
+
+    def chaincode_name
+      contract.chaincode_name
     end
 
     def transaction_id
@@ -44,6 +59,85 @@ module Fabric
     #
     def proposal
       proposed_transaction.proposal
+    end
+
+    #
+    # Serialized bytes of the proposal message in proto3 format.
+    #
+    # @return [String] Binary representation of the proposal message.
+    #
+    def to_proto
+      proposed_transaction.to_proto
+    end
+
+    #
+    # Proposal digest which can be utilized for offline signing.
+    # If signing offline, call signature= to set signature once
+    # computed.
+    #
+    # @return [String] raw binary digest of the proposal message.
+    #
+    def digest
+      signer.digest(proposal.to_proto)
+    end
+
+    #
+    # Sets the signature of the signed proposal in the proposed transaction
+    #
+    # @param [String] signature raw byte string signature of the proposal message
+    #                 (should be the signature of the proposed message digest)
+    #
+    def signature=(signature)
+      proposed_transaction.signed_proposal.signature = signature
+    end
+
+    #
+    # Returns the signed proposal signature
+    #
+    # @return [String] Raw byte string signature
+    #
+    def signature
+      proposed_transaction.signed_proposal.signature
+    end
+
+    #
+    # Returns true if the signed proposal has a signature
+    #
+    # @return [Boolean] true|false
+    #
+    def signed?
+      # signature cannot be nil because google protobuf won't let it
+      !proposed_transaction.signed_proposal.signature.empty?
+    end
+
+    #
+    # Utilizes the signer to sign the proposal message if it has not been signed yet.
+    #
+    def sign
+      return if signed?
+
+      self.signature = signer.sign proposal.to_proto
+    end
+
+    def evaluate
+      # TODO: evaluate proposal
+    end
+
+    def endorse
+      # TODO: endorse proposal
+    end
+
+    def new_evaluate_request
+      # TODO
+    end
+
+    def new_endorse_request
+      # TODO
+    end
+
+    def new_prepared_transaction
+      # TODO
+      # used in endorse
     end
   end
 end
