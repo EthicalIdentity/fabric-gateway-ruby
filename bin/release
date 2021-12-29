@@ -1,4 +1,5 @@
 #!/bin/bash
 
 # Requires gem install gem-release
-gem bump -t -r $@
+# usage: bin/relase -v minor|major|etc.
+gem bump --file lib/fabric/version.rb -t -r $@
