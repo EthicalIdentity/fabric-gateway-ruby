@@ -2,7 +2,7 @@
 
 RSpec.describe Fabric::ProposedTransaction do
   subject(:proposed_transaction) do
-    described_class.new(contract, 'testTransaction', extra_args)
+    described_class.new(contract, 'testTransaction', **extra_args)
   end
 
   before do
