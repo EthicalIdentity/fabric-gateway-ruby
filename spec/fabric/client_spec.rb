@@ -25,12 +25,12 @@ RSpec.describe Fabric::Client do
 
     context 'when passing invalid client_opts' do
       it 'raises an error' do
-        if RUBY_VERSION.start_with?('2.6')
-          expected_message = 'unknown keyword: bad_arg'
-        else
-          expected_message = 'unknown keyword: :bad_arg'
-        end
-        
+        expected_message = if RUBY_VERSION.start_with?('2.6')
+                             'unknown keyword: bad_arg'
+                           else
+                             'unknown keyword: :bad_arg'
+                           end
+
         expect { described_class.new(host: 'localhost:5000', creds: :this_channel_is_insecure, bad_arg: 'wrong') }
           .to raise_error(ArgumentError)
           .with_message(expected_message)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Fabric::Network do
   subject(:network) { described_class.new(gateway, 'testnet') }
 
@@ -42,10 +44,11 @@ RSpec.describe Fabric::Network do
         }
       end
 
-      it 'returns a contract' do 
+      it 'returns a contract' do
         expect(network.new_contract('testchaincode')).to be_a(Fabric::Contract)
       end
-      it 'initializes the contract with the network' do 
+
+      it 'initializes the contract with the network' do
         expect(network.new_contract('testchaincode')).to have_attributes(expected_attributes)
       end
     end
@@ -63,10 +66,11 @@ RSpec.describe Fabric::Network do
         }
       end
 
-      it 'returns a contract' do 
+      it 'returns a contract' do
         expect(network.new_contract('testchaincode', 'testcontract')).to be_a(Fabric::Contract)
       end
-      it 'initializes the contract with the network' do 
+
+      it 'initializes the contract with the network' do
         expect(network.new_contract('testchaincode', 'testcontract')).to have_attributes(expected_attributes)
       end
     end

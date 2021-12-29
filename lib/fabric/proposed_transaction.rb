@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fabric
   #
   # Manages the instantiation and creation of the Gateway::ProposedTransaction Protobuf Message.

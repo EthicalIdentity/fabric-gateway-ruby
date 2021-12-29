@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # rubocop:disable Metrics/BlockLength
 # rubocop:disable Rspec/ContextWording
 RSpec.shared_context 'client mocks' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Fabric::Proposal do
   subject(:proposal) { described_class.new(proposed_transaction) }
 

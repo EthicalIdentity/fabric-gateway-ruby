@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fabric
   #
   # Proposal represents a transaction proposal that can be sent to peers for endorsement or evaluated as a query.

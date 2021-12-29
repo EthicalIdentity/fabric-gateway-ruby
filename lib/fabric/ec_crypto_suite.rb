@@ -193,7 +193,7 @@ module Fabric
     # https://github.com/hyperledger/fabric-sdk-py/blob/25209f61518873da68d28313582607c29b5bae7d/hfc/util/crypto/crypto.py#L259
     def check_malleability(sequence, order)
       half_order = order >> 1
-      !(sequence.value[1].value > half_order)
+      sequence.value[1].value <= half_order
     end
   end
 end

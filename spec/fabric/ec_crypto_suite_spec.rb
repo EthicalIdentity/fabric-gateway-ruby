@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Fabric::ECCryptoSuite do
   describe '#openssl_pkey_from_public_key' do
     subject(:crypto_suite) { described_class.new }

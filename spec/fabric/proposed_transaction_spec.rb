@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Fabric::ProposedTransaction do
   subject(:proposed_transaction) do
     described_class.new(contract, 'testTransaction', extra_args)
@@ -256,7 +258,7 @@ RSpec.describe Fabric::ProposedTransaction do
   describe '#to_proto' do
     let(:expected_proposed_transaction) do
       "\n" \
-      "@f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef9f80228bdadeb2f6c4a8a365ad8830e\x12\xB0\x01\n" +
+        "@f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef9f80228bdadeb2f6c4a8a365ad8830e\x12\xB0\x01\n" \
         "\xAD\x01\n" \
         "\x7F\n" \
         "h\b\x03\x1A\x06\b\xC0\x8F\x9C\x8E\x06\"\atestnet*@f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef9f80228bdadeb2f6c4a8a365ad8830e:\x11\x12\x0F\x12\rtestchaincode\x12\x13\n" \
