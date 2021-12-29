@@ -1,5 +1,9 @@
 # Fabric::Gateway
 
+![Rspec Tests](https://github.com/EthicalIdentity/fabric-gateway-ruby/actions/workflows/rspec.yml/badge.svg) [![codecov](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby/branch/master/graph/badge.svg?token=AXHQEN0R2R)](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/84bab9bb5911d3564df6/maintainability)](https://codeclimate.com/github/EthicalIdentity/fabric-gateway-ruby/maintainability) ![Gem](https://img.shields.io/gem/v/fabric-gateway) ![Downloads](https://img.shields.io/gem/dt/fabric-gateway)  [![GitHub license](https://img.shields.io/github/license/EthicalIdentity/fabric-gateway-ruby)](https://github.com/EthicalIdentity/fabric-gateway-ruby/blob/master/LICENSE.txt) 
+
+
+
 Hyperledger Fabric Gateway gRPC SDK generated directly from protos found at: https://github.com/hyperledger/fabric-protos.
 
 ## Installation
@@ -28,7 +32,7 @@ Will update to new version of grpc when fix is released.
 
 ## Usage
 
-This is a alpha stage library. This library is barely working.
+This is an alpha stage library suitable for early adopters. Not all Hyperledger Fabric Gateway operations have been implemented. However the operations that have been implemented have pretty good unit test coverage.
 
 ```
 $ bin/console
@@ -50,25 +54,44 @@ client_opts = {
     GRPC::Core::Channel::SSL_TARGET => 'peer0.org1.example.com'
   }
 }
+# optional, if you want to set deadlines to the individual calls (in seconds)
+default_call_options = {
+  endorse_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  evaluate_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  submit_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  commit_status_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  chaincode_events_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(60) }
+}
+creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
+client=Fabric::Client.new('localhost:7051', creds, default_call_options: default_call_options, **client_opts)
 
-user_identity = Fabric::Gateway::Identity.new(
+identity = Fabric::Gateway::Identity.new(
   {
-    username: "admin",
-    affiliation: "org1.department1",
-    mspid: 'Org1MSP',
+    msp_id: 'Org1MSP',
     private_key: Fabric::Gateway.crypto_suite.key_from_pem(load_certs[1]),
     pem_certificate: load_certs[2],
   }
 )
 
-creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
-client=Gateway::Gateway::Stub.new('localhost:7051', creds, **client_opts)
-proposal = Fabric::Gateway::Proposal.new(user_identity, {channel_id: 'your_channel', chaincode_id: 'basic', args: [ 'GetAllAssets' ]})
+gateway = identity.new_gateway(client)
+network = gateway.new_network('my_channel')
+contract = network.new_contract('basic')
 
-response = client.evaluate(Gateway::EvaluateRequest.new(channel_id: "your_channel", proposed_transaction: proposal.signed_proposal))
+# Evaluate
+puts contract.evaluate_transaction('GetAllAssets')
 
-pp response
+# Submit - Not Yet Implemented!
+puts contract.submit_transaction('CreateAsset', 'asset13', 'yellow', '5', 'Tom', '1300')
+
+# Endorse - Not Yet Implemented!
+
+# Commit Status - Not Yet Implemented!
+
+# Chaincode Events - Not Yet Implemented!
+
 ```
+
+Please refer to the [full reference documentation](https://rubydoc.info/github/EthicalIdentity/fabric-gateway-ruby) for complete usage information.
 
 ## Development
 
@@ -82,6 +105,17 @@ To rebuild the proto code, run the regenerate script:
 $ bin/regenerate
 ```
 
+Effort has been made to follow the design patterns and naming convention where possible from the official [Hyperledger Fabric Gateway SDK](https://github.com/hyperledger/fabric-gateway) while at the same time producing an idiomatic ruby gem. Our intention is to produce a gem that would be compatible with the documentation of the official SDK while natural to use for a seasoned ruby developer.
+
+## Development References & Resources
+
+These are the libraries and knowledge necessary for developing this gem:
+
+* gRPC - [gRPC Intro](https://grpc.io/docs/what-is-grpc/introduction/) / [gRPC on ruby](https://grpc.io/docs/languages/ruby/)
+* Protocol Buffers (Protobuf) - [overview](https://developers.google.com/protocol-buffers/docs/proto3) / [ruby reference](https://developers.google.com/protocol-buffers/docs/reference/ruby-generated)
+* [Hyperledger Fabric Protocol Specifications](https://openblockchain.readthedocs.io/en/latest/protocol-spec/) 
+* [Hyperledger Fabric Gateway Overview](https://hyperledger-fabric.readthedocs.io/en/latest/gateway.html) / [Fabric Gateway RFC](https://hyperledger.github.io/fabric-rfcs/text/0000-fabric-gateway.html)
+  
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/ethicalidentity/fabric-gateway. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/ethicalidentity/fabric-gateway/blob/master/CODE_OF_CONDUCT.md).
@@ -93,13 +127,22 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Add license
 - [x] Add ChangeLog
 - [x] Create Gem
-- [ ] Add usage instructions
-- [ ] Abstract connection and calls such that the protos aren't being interacted directly
-- [ ] Add testing & CI/CD
+- [x] Add testing & CI/CD
+- [x] Add rubocop and linting
+- [x] Add usage instructions
+- [x] Setup auto-generation of API docs on rubydoc.info
+- [x] Abstract connection and calls such that the protos aren't being interacted directly
+- [x] Implement, Document & Test Evaluate
 - [ ] Implement, Document & Test Endorse
 - [ ] Implement, Document & Test Submit
 - [ ] Implement, Document & Test CommitStatus
 - [ ] Implement, Document & Test ChaincodeEvents
+- [ ] Implement off-line signing - https://github.com/hyperledger/fabric-gateway/blob/1e4a926ddb98ec8ee969da3fc1500642ab389d01/node/src/contract.ts#L63 
+- [ ] Consider adding error handling, invalid transaction proposals will result in random GRPC::FailedPrecondition type errors
+- [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
+- [ ] Support for offline transaction signing (write scenario test for this) - https://github.com/hyperledger/fabric-gateway/blob/cf78fc11a439ced7dfd2f9b55886c55c73119b25/pkg/client/offlinesign_test.go
+
+
 
 
 ## License

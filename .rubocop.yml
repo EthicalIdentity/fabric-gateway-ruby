@@ -1,0 +1,23 @@
+require:
+  - rubocop-rspec
+
+Metrics/BlockLength:
+  Exclude:
+    - '*.gemspec'
+    - 'spec/**/*_spec.rb'
+    - spec/factories.rb 
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.6
+  Exclude:
+    - vendor/bundle/**/*
+    # exclude protoc generated code
+    - 'lib/gateway/*'
+    - 'lib/common/*'
+    - 'lib/gossip/*'
+    - 'lib/msp/*'
+    - 'lib/orderer/*'
+    - 'lib/peer/*'
+
+
