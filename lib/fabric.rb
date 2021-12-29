@@ -9,7 +9,6 @@ require 'fabric/identity'
 require 'fabric/network'
 require 'fabric/proposal'
 require 'fabric/proposed_transaction'
-require 'fabric/simple_proposal'
 require 'fabric/version'
 
 require 'gateway/gateway_pb'

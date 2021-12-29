@@ -9,6 +9,7 @@ Metrics/BlockLength:
 
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 2.6
   Exclude:
     - vendor/bundle/**/*
     # exclude protoc generated code

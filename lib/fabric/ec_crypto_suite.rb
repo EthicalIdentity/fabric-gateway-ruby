@@ -9,7 +9,7 @@ module Fabric
   # Elliptic-curve Crypto Suite using OpenSSL
   #
   # @TODO missing tests
-  class ECCryptoSuite
+  class ECCryptoSuite # rubocop:disable Metrics/ClassLength
     DEFAULT_KEY_SIZE = 256
     DEFAULT_DIGEST_ALGORITHM = 'SHA256'
     DEFAULT_AES_KEY_SIZE = 128

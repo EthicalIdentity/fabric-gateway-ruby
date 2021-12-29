@@ -79,14 +79,17 @@ module Fabric
 
     #
     # Evaluate a transaction function and return its result. This method provides greater control over the transaction
-    # proposal content and the endorsing peers on which it is evaluated. This allows transaction functions to be evaluated
-    # where the proposal must include transient data, or that will access ledger data with key-based endorsement policies.
+    # proposal content and the endorsing peers on which it is evaluated. This allows transaction functions to be
+    # evaluated where the proposal must include transient data, or that will access ledger data with key-based
+    # endorsement policies.
     #
     # @param [String] transaction_name
     # @param [Hash] proposal_options
     # @option proposal_options [Array] :arguments array of arguments to pass to the transaction
-    # @option proposal_options [Hash] :transient_data Private data passed to the transaction function but not recorded on the ledger.
-    # @option proposal_options [Array] :endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
+    # @option proposal_options [Hash] :transient_data Private data passed to the transaction function but not recorded
+    #                                                 on the ledger.
+    # @option proposal_options [Array] :endorsing_organizations Specifies the set of organizations that will attempt to
+    #                                                           endorse the proposal.
     #
     # @return [String] Raw evaluation response payload
     #
@@ -104,8 +107,10 @@ module Fabric
     # @param [String] transaction_name
     # @param [Hash] proposal_options
     # @option proposal_options [Array] :arguments array of arguments to pass to the transaction
-    # @option proposal_options [Hash] :transient_data Private data passed to the transaction function but not recorded on the ledger.
-    # @option proposal_options [Array] :endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
+    # @option proposal_options [Hash] :transient_data Private data passed to the transaction function but not recorded
+    #                                                 on the ledger.
+    # @option proposal_options [Array] :endorsing_organizations Specifies the set of organizations that will attempt to
+    #                                                           endorse the proposal.
     #
     # @return [String] Raw evaluation response payload
     #
@@ -135,7 +140,8 @@ module Fabric
     # @param [String] transaction_name transaction name (first argument unshifted into the argument array)
     # @param [Array<String>] arguments array of arguments to pass to the transaction
     # @param [Hash] transient_data Private data passed to the transaction function but not recorded on the ledger.
-    # @param [Array] endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
+    # @param [Array] endorsing_organizations Specifies the set of organizations that will attempt to endorse the
+    #                                        proposal.
     #
     # @return [Fabric::Proposal] signed unexecuted proposal
     #

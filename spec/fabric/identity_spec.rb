@@ -42,13 +42,17 @@ RSpec.describe Fabric::Identity do
 
       let(:u1_privkey) { Fabric.crypto_suite.key_from_pem(File.read("#{RSPEC_ROOT}/fixtures/user1_privkey.pem")) }
       let(:u1_cert) { File.read("#{RSPEC_ROOT}/fixtures/user1_cert.pem") }
+      let(:expected_public_key) do
+        '04f8aecc56ff47ac1545b3bdfc86f7c170cd12aa75284e677c493b4b2ebac92f' \
+          '9826f9aa4068341e98e094916b794b7c3a7133625623f714a90da7ce342a7ffaa8'
+      end
 
       it 'sets private_key' do
         expect(identity.private_key).to eql('1d68b4efe425473ca8328c82a1cd3522d9dcb429dba612f619bfa827d9734699')
       end
 
       it 'sets public_key' do
-        expect(identity.public_key).to eql('04f8aecc56ff47ac1545b3bdfc86f7c170cd12aa75284e677c493b4b2ebac92f9826f9aa4068341e98e094916b794b7c3a7133625623f714a90da7ce342a7ffaa8')
+        expect(identity.public_key).to eql(expected_public_key)
       end
 
       it 'sets certificate' do

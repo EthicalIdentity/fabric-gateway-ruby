@@ -9,7 +9,7 @@ RSpec.shared_context 'client mocks' do
   attr_reader :sent_chaincode_proposal_input
 
   def sent_chaincode_input_args
-    @sent_chaincode_proposal_input.chaincode_spec.input.args
+    sent_chaincode_proposal_input.chaincode_spec.input.args
   end
 
   attr_reader :sent_call_options

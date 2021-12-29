@@ -135,58 +135,57 @@ RSpec.describe Fabric::ProposedTransaction do
     end
   end
 
-  describe '#generate_proposed_transaction' do
+  describe '#generate_proposed_transaction' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     # consider testing this individually in the future
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#signed_proposal' do
+  describe '#signed_proposal' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     # consider testing this individually in the future
-    # signature is oddly not set in the signed proposal
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#proposal' do
+  describe '#proposal' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#header' do
+  describe '#header' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#channel_header' do
+  describe '#channel_header' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#channel_header_extension' do
+  describe '#channel_header_extension' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#chaincode_id' do
+  describe '#chaincode_id' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#chaincode_proposal_payload' do
+  describe '#chaincode_proposal_payload' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
   end
 
-  describe '#timestamp' do
+  describe '#timestamp' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     it 'is already tested', skip: 'Tested in #new' do
       skip
     end
@@ -218,13 +217,15 @@ RSpec.describe Fabric::ProposedTransaction do
         allow(contract.signer.crypto_suite).to receive(:generate_nonce).and_return('static')
       end
 
+      let(:expected_transaction_id) { 'f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef9f80228bdadeb2f6c4a8a365ad8830e' }
+
       it 'generates a nonce' do
         proposed_transaction.transaction_id
         expect(contract.signer.crypto_suite).to have_received(:generate_nonce)
       end
 
       it 'generates a transaction id' do
-        expect(proposed_transaction.transaction_id).to eql('f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef9f80228bdadeb2f6c4a8a365ad8830e')
+        expect(proposed_transaction.transaction_id).to eql(expected_transaction_id)
       end
     end
 
@@ -261,7 +262,8 @@ RSpec.describe Fabric::ProposedTransaction do
         "@f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef9f80228bdadeb2f6c4a8a365ad8830e\x12\xB0\x01\n" \
         "\xAD\x01\n" \
         "\x7F\n" \
-        "h\b\x03\x1A\x06\b\xC0\x8F\x9C\x8E\x06\"\atestnet*@f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef9f80228bdadeb2f6c4a8a365ad8830e:\x11\x12\x0F\x12\rtestchaincode\x12\x13\n" \
+        "h\b\x03\x1A\x06\b\xC0\x8F\x9C\x8E\x06\"\atestnet*@f4ba2e876e3e6bc1b1b4a1f11b6f5f1ef" \
+        "9f80228bdadeb2f6c4a8a365ad8830e:\x11\x12\x0F\x12\rtestchaincode\x12\x13\n" \
         "\t\n" \
         "\aOrg1MSP\x12\x06static\x12*\n" \
         "(\n" \
@@ -270,7 +272,8 @@ RSpec.describe Fabric::ProposedTransaction do
     end
 
     it 'returns a serialized protobuf binary string' do
-      expect(proposed_transaction.to_proto.force_encoding('BINARY')).to eq(expected_proposed_transaction.force_encoding('BINARY'))
+      expect(proposed_transaction.to_proto.force_encoding('BINARY'))
+        .to eq(expected_proposed_transaction.dup.force_encoding('BINARY'))
     end
   end
 
