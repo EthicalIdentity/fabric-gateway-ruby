@@ -121,4 +121,97 @@ RSpec.describe Fabric::Proposal do
       end
     end
   end
+
+  describe '#evaluate' do
+    # please refer to support/shared_context/client_mocks - it is where all the magic is happening!
+    include_context 'client mocks'
+
+    before do
+      setup_evaluate_mock(proposed_transaction.client, :client_evaluate_response)
+    end
+
+    context 'when the proposal is not signed' do
+      let!(:response) { proposal.evaluate }
+
+      it 'sets the signature' do
+        expect(sent_evaluate_request.proposed_transaction.signature).not_to be_empty
+      end
+
+      it 'returns an evaluate response' do
+        expect(response).to be(:client_evaluate_response)
+      end
+
+      it 'calls client evaluate' do
+        expect(proposed_transaction.client).to have_received(:evaluate)
+      end
+
+      it 'sends no call options' do
+        expect(sent_call_options).to eql({})
+      end
+    end
+
+    context 'when the proposal is signed' do
+      before do
+        proposal.signature = 'a fake signature'
+      end
+
+      let!(:response) { proposal.evaluate }
+
+      it 'does not change the signature' do
+        expect(sent_evaluate_request.proposed_transaction.signature).to eql('a fake signature')
+      end
+
+      it 'returns an evaluate response' do
+        expect(response).to be(:client_evaluate_response)
+      end
+
+      it 'calls client evaluate' do
+        expect(proposed_transaction.client).to have_received(:evaluate)
+      end
+
+      it 'sends no call options' do
+        expect(sent_call_options).to eql({})
+      end
+    end
+
+    context 'when options are passed' do
+      let!(:response) { proposal.evaluate({ some: 'option' }) }
+
+      it 'sets the signature' do
+        expect(sent_evaluate_request.proposed_transaction.signature).not_to be_empty
+      end
+
+      it 'returns an evaluate response' do
+        expect(response).to be(:client_evaluate_response)
+      end
+
+      it 'calls client evaluate' do
+        expect(proposed_transaction.client).to have_received(:evaluate)
+      end
+
+      it 'sends no call options' do
+        expect(sent_call_options).to eql({ some: 'option' })
+      end
+    end
+  end
+
+  describe '#new_evaluate_request' do
+    let!(:response) { proposal.new_evaluate_request }
+
+    it 'returns an EvaluateRequest' do
+      expect(response).to be_a(::Gateway::EvaluateRequest)
+    end
+
+    it 'sets the channel_id' do
+      expect(response.channel_id).to eql('testnet')
+    end
+
+    it 'sets the proposed_transaction' do
+      expect(response.proposed_transaction).to eql(proposed_transaction.proposed_transaction.proposal)
+    end
+
+    it 'sets the target_organizations' do
+      expect(response.target_organizations).to eql([])
+    end
+  end
 end

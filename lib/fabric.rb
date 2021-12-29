@@ -23,6 +23,22 @@ module Fabric
   class InvalidArgument < Error; end
   class NotYetImplemented < Error; end
 
+  #
+  # CommitError
+  #
+  # @TODO: TEST ME!
+  #
+  class CommitError < Error
+    attr_reader :code, :transaction_id
+
+    def initialize(status)
+      super("Transaction #{status.transaction_id} failed to commit with status code #{status.code} -" +
+        Protos::TxValidationCode.lookup(status.code).to_s)
+      @code = code
+      @transaction_id = status.transaction_id
+    end
+  end
+
   def self.crypto_suite(opts = {})
     @crypto_suite ||= Fabric::ECCryptoSuite.new opts
   end

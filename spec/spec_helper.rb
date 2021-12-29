@@ -3,6 +3,7 @@
 require 'bundler/setup'
 require 'factory_bot'
 require 'timecop'
+
 if ENV['CI'] == 'true'
   require 'simplecov'
   SimpleCov.start
@@ -12,6 +13,7 @@ if ENV['CI'] == 'true'
 end
 
 require 'fabric'
+require_relative 'support/shared_context/client_mocks'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

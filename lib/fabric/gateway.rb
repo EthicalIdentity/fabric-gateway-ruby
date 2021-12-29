@@ -7,15 +7,6 @@ module Fabric
   class Gateway
     attr_reader :signer, :client
 
-    # TODO: in official sdk, gateway controls timeouts
-    # need to figure out how to incorporate this
-    # ref: https://github.com/hyperledger/fabric-gateway/blob/main/node/src/gateway.ts
-    # ref: https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/gateway.go
-    # *     evaluateOptions: defaultTimeout,
-    # *     endorseOptions: defaultTimeout,
-    # *     submitOptions: defaultTimeout,
-    # *     commitStatusOptions: defaultTimeout,
-
     #
     # Initialize a new Gateway
     #

@@ -55,10 +55,26 @@ module Fabric
     #
     # Returns the proposal message as a protobuf Message object.
     #
-    # @return [Protos::SignedProposal|nil] SignedProposal message
+    # @return [Protos::Proposal|nil] Proposal message
     #
     def proposal
       proposed_transaction.proposal
+    end
+
+    #
+    # Returns the signed proposal
+    #
+    # <rant>
+    # Fabric message naming scheme is a mess:
+    # ProposedTransaction has a Proposal which is a SignedProposal
+    #               which has a Proposal which is a Proposal
+    # so.... which proposal do you want to access? Adding this function for clarity
+    # </rant>
+    #
+    # @return [Protos::SignedProposal|nil] SignedProposal message
+    #
+    def signed_proposal
+      proposed_transaction.proposed_transaction.proposal
     end
 
     #
@@ -119,16 +135,37 @@ module Fabric
       self.signature = signer.sign proposal.to_proto
     end
 
-    def evaluate
-      # TODO: evaluate proposal
+    #
+    # Evaluate the transaction proposal and obtain its result, without updating the ledger. This runs the transaction
+    # on a peer to obtain a transaction result, but does not submit the endorsed transaction to the orderer to be
+    # committed to the ledger.
+    #
+    # @param [Hash] options gRPC call options @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
+    #
+    # @return [String] The result returned by the transaction function
+    #
+    def evaluate(options = {})
+      sign
+
+      evaluate_response = client.evaluate(new_evaluate_request, options)
+      evaluate_response.result.payload
     end
 
     def endorse
       # TODO: endorse proposal
     end
 
+    #
+    # Generates an evaluate request from this proposal.
+    #
+    # @return [Gateway::EvaluateRequest] evaluation request with the current proposal
+    #
     def new_evaluate_request
-      # TODO
+      ::Gateway::EvaluateRequest.new(
+        channel_id: network_name,
+        proposed_transaction: signed_proposal,
+        target_organizations: proposed_transaction.endorsing_organizations
+      )
     end
 
     def new_endorse_request

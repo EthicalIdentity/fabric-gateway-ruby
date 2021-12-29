@@ -59,6 +59,8 @@ RSpec.describe Fabric::Client do
     end
 
     context 'when grpc_client host, creds, and client_opts are passed' do
+      subject(:client) { described_class.new(host: 'localhost:1234', creds: creds, **client_opts) }
+
       let(:creds) { GRPC::Core::ChannelCredentials.new('') }
       let(:client_opts) do
         {
@@ -67,13 +69,141 @@ RSpec.describe Fabric::Client do
           }
         }
       end
-      subject(:client) { described_class.new(host: 'localhost:1234', creds: creds, **client_opts) }
+
       it 'instantiates a Gateway::Gateway::Stub' do
         expect(client.grpc_client).to be_a(Gateway::Gateway::Stub)
       end
 
       it 'honors client_opts' do
         expect(client.grpc_client.instance_variable_get(:@host)).to eql('peer0.org1.example.com')
+      end
+    end
+
+    context 'when default_call_options are passed' do
+      let(:default_call_options) do
+        {
+          endorse_options: { deadline: 5 },
+          evaluate_options: { deadline: 10 },
+          submit_options: { deadline: 15 },
+          commit_status_options: { deadline: 20 },
+          chaincode_events_options: { deadline: 25 }
+        }
+      end
+
+      it 'sets default_call_options' do
+        stub = Gateway::Gateway::Stub.new('localhost:5000', :this_channel_is_insecure)
+        client = described_class.new(grpc_client: stub, default_call_options: default_call_options)
+        expect(client.default_call_options).to eql(default_call_options)
+      end
+    end
+
+    context 'when default_call_options are not passed' do
+      let(:default_call_options) do
+        {
+          endorse_options: {},
+          evaluate_options: {},
+          submit_options: {},
+          commit_status_options: {},
+          chaincode_events_options: {}
+        }
+      end
+
+      it 'uses empty default_call_options' do
+        stub = Gateway::Gateway::Stub.new('localhost:5000', :this_channel_is_insecure)
+        client = described_class.new(grpc_client: stub)
+        expect(client.default_call_options).to eql(default_call_options)
+      end
+    end
+  end
+
+  # All the client tests are just mock tests. Must consider writing integration tests
+  # for all the Fabric Gateway operations - endorse, evaluate, submit, commit_status,
+  # and chaincode_events.
+
+  describe '#evaluate' do
+    subject(:client) { build(:simple_client) }
+
+    before do
+      allow(client.grpc_client).to receive(:evaluate)
+    end
+
+    context 'when options are not passed' do
+      it 'calls evaluate on the grpc_client' do
+        client.evaluate('evaluate_request')
+        expect(client.grpc_client).to have_received(:evaluate).with('evaluate_request', {})
+      end
+    end
+
+    context 'when options are passed' do
+      it 'calls evaluate on the grpc_client' do
+        client.evaluate('evaluate_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:evaluate).with('evaluate_request', { deadline: 5 })
+      end
+    end
+  end
+
+  describe '#endorse' do
+    subject(:client) { build(:simple_client) }
+
+    before do
+      allow(client.grpc_client).to receive(:endorse)
+    end
+
+    context 'when options are not passed' do
+      it 'calls endorse on the grpc_client' do
+        client.endorse('endorse_request')
+        expect(client.grpc_client).to have_received(:endorse).with('endorse_request', {})
+      end
+    end
+
+    context 'when options are passed' do
+      it 'calls endorse on the grpc_client' do
+        client.endorse('endorse_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:endorse).with('endorse_request', { deadline: 5 })
+      end
+    end
+  end
+
+  describe '#submit' do
+    subject(:client) { build(:simple_client) }
+
+    before do
+      allow(client.grpc_client).to receive(:submit)
+    end
+
+    context 'when options are not passed' do
+      it 'calls submit on the grpc_client' do
+        client.submit('submit_request')
+        expect(client.grpc_client).to have_received(:submit).with('submit_request', {})
+      end
+    end
+
+    context 'when options are passed' do
+      it 'calls submit on the grpc_client' do
+        client.submit('submit_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:submit).with('submit_request', { deadline: 5 })
+      end
+    end
+  end
+
+  describe '#commit_status' do
+    subject(:client) { build(:simple_client) }
+
+    before do
+      allow(client.grpc_client).to receive(:commit_status)
+    end
+
+    context 'when options are not passed' do
+      it 'calls commit_status on the grpc_client' do
+        client.commit_status('commit_status_request')
+        expect(client.grpc_client).to have_received(:commit_status).with('commit_status_request', {})
+      end
+    end
+
+    context 'when options are passed' do
+      it 'calls commit_status on the grpc_client' do
+        client.commit_status('commit_status_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:commit_status).with('commit_status_request', { deadline: 5 })
       end
     end
   end

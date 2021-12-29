@@ -66,11 +66,11 @@ module Fabric
     end
 
     def as_proto
-      @serialized_identity ||= Msp::SerializedIdentity.new(mspid: msp_id, id_bytes: certificate)
+      @as_proto ||= Msp::SerializedIdentity.new(mspid: msp_id, id_bytes: certificate)
     end
 
     def to_proto
-      @serialized_identity ||= Msp::SerializedIdentity.new(mspid: msp_id, id_bytes: certificate).to_proto
+      @to_proto ||= Msp::SerializedIdentity.new(mspid: msp_id, id_bytes: certificate).to_proto
     end
 
     #

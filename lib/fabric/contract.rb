@@ -45,41 +45,102 @@ module Fabric
       network.name
     end
 
-    # @TODO: Implement Me!
-    def evaluate_transaction
-      raise NotYetImplemented
+    #
+    # Evaluate a transaction function and return its results. A transaction proposal will be evaluated on endorsing
+    # peers but the transaction will not be sent to the ordering service and so will not be committed to the ledger.
+    # This can be used for querying the world state.
+    #
+    # @param [String] transaction_name
+    # @param [Array] arguments array of arguments to pass to the transaction
+    #
+    # @return [String] raw payload of the transaction response
+    #
+    def evaluate_transaction(transaction_name, arguments = [])
+      evaluate(transaction_name, { arguments: arguments })
     end
 
-    # @TODO: Implement Me!
-    def submit_transaction
-      raise NotYetImplemented
+    #
+    # Submit a transaction to the ledger and return its result only after it is committed to the ledger. The
+    # transaction function will be evaluated on endorsing peers and then submitted to the ordering service to be
+    # committed to the ledger.
+    #
+    # @TODO: Not yet complete
+    #
+    # @param [String] transaction_name
+    # @param [Array] arguments array of arguments to pass to the transaction
+    #
+    # @return [String] raw payload of the transaction response
+    #
+    def submit_transaction(transaction_name, arguments = [])
+      submit(transaction_name, { arguments: arguments })
     end
 
-    # @TODO: Implement Me!
-    def evaluate
-      raise NotYetImplemented
+    #
+    # Evaluate a transaction function and return its result. This method provides greater control over the transaction
+    # proposal content and the endorsing peers on which it is evaluated. This allows transaction functions to be evaluated
+    # where the proposal must include transient data, or that will access ledger data with key-based endorsement policies.
+    #
+    # @param [String] transaction_name
+    # @param [Hash] proposal_options
+    # @option proposal_options [Array] :arguments array of arguments to pass to the transaction
+    # @option proposal_options [Hash] :transient_data Private data passed to the transaction function but not recorded on the ledger.
+    # @option proposal_options [Array] :endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
+    #
+    # @return [String] Raw evaluation response payload
+    #
+    def evaluate(transaction_name, proposal_options = {})
+      new_proposal(transaction_name, **proposal_options).evaluate
     end
 
-    # @TODO: Implement Me!
-    def submit
+    #
+    # Submit a transaction to the ledger and return its result only after it is committed to the ledger. The
+    # transaction function will be evaluated on endorsing peers and then submitted to the ordering service to be
+    # committed to the ledger.
+    #
+    # @TODO: Implement Me! - LEFT OFF HERE!
+    #
+    # @param [String] transaction_name
+    # @param [Hash] proposal_options
+    # @option proposal_options [Array] :arguments array of arguments to pass to the transaction
+    # @option proposal_options [Hash] :transient_data Private data passed to the transaction function but not recorded on the ledger.
+    # @option proposal_options [Array] :endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
+    #
+    # @return [String] Raw evaluation response payload
+    #
+    def submit(transaction_name, proposal_options = {})
+      transaction = new_proposal(transaction_name, **proposal_options).endorse
+      submitted = transaction.submit
+
+      status = submitted.get_status
+
+      raise CommitError, status unless status.get_status == ::GRPC::Core::StatusCodes::OK
+    end
+
+    #
+    # @TODO: unimplemented, not sure if this can be implemented because
+    # the official grpc ruby client does not support non-blocking async
+    # calls (https://github.com/grpc/grpc/issues/10973)
+    #
+    # not 100% sure if grpc support is necessary for this.
+    #
+    def submit_async
       raise NotYetImplemented
     end
 
     #
-    # Creates a fully prepared proposal for the given transaction parameters
-    # based on the current state of the system.
+    # Creates a transaction proposal that can be evaluated or endorsed. Supports off-line signing flow.
     #
     # @param [String] transaction_name transaction name (first argument unshifted into the argument array)
     # @param [Array<String>] arguments array of arguments to pass to the transaction
     # @param [Hash] transient_data Private data passed to the transaction function but not recorded on the ledger.
-    # @param [Array<Type>] endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
+    # @param [Array] endorsing_organizations Specifies the set of organizations that will attempt to endorse the proposal.
     #
     # @return [Fabric::Proposal] signed unexecuted proposal
     #
     def new_proposal(transaction_name, arguments: [], transient_data: {}, endorsing_organizations: [])
       proposed_transaction = ProposedTransaction.new(
         self,
-        transaction_name,
+        qualified_transaction_name(transaction_name),
         arguments: arguments,
         transient_data: transient_data,
         endorsing_organizations: endorsing_organizations
@@ -87,7 +148,6 @@ module Fabric
       Proposal.new(proposed_transaction)
     end
 
-    # @TODO: untested and currently unused.
     def qualified_transaction_name(transaction_name)
       contract_name.nil? || contract_name.empty? ? transaction_name : "#{contract_name}:#{transaction_name}"
     end

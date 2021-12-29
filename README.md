@@ -32,7 +32,7 @@ Will update to new version of grpc when fix is released.
 
 ## Usage
 
-This is a alpha stage library. This library is barely working.
+This is an alpha stage library suitable for early adopters. Not all Hyperledger Fabric Gateway operations have been implemented. However the operations that have been implemented have pretty good unit test coverage.
 
 ```
 $ bin/console
@@ -54,24 +54,41 @@ client_opts = {
     GRPC::Core::Channel::SSL_TARGET => 'peer0.org1.example.com'
   }
 }
+# optional, if you want to set deadlines to the individual calls (in seconds)
+default_call_options = {
+  endorse_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  evaluate_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  submit_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  commit_status_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
+  chaincode_events_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(60) }
+}
+creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
+client=Fabric::Client.new('localhost:7051', creds, default_call_options: default_call_options, **client_opts)
 
-user_identity = Fabric::Gateway::Identity.new(
+identity = Fabric::Gateway::Identity.new(
   {
-    username: "admin",
-    affiliation: "org1.department1",
-    mspid: 'Org1MSP',
+    msp_id: 'Org1MSP',
     private_key: Fabric::Gateway.crypto_suite.key_from_pem(load_certs[1]),
     pem_certificate: load_certs[2],
   }
 )
 
-creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
-client=Gateway::Gateway::Stub.new('localhost:7051', creds, **client_opts)
-proposal = Fabric::Gateway::Proposal.new(user_identity, {channel_id: 'your_channel', chaincode_id: 'basic', args: [ 'GetAllAssets' ]})
+gateway = identity.new_gateway(client)
+network = gateway.new_network('my_channel')
+contract = network.new_contract('basic')
 
-response = client.evaluate(Gateway::EvaluateRequest.new(channel_id: "your_channel", proposed_transaction: proposal.signed_proposal))
+# Evaluate
+puts contract.evaluate_transaction('GetAllAssets')
 
-pp response
+# Submit - Not Yet Implemented!
+puts contract.submit_transaction('CreateAsset', 'asset13', 'yellow', '5', 'Tom', '1300')
+
+# Endorse - Not Yet Implemented!
+
+# Commit Status - Not Yet Implemented!
+
+# Chaincode Events - Not Yet Implemented!
+
 ```
 
 Please refer to the [full reference documentation](https://rubydoc.info/github/EthicalIdentity/fabric-gateway-ruby) for complete usage information.
@@ -112,16 +129,18 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Create Gem
 - [x] Add testing & CI/CD
 - [x] Add rubocop and linting
-- [ ] Add usage instructions
+- [x] Add usage instructions
 - [x] Setup auto-generation of API docs on rubydoc.info
-- [ ] Abstract connection and calls such that the protos aren't being interacted directly
+- [x] Abstract connection and calls such that the protos aren't being interacted directly
+- [x] Implement, Document & Test Evaluate
 - [ ] Implement, Document & Test Endorse
 - [ ] Implement, Document & Test Submit
 - [ ] Implement, Document & Test CommitStatus
 - [ ] Implement, Document & Test ChaincodeEvents
 - [ ] Implement off-line signing - https://github.com/hyperledger/fabric-gateway/blob/1e4a926ddb98ec8ee969da3fc1500642ab389d01/node/src/contract.ts#L63 
+- [ ] Consider adding error handling, invalid transaction proposals will result in random GRPC::FailedPrecondition type errors
 - [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
-- [ ] Support for offline transaction signing - https://github.com/hyperledger/fabric-gateway/blob/cf78fc11a439ced7dfd2f9b55886c55c73119b25/pkg/client/offlinesign_test.go
+- [ ] Support for offline transaction signing (write scenario test for this) - https://github.com/hyperledger/fabric-gateway/blob/cf78fc11a439ced7dfd2f9b55886c55c73119b25/pkg/client/offlinesign_test.go
 
 
 
