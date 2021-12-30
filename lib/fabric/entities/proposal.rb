@@ -96,7 +96,7 @@ module Fabric
     # @return [String] raw binary digest of the proposal message.
     #
     def digest
-      signer.digest(proposal.to_proto)
+      Fabric.crypto_suite.digest(proposal.to_proto)
     end
 
     #
@@ -153,8 +153,24 @@ module Fabric
       evaluate_response.result.payload
     end
 
-    def endorse
-      # TODO: endorse proposal
+    #
+    # Obtain endorsement for the transaction proposal from sufficient peers to allow it to be committed to the ledger.
+    #
+    # @todo - please test me
+    #
+    # @param [Hash] options gRPC call options @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
+    #
+    # @return [Fabric::Transaction] An endorsed transaction that can be submitted to the ledger.
+    #
+    def endorse(options = {})
+      sign
+      endorse_response = client.endorse(new_endorse_request, options)
+
+      raise Fabric::Error, 'Missing transaction envelope' if endorse_response.prepared_transaction.nil?
+
+      prepared_transaction = new_prepared_transaction(endorse_response.prepared_transaction)
+
+      Fabric::Transaction.new(network, prepared_transaction)
     end
 
     #
@@ -170,13 +186,34 @@ module Fabric
       )
     end
 
+    #
+    # Creates a new endorse request from this proposal.
+    #
+    # @todo - test me!
+    # @return [Gateway::EndorseRequest] EndorseRequest protobuf message
+    #
     def new_endorse_request
-      # TODO
+      ::Gateway::EndorseRequest.new(
+        transaction_id: transaction_id,
+        channel_id: network_name,
+        proposed_transaction: signed_proposal,
+        endorsing_organizations: proposed_transaction.endorsing_organizations
+      )
     end
 
-    def new_prepared_transaction
-      # TODO
-      # used in endorse
+    #
+    # Creates a new prepared transaction from a transaction envelope.
+    #
+    # @todo - test me!
+    # @param [Common::Envelope] envelope transaction envelope
+    #
+    # @return [Gateway::PreparedTransaction] prepared transaction protobuf message
+    #
+    def new_prepared_transaction(envelope)
+      ::Gateway::PreparedTransaction.new(
+        transaction_id: transaction_id,
+        envelope: envelope
+      )
     end
   end
 end

@@ -66,7 +66,7 @@ module Fabric
     # transaction function will be evaluated on endorsing peers and then submitted to the ordering service to be
     # committed to the ledger.
     #
-    # @TODO: Not yet complete
+    # @todo: Not yet complete
     #
     # @param [String] transaction_name
     # @param [Array] arguments array of arguments to pass to the transaction
@@ -102,7 +102,7 @@ module Fabric
     # transaction function will be evaluated on endorsing peers and then submitted to the ordering service to be
     # committed to the ledger.
     #
-    # @TODO: Implement Me! - LEFT OFF HERE!
+    # @todo: Implement Me! - LEFT OFF HERE!
     #
     # @param [String] transaction_name
     # @param [Hash] proposal_options
@@ -116,15 +116,13 @@ module Fabric
     #
     def submit(transaction_name, proposal_options = {})
       transaction = new_proposal(transaction_name, **proposal_options).endorse
-      submitted = transaction.submit
+      transaction.submit
 
-      status = submitted.get_status
-
-      raise CommitError, status unless status.get_status == ::GRPC::Core::StatusCodes::OK
+      transaction.result
     end
 
     #
-    # @TODO: unimplemented, not sure if this can be implemented because
+    # @todo: unimplemented, not sure if this can be implemented because
     # the official grpc ruby client does not support non-blocking async
     # calls (https://github.com/grpc/grpc/issues/10973)
     #

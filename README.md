@@ -37,6 +37,8 @@ This is an alpha stage library suitable for early adopters. Not all Hyperledger 
 ```
 $ bin/console
 
+# for running in application or script; not needed from bin/console
+require 'fabric' 
 
 def load_certs
   data_dir ='/your/certs/directory' # aka test-network/organizations
@@ -80,12 +82,9 @@ contract = network.new_contract('basic')
 # Evaluate
 puts contract.evaluate_transaction('GetAllAssets')
 
-# Submit - Not Yet Implemented!
-puts contract.submit_transaction('CreateAsset', 'asset13', 'yellow', '5', 'Tom', '1300')
-
-# Endorse - Not Yet Implemented!
-
-# Commit Status - Not Yet Implemented!
+# Submit
+puts contract.submit_transaction('CreateAsset', ['asset13', 'yellow', '5', 'Tom', '1300'])
+puts contract.submit_transaction('UpdateAsset', %w[asset999 yellow 5 Tom 5555])
 
 # Chaincode Events - Not Yet Implemented!
 
