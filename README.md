@@ -138,6 +138,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [ ] Implement, Document & Test ChaincodeEvents
 - [ ] Support Submit Async (currently blocks waiting for the transaction to be committed)
 - [ ] Consider adding error handling, invalid transaction proposals will result in random GRPC::FailedPrecondition type errors
+- [ ] Consider adding transaction_id information to Fabric::Errors that are raised; would help a lot for debugging.
 - [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
 - [ ] Implement off-line signing - https://github.com/hyperledger/fabric-gateway/blob/1e4a926ddb98ec8ee969da3fc1500642ab389d01/node/src/contract.ts#L63 
 - [ ] Support for offline transaction signing (write scenario test for this) - https://github.com/hyperledger/fabric-gateway/blob/cf78fc11a439ced7dfd2f9b55886c55c73119b25/pkg/client/offlinesign_test.go
