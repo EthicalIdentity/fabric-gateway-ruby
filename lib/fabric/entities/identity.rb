@@ -76,9 +76,9 @@ module Fabric
     #
     # Creates a new gateway passing in the current identity
     #
-    # @param [Gateway::Gateway::Stub] connection <description>
+    # @param [Fabric::Client] client
     #
-    # @return [Fabric::Gateway] <description>
+    # @return [Fabric::Gateway] gateway
     #
     def new_gateway(client)
       Fabric::Gateway.new(self, client)

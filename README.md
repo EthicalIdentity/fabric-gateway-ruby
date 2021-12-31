@@ -34,7 +34,7 @@ Will update to new version of grpc when fix is released.
 
 This is an alpha stage library suitable for early adopters. The basic evaluate and submit gateway functions are implemented. Chaincode events monitoring is not yet implemented.
 
-```
+```ruby
 $ bin/console
 
 # for running in application or script; not needed from bin/console

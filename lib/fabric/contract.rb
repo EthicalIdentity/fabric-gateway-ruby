@@ -25,6 +25,8 @@ module Fabric
   class Contract
     attr_reader :network, :chaincode_name, :contract_name
 
+    # @!parse include Fabric::Accessors::Network
+    # @!parse include Fabric::Accessors::Gateway
     include Fabric::Accessors::Network
 
     def initialize(network, chaincode_name, contract_name = '')
@@ -105,9 +107,9 @@ module Fabric
     end
 
     #
-    # @todo: unimplemented, not sure if this can be implemented because
-    # the official grpc ruby client does not support non-blocking async
-    # calls (https://github.com/grpc/grpc/issues/10973)
+    # @todo unimplemented, not sure if this can be implemented because
+    #   the official grpc ruby client does not support non-blocking async
+    #   calls (https://github.com/grpc/grpc/issues/10973)
     #
     # not 100% sure if grpc support is necessary for this.
     #

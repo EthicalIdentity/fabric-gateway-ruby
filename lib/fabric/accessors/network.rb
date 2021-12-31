@@ -9,14 +9,29 @@ module Fabric
     # and then `include Fabric::Accessors::Network`
     #
     module Network
+      # @!visibility private
       def self.included(base)
         base.send :include, Fabric::Accessors::Gateway
       end
 
+      # @!parse include Fabric::Accessors::Gateway
+
+      #
+      # Returns the gateway instance
+      #
+      # @return [Fabric::Gateway] gateway
+      # @!parse attr_reader :gateway
+      #
       def gateway
         network.gateway
       end
 
+      #
+      # Network name or the channel name or channel id
+      #
+      # @return [String] network name
+      # @!parse attr_reader :network_name
+      #
       def network_name
         network.name
       end
