@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.shared_examples 'a gateway accessor' do
   describe '#gateway' do
     it 'returns the gateway' do

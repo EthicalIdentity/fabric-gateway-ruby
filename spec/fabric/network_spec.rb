@@ -19,7 +19,7 @@ RSpec.describe Fabric::Network do
   end
 
   it_behaves_like 'a gateway accessor'
-  
+
   describe '#new_contract' do
     context 'when contract_name is not passed' do
       let(:expected_attributes) do
