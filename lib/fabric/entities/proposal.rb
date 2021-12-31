@@ -156,8 +156,6 @@ module Fabric
     #
     # Obtain endorsement for the transaction proposal from sufficient peers to allow it to be committed to the ledger.
     #
-    # @todo - please test me
-    #
     # @param [Hash] options gRPC call options @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
     #
     # @return [Fabric::Transaction] An endorsed transaction that can be submitted to the ledger.
@@ -189,7 +187,6 @@ module Fabric
     #
     # Creates a new endorse request from this proposal.
     #
-    # @todo - test me!
     # @return [Gateway::EndorseRequest] EndorseRequest protobuf message
     #
     def new_endorse_request
@@ -204,7 +201,6 @@ module Fabric
     #
     # Creates a new prepared transaction from a transaction envelope.
     #
-    # @todo - test me!
     # @param [Common::Envelope] envelope transaction envelope
     #
     # @return [Gateway::PreparedTransaction] prepared transaction protobuf message

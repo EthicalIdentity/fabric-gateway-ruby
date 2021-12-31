@@ -33,10 +33,12 @@ RSpec.shared_context 'client mocks' do
   #   object_double(::Gateway::SubmitResponse.new)
   # end
 
-  # def mock_endorse_response(return_payload)
-  #   mock_endorse_response = object_double(::Gateway::EndorseResponse.new)
-  #   allow(mock_endorse_response).to receive(:prepared_transaction).and_return(return_payload)
-  # end
+  def mock_endorse_response(return_payload)
+    mock_endorse_response = object_double(::Gateway::EndorseResponse.new)
+    allow(mock_endorse_response).to receive(:prepared_transaction).and_return(return_payload)
+
+    mock_endorse_response
+  end
 
   def setup_evaluate_mock(client, return_payload)
     allow(client).to receive(:evaluate) do |arg, arg2|
@@ -55,13 +57,13 @@ RSpec.shared_context 'client mocks' do
   #   end.and_return(mock_submit_response)
   # end
 
-  # def setup_endorse_mock(client, return_payload)
-  #   allow(client).to receive(:endorse) do |arg, arg2|
-  #     expect(arg).to be_a(::Gateway::EndorseRequest)
-  #     @sent_endorse_request = arg
-  #     @sent_call_options = arg2
-  #   end.and_return(mock_endorse_response(return_payload))
-  # end
+  def setup_endorse_mock(client, return_payload)
+    allow(client).to receive(:endorse) do |arg, arg2|
+      expect(arg).to be_a(::Gateway::EndorseRequest)
+      @sent_endorse_request = arg
+      @sent_call_options = arg2
+    end.and_return(mock_endorse_response(return_payload))
+  end
 end
 # rubocop:enable Metrics/BlockLength
 # rubocop:enable Rspec/ContextWording
