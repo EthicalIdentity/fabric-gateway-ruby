@@ -66,7 +66,6 @@ module Fabric
     # transaction function will be evaluated on endorsing peers and then submitted to the ordering service to be
     # committed to the ledger.
     #
-    # @todo: Not yet complete
     #
     # @param [String] transaction_name
     # @param [Array] arguments array of arguments to pass to the transaction

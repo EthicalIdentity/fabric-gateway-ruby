@@ -29,7 +29,7 @@ module Fabric
   #
   # CommitError
   #
-  # @TODO: TEST ME!
+  # @todo: TEST ME!
   #
   class CommitError < Error
     attr_reader :code, :transaction_id

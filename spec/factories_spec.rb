@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe 'Factories' do
   describe 'Status' do
     context 'when passing successful trait' do
@@ -9,6 +11,7 @@ RSpec.describe 'Factories' do
           successful: true
         }
       end
+
       it 'generates a successful status' do
         expect(build(:status, :successful)).to have_attributes(expected_attributes)
       end
@@ -23,6 +26,7 @@ RSpec.describe 'Factories' do
           successful: false
         }
       end
+
       it 'generates a successful status' do
         expect(build(:status, :unsuccessful)).to have_attributes(expected_attributes)
       end

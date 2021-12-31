@@ -90,7 +90,7 @@ module Fabric
     # Subscribe to chaincode events
     #
     # @NOTE: This function has never been utilized or tested. This function is probably wrong, missing a block.
-    # @TODO: add testing!
+    # @todo: add testing!
     #
     # @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
     # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer
