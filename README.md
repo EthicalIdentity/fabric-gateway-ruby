@@ -32,7 +32,7 @@ Will update to new version of grpc when fix is released.
 
 ## Usage
 
-This is an alpha stage library suitable for early adopters. Not all Hyperledger Fabric Gateway operations have been implemented. However the operations that have been implemented have pretty good unit test coverage.
+This is an alpha stage library suitable for early adopters. The basic evaluate and submit gateway functions are implemented. Chaincode events monitoring is not yet implemented.
 
 ```
 $ bin/console
