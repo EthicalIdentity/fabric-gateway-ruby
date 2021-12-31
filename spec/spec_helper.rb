@@ -14,6 +14,7 @@ end
 
 require 'fabric'
 require_relative 'support/shared_context/client_mocks'
+require_relative 'support/shared_context/accessor_shared_contexts'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

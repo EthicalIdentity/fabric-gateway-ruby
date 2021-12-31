@@ -3,6 +3,10 @@
 require 'gateway/gateway_pb'
 require 'gateway/gateway_services_pb'
 
+require 'fabric/accessors/gateway'
+require 'fabric/accessors/network'
+require 'fabric/accessors/contract'
+
 require 'fabric/entities/envelope'
 require 'fabric/entities/identity'
 require 'fabric/entities/proposal'

@@ -22,33 +22,7 @@ module Fabric
       @proposed_transaction.contract
     end
 
-    def network
-      contract.network
-    end
-
-    def client
-      network.client
-    end
-
-    def signer
-      network.signer
-    end
-
-    def gateway
-      network.gateway
-    end
-
-    def network_name
-      network.name
-    end
-
-    def contract_name
-      contract.contract_name
-    end
-
-    def chaincode_name
-      contract.chaincode_name
-    end
+    include Fabric::Accessors::Contract
 
     def transaction_id
       proposed_transaction.transaction_id

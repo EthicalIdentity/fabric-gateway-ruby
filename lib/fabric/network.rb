@@ -11,17 +11,11 @@ module Fabric
   class Network
     attr_reader :gateway, :name
 
+    include Fabric::Accessors::Gateway
+
     def initialize(gateway, name)
       @gateway = gateway
       @name = name
-    end
-
-    def client
-      gateway.client
-    end
-
-    def signer
-      gateway.signer
     end
 
     #

@@ -19,6 +19,8 @@ module Fabric
     # This is usually used in conjunction with transientData for private data scenarios.
     attr_reader :endorsing_organizations
 
+    include Fabric::Accessors::Contract
+
     def initialize(contract, transaction_name, arguments: [], transient_data: {}, endorsing_organizations: [])
       @contract = contract
       @transaction_name = transaction_name
@@ -27,34 +29,6 @@ module Fabric
       @endorsing_organizations = endorsing_organizations
 
       generate_proposed_transaction
-    end
-
-    def network
-      contract.network
-    end
-
-    def client
-      network.client
-    end
-
-    def signer
-      network.signer
-    end
-
-    def gateway
-      network.gateway
-    end
-
-    def network_name
-      network.name
-    end
-
-    def contract_name
-      contract.contract_name
-    end
-
-    def chaincode_name
-      contract.chaincode_name
     end
 
     #

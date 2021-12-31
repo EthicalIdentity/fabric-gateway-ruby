@@ -23,6 +23,8 @@ RSpec.describe Fabric::Proposal do
     it { is_expected.to have_attributes(expected_attributes) }
   end
 
+  it_behaves_like 'a contract accessor'
+
   describe '#to_proto' do
     it 'calls to_proto of the proposed transaction' do
       allow(proposed_transaction).to receive(:to_proto)

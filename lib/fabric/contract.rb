@@ -25,26 +25,12 @@ module Fabric
   class Contract
     attr_reader :network, :chaincode_name, :contract_name
 
+    include Fabric::Accessors::Network
+
     def initialize(network, chaincode_name, contract_name = '')
       @network = network
       @chaincode_name = chaincode_name
       @contract_name = contract_name
-    end
-
-    def client
-      network.client
-    end
-
-    def signer
-      network.signer
-    end
-
-    def gateway
-      network.gateway
-    end
-
-    def network_name
-      network.name
     end
 
     #

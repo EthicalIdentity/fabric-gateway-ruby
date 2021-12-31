@@ -50,29 +50,7 @@ RSpec.describe Fabric::Contract do # rubocop:disable RSpec/FilePath
     end
   end
 
-  describe '#client' do
-    it 'returns the client from gateway' do
-      expect(contract.client).to eql(gateway.client)
-    end
-  end
-
-  describe '#signer' do
-    it 'returns the signer from gateway' do
-      expect(contract.signer).to eql(gateway.signer)
-    end
-  end
-
-  describe '#gateway' do
-    it 'returns the signer from gateway' do
-      expect(contract.gateway).to eql(gateway)
-    end
-  end
-
-  describe '#network_name' do
-    it 'returns the network_name from the network' do
-      expect(contract.network_name).to eql('testnet')
-    end
-  end
+  it_behaves_like 'a network accessor'
 
   describe '#evaluate' do
     context 'when no arguments are passed' do

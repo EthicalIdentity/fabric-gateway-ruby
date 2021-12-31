@@ -8,21 +8,7 @@ module Fabric
   class Transaction
     attr_reader :network
 
-    def client
-      network.client
-    end
-
-    def signer
-      network.signer
-    end
-
-    def gateway
-      network.gateway
-    end
-
-    def network_name
-      network.name
-    end
+    include Fabric::Accessors::Network
 
     # @return [Gateway::PreparedTransaction] Prepared Transaction
     attr_reader :prepared_transaction

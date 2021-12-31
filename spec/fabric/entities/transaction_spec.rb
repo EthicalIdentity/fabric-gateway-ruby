@@ -7,6 +7,8 @@ RSpec.describe Fabric::Transaction do  # rubocop:disable RSpec/FilePath
   let(:prepared_transaction) { Gateway::PreparedTransaction.new(envelope: envelope, transaction_id: 'abc123') }
   let(:envelope) { Common::Envelope.new(payload: 'test payload') }
 
+  it_behaves_like 'a network accessor'
+
   describe '#new' do
     it { is_expected.to be_a(described_class) }
     it { is_expected.to have_attributes(network: network, prepared_transaction: prepared_transaction) }
