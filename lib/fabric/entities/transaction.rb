@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fabric
   #
   # Represents an endorsed transaction that can be submitted to the orderer for commit to the ledger,
@@ -177,8 +179,8 @@ module Fabric
     end
 
     #
-    # Returns the current instance of the signed commit status request. Necessary so we can keep the state of the signature
-    # in the transaction object.
+    # Returns the current instance of the signed commit status request. Necessary so we can keep the state of the
+    # signature in the transaction object.
     #
     # @return [Gateway::SignedCommitStatusRequest] signed commit status request
     #

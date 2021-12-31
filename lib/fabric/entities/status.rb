@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fabric
   #
   # Status of a transaction that is to be committed to the ledger.

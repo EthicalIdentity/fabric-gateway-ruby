@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Fabric::Transaction do  # rubocop:disable RSpec/FilePath
   subject(:transaction) { described_class.new(network, prepared_transaction) }
 
@@ -34,11 +36,10 @@ RSpec.describe Fabric::Transaction do  # rubocop:disable RSpec/FilePath
 
     context 'when check_status is not passed and status is unsuccessful' do
       let(:commit_status_response) { Gateway::CommitStatusResponse.new(result: :BAD_PAYLOAD) }
+      let(:expected_error_message) { 'Transaction abc123 failed to commit with status code 2 - BAD_PAYLOAD' }
 
       it 'raises an error' do
-        expect do
-          transaction.result
-        end.to raise_error(Fabric::CommitError).with_message('Transaction abc123 failed to commit with status code 2 - BAD_PAYLOAD')
+        expect { transaction.result }.to raise_error(Fabric::CommitError).with_message(expected_error_message)
       end
     end
 
@@ -50,11 +51,11 @@ RSpec.describe Fabric::Transaction do  # rubocop:disable RSpec/FilePath
 
     context 'when check_status is true and status is unsuccessful' do
       let(:commit_status_response) { Gateway::CommitStatusResponse.new(result: :BAD_PAYLOAD) }
+      let(:expected_error_message) { 'Transaction abc123 failed to commit with status code 2 - BAD_PAYLOAD' }
 
       it 'raises an error' do
-        expect do
-          transaction.result(check_status: true)
-        end.to raise_error(Fabric::CommitError).with_message('Transaction abc123 failed to commit with status code 2 - BAD_PAYLOAD')
+        expect { transaction.result(check_status: true) }
+          .to raise_error(Fabric::CommitError).with_message(expected_error_message)
       end
     end
 

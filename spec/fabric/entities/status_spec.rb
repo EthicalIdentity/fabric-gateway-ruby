@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Fabric::Status do # rubocop:disable RSpec/FilePath
   describe '::TRANSACTION_STATUSES' do
     let(:expected_transaction_values) do
