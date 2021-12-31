@@ -40,7 +40,7 @@ module Fabric
     # @param [Fabric::Status] status transaction status
     #
     def initialize(status)
-      super("Transaction #{status.transaction_id} failed to commit with status code #{status.code} -" +
+      super("Transaction #{status.transaction_id} failed to commit with status code #{status.code} - " +
         Status::TRANSACTION_STATUSES.key(status.code).to_s)
       @code = code
       @transaction_id = status.transaction_id

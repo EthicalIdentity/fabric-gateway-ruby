@@ -102,8 +102,6 @@ module Fabric
     # transaction function will be evaluated on endorsing peers and then submitted to the ordering service to be
     # committed to the ledger.
     #
-    # @todo: Implement Me! - LEFT OFF HERE!
-    #
     # @param [String] transaction_name
     # @param [Hash] proposal_options
     # @option proposal_options [Array] :arguments array of arguments to pass to the transaction
@@ -154,6 +152,14 @@ module Fabric
       Proposal.new(proposed_transaction)
     end
 
+    #
+    # Generates the qualified transaction name for the contract. (prepends the contract name to the transaction name if
+    # contract name is set)
+    #
+    # @param [string] transaction_name
+    #
+    # @return [string] qualified transaction name
+    #
     def qualified_transaction_name(transaction_name)
       contract_name.nil? || contract_name.empty? ? transaction_name : "#{contract_name}:#{transaction_name}"
     end

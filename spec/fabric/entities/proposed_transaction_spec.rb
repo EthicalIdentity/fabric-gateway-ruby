@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Fabric::ProposedTransaction do
+RSpec.describe Fabric::ProposedTransaction do # rubocop:disable RSpec/FilePath
   subject(:proposed_transaction) do
     described_class.new(contract, 'testTransaction', **extra_args)
   end

@@ -1,11 +1,10 @@
 module Fabric
   #
-  # Status of a transaction that is committed to the ledger.
-  # @todo - test me! this is very trivial, so it might be a good idea
-  #   for a first time tester or someone new to the project
+  # Status of a transaction that is to be committed to the ledger.
   #
   class Status
-    TRANSACTION_STATUSES = ::Protos::TxValidationCode.constants.map(&::Protos::TxValidationCode.method(:const_get)).collect do |i|
+    TRANSACTION_STATUSES = ::Protos::TxValidationCode.constants.map(&::Protos::TxValidationCode.method(:const_get))
+                                                     .collect do |i|
       [::Protos::TxValidationCode.lookup(i), i]
     end.to_h
 

@@ -4,6 +4,7 @@ module Fabric
   #
   # @todo - missing tests :(
   class Envelope
+    # @return [Common::Envelope] transaction envelope
     attr_reader :envelope
 
     def initialize(envelope)

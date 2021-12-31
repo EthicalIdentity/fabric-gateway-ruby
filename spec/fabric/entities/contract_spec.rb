@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Fabric::Contract do
+RSpec.describe Fabric::Contract do # rubocop:disable RSpec/FilePath
   subject(:contract) { described_class.new(network, 'testchaincode', 'testcontract') }
 
   let(:signer) { build(:identity, :user1) }
