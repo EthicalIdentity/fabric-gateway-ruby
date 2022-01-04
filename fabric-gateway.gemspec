@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('codecov', '~> 0.6.0')
   spec.add_development_dependency('factory_bot', '~> 6.2.0')
   spec.add_development_dependency('grpc-tools', '~> 1.42')
+  spec.add_development_dependency('rake-notes', '~> 0.2.0')
   spec.add_development_dependency('rubocop', '~> 1.23.0')
   spec.add_development_dependency('rubocop-rspec', '~> 2.6.0')
   spec.add_development_dependency('simplecov', '~> 0.21.2')
