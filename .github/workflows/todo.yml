@@ -1,4 +1,4 @@
-name: "Workflow"
+name: "TODO to Github Issues"
 on: ["push"]
 jobs:
   build:
