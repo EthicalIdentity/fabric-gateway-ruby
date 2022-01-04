@@ -22,33 +22,7 @@ module Fabric
       @proposed_transaction.contract
     end
 
-    def network
-      contract.network
-    end
-
-    def client
-      network.client
-    end
-
-    def signer
-      network.signer
-    end
-
-    def gateway
-      network.gateway
-    end
-
-    def network_name
-      network.name
-    end
-
-    def contract_name
-      contract.contract_name
-    end
-
-    def chaincode_name
-      contract.chaincode_name
-    end
+    include Fabric::Accessors::Contract
 
     def transaction_id
       proposed_transaction.transaction_id
@@ -96,7 +70,7 @@ module Fabric
     # @return [String] raw binary digest of the proposal message.
     #
     def digest
-      signer.digest(proposal.to_proto)
+      Fabric.crypto_suite.digest(proposal.to_proto)
     end
 
     #
@@ -153,8 +127,22 @@ module Fabric
       evaluate_response.result.payload
     end
 
-    def endorse
-      # TODO: endorse proposal
+    #
+    # Obtain endorsement for the transaction proposal from sufficient peers to allow it to be committed to the ledger.
+    #
+    # @param [Hash] options gRPC call options @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
+    #
+    # @return [Fabric::Transaction] An endorsed transaction that can be submitted to the ledger.
+    #
+    def endorse(options = {})
+      sign
+      endorse_response = client.endorse(new_endorse_request, options)
+
+      raise Fabric::Error, 'Missing transaction envelope' if endorse_response.prepared_transaction.nil?
+
+      prepared_transaction = new_prepared_transaction(endorse_response.prepared_transaction)
+
+      Fabric::Transaction.new(network, prepared_transaction)
     end
 
     #
@@ -170,13 +158,32 @@ module Fabric
       )
     end
 
+    #
+    # Creates a new endorse request from this proposal.
+    #
+    # @return [Gateway::EndorseRequest] EndorseRequest protobuf message
+    #
     def new_endorse_request
-      # TODO
+      ::Gateway::EndorseRequest.new(
+        transaction_id: transaction_id,
+        channel_id: network_name,
+        proposed_transaction: signed_proposal,
+        endorsing_organizations: proposed_transaction.endorsing_organizations
+      )
     end
 
-    def new_prepared_transaction
-      # TODO
-      # used in endorse
+    #
+    # Creates a new prepared transaction from a transaction envelope.
+    #
+    # @param [Common::Envelope] envelope transaction envelope
+    #
+    # @return [Gateway::PreparedTransaction] prepared transaction protobuf message
+    #
+    def new_prepared_transaction(envelope)
+      ::Gateway::PreparedTransaction.new(
+        transaction_id: transaction_id,
+        envelope: envelope
+      )
     end
   end
 end

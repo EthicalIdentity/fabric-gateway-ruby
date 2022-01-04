@@ -1,18 +1,26 @@
 # frozen_string_literal: true
 
+require 'gateway/gateway_pb'
+require 'gateway/gateway_services_pb'
+
+require 'fabric/accessors/gateway'
+require 'fabric/accessors/network'
+require 'fabric/accessors/contract'
+
+require 'fabric/entities/envelope'
+require 'fabric/entities/identity'
+require 'fabric/entities/proposal'
+require 'fabric/entities/proposed_transaction'
+require 'fabric/entities/status'
+require 'fabric/entities/transaction'
+
 require 'fabric/constants'
 require 'fabric/contract'
 require 'fabric/client'
 require 'fabric/ec_crypto_suite'
 require 'fabric/gateway'
-require 'fabric/identity'
 require 'fabric/network'
-require 'fabric/proposal'
-require 'fabric/proposed_transaction'
 require 'fabric/version'
-
-require 'gateway/gateway_pb'
-require 'gateway/gateway_services_pb'
 
 #
 # Hyperledger Fabric Gateway SDK
@@ -25,14 +33,19 @@ module Fabric
   #
   # CommitError
   #
-  # @TODO: TEST ME!
+  # @todo TEST ME!
   #
   class CommitError < Error
     attr_reader :code, :transaction_id
 
+    #
+    # Creates a transaction commit error from the status
+    #
+    # @param [Fabric::Status] status transaction status
+    #
     def initialize(status)
-      super("Transaction #{status.transaction_id} failed to commit with status code #{status.code} -" +
-        Protos::TxValidationCode.lookup(status.code).to_s)
+      super("Transaction #{status.transaction_id} failed to commit with status code #{status.code} - " +
+        Status::TRANSACTION_STATUSES.key(status.code).to_s)
       @code = code
       @transaction_id = status.transaction_id
     end

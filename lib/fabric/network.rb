@@ -11,17 +11,12 @@ module Fabric
   class Network
     attr_reader :gateway, :name
 
+    # @!parse include Fabric::Accessors::Gateway
+    include Fabric::Accessors::Gateway
+
     def initialize(gateway, name)
       @gateway = gateway
       @name = name
-    end
-
-    def client
-      gateway.client
-    end
-
-    def signer
-      gateway.signer
     end
 
     #
@@ -37,7 +32,7 @@ module Fabric
     end
 
     #
-    # @TODO: original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
+    # @todo original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
     # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
     # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
     #
@@ -48,7 +43,7 @@ module Fabric
     end
 
     #
-    # @TODO: original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
+    # @todo original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
     # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
     # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
     #

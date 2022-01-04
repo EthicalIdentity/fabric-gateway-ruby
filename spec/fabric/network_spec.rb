@@ -18,17 +18,7 @@ RSpec.describe Fabric::Network do
     it { is_expected.to have_attributes(expected_attributes) }
   end
 
-  describe '#client' do
-    it 'returns the client from gateway' do
-      expect(network.client).to eql(gateway.client)
-    end
-  end
-
-  describe '#signer' do
-    it 'returns the signer from gateway' do
-      expect(network.signer).to eql(gateway.signer)
-    end
-  end
+  it_behaves_like 'a gateway accessor'
 
   describe '#new_contract' do
     context 'when contract_name is not passed' do

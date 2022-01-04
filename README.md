@@ -1,6 +1,6 @@
 # Fabric::Gateway
 
-![Rspec Tests](https://github.com/EthicalIdentity/fabric-gateway-ruby/actions/workflows/rspec.yml/badge.svg) [![codecov](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby/branch/master/graph/badge.svg?token=AXHQEN0R2R)](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/84bab9bb5911d3564df6/maintainability)](https://codeclimate.com/github/EthicalIdentity/fabric-gateway-ruby/maintainability) ![Gem](https://img.shields.io/gem/v/fabric-gateway) ![Downloads](https://img.shields.io/gem/dt/fabric-gateway)  [![GitHub license](https://img.shields.io/github/license/EthicalIdentity/fabric-gateway-ruby)](https://github.com/EthicalIdentity/fabric-gateway-ruby/blob/master/LICENSE.txt) 
+[![Rspec Tests](https://github.com/EthicalIdentity/fabric-gateway-ruby/actions/workflows/rspec.yml/badge.svg)](https://github.com/EthicalIdentity/fabric-gateway-ruby/actions/workflows/rspec.yml?query=branch%3Amaster) [![codecov](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby/branch/master/graph/badge.svg?token=AXHQEN0R2R)](https://codecov.io/gh/EthicalIdentity/fabric-gateway-ruby) [![Maintainability](https://api.codeclimate.com/v1/badges/84bab9bb5911d3564df6/maintainability)](https://codeclimate.com/github/EthicalIdentity/fabric-gateway-ruby/maintainability) [![Gem](https://img.shields.io/gem/v/fabric-gateway)](https://rubygems.org/gems/fabric-gateway) [![Downloads](https://img.shields.io/gem/dt/fabric-gateway)](https://rubygems.org/gems/fabric-gateway)  [![GitHub license](https://img.shields.io/github/license/EthicalIdentity/fabric-gateway-ruby)](https://github.com/EthicalIdentity/fabric-gateway-ruby/blob/master/LICENSE.txt) 
 
 
 
@@ -32,11 +32,13 @@ Will update to new version of grpc when fix is released.
 
 ## Usage
 
-This is an alpha stage library suitable for early adopters. Not all Hyperledger Fabric Gateway operations have been implemented. However the operations that have been implemented have pretty good unit test coverage.
+This is an alpha stage library suitable for early adopters. The basic evaluate and submit gateway functions are implemented. Chaincode events monitoring is not yet implemented.
 
-```
+```ruby
 $ bin/console
 
+# for running in application or script; not needed from bin/console
+require 'fabric' 
 
 def load_certs
   data_dir ='/your/certs/directory' # aka test-network/organizations
@@ -80,12 +82,9 @@ contract = network.new_contract('basic')
 # Evaluate
 puts contract.evaluate_transaction('GetAllAssets')
 
-# Submit - Not Yet Implemented!
-puts contract.submit_transaction('CreateAsset', 'asset13', 'yellow', '5', 'Tom', '1300')
-
-# Endorse - Not Yet Implemented!
-
-# Commit Status - Not Yet Implemented!
+# Submit
+puts contract.submit_transaction('CreateAsset', ['asset13', 'yellow', '5', 'Tom', '1300'])
+puts contract.submit_transaction('UpdateAsset', %w[asset999 yellow 5 Tom 5555])
 
 # Chaincode Events - Not Yet Implemented!
 
@@ -133,13 +132,15 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Setup auto-generation of API docs on rubydoc.info
 - [x] Abstract connection and calls such that the protos aren't being interacted directly
 - [x] Implement, Document & Test Evaluate
-- [ ] Implement, Document & Test Endorse
-- [ ] Implement, Document & Test Submit
-- [ ] Implement, Document & Test CommitStatus
+- [x] Implement, Document & Test Endorse
+- [x] Implement, Document & Test Submit
+- [x] Implement, Document & Test CommitStatus
 - [ ] Implement, Document & Test ChaincodeEvents
-- [ ] Implement off-line signing - https://github.com/hyperledger/fabric-gateway/blob/1e4a926ddb98ec8ee969da3fc1500642ab389d01/node/src/contract.ts#L63 
+- [ ] Support Submit Async (currently blocks waiting for the transaction to be committed)
 - [ ] Consider adding error handling, invalid transaction proposals will result in random GRPC::FailedPrecondition type errors
+- [ ] Consider adding transaction_id information to Fabric::Errors that are raised; would help a lot for debugging.
 - [ ] Consider adding integration tests against blockchain; might be a ton of stuff to setup
+- [ ] Implement off-line signing - https://github.com/hyperledger/fabric-gateway/blob/1e4a926ddb98ec8ee969da3fc1500642ab389d01/node/src/contract.ts#L63 
 - [ ] Support for offline transaction signing (write scenario test for this) - https://github.com/hyperledger/fabric-gateway/blob/cf78fc11a439ced7dfd2f9b55886c55c73119b25/pkg/client/offlinesign_test.go
 
 

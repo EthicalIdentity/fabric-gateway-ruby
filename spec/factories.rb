@@ -75,4 +75,32 @@ FactoryBot.define do
       )
     end
   end
+
+  factory :status, class: 'Fabric::Status' do
+    transient do
+      transaction_id { 'factory_generated_transaction_id' }
+      block_number { 123 }
+      code { 0 }
+    end
+
+    trait :successful do
+      transient do
+        code { 0 }
+      end
+    end
+
+    trait :unsuccessful do
+      transient do
+        code { 1 }
+      end
+    end
+
+    initialize_with do
+      Fabric::Status.new(
+        transaction_id,
+        block_number,
+        code
+      )
+    end
+  end
 end

@@ -50,29 +50,7 @@ RSpec.describe Fabric::Contract do
     end
   end
 
-  describe '#client' do
-    it 'returns the client from gateway' do
-      expect(contract.client).to eql(gateway.client)
-    end
-  end
-
-  describe '#signer' do
-    it 'returns the signer from gateway' do
-      expect(contract.signer).to eql(gateway.signer)
-    end
-  end
-
-  describe '#gateway' do
-    it 'returns the signer from gateway' do
-      expect(contract.gateway).to eql(gateway)
-    end
-  end
-
-  describe '#network_name' do
-    it 'returns the network_name from the network' do
-      expect(contract.network_name).to eql('testnet')
-    end
-  end
+  it_behaves_like 'a network accessor'
 
   describe '#evaluate' do
     context 'when no arguments are passed' do
@@ -198,11 +176,102 @@ RSpec.describe Fabric::Contract do
   end
 
   describe '#submit' do
-    pending 'TODO: implement'
+    let(:proposal_double) { instance_double('Proposal') }
+    let(:transaction_double) { instance_double('Transaction') }
+
+    before do
+      allow(transaction_double).to receive(:result).and_return('mocked result')
+      allow(transaction_double).to receive(:submit)
+      allow(proposal_double).to receive(:endorse).and_return(transaction_double)
+      allow(Fabric::Proposal).to receive(:new).and_return(proposal_double)
+    end
+
+    context 'when no proposal options are passed' do
+      it 'creates a new proposal with the expected arguments' do # rubocop:disable RSpec
+        contract.submit('test_transaction')
+
+        expect(Fabric::Proposal).to have_received(:new) do |proposed_transaction|
+          expect(proposed_transaction.transaction_name).to eql('testcontract:test_transaction')
+          expect(proposed_transaction.arguments).to eql([])
+          expect(proposed_transaction.transient_data).to eql({})
+          expect(proposed_transaction.endorsing_organizations).to eql(%w[])
+        end
+      end
+
+      it 'returns the transaction result' do
+        expect(contract.submit('test_transaction')).to eql('mocked result')
+      end
+    end
+
+    context 'when proposal options are passed' do
+      it 'creates a new proposal with the expected arguments' do # rubocop:disable RSpec
+        contract.submit(
+          'test_transaction',
+          {
+            arguments: %w[arg1 arg2],
+            transient_data: { something: 'different' },
+            endorsing_organizations: %w[org1 org2 org3]
+          }
+        )
+
+        expect(Fabric::Proposal).to have_received(:new) do |proposed_transaction|
+          expect(proposed_transaction.transaction_name).to eql('testcontract:test_transaction')
+          expect(proposed_transaction.arguments).to eql(%w[arg1 arg2])
+          expect(proposed_transaction.transient_data).to eql({ something: 'different' })
+          expect(proposed_transaction.endorsing_organizations).to eql(%w[org1 org2 org3])
+        end
+      end
+
+      it 'returns the transaction result' do
+        expect(contract.submit('test_transaction')).to eql('mocked result')
+      end
+    end
   end
 
   describe '#submit_transaction' do
-    pending 'TODO: implement'
+    let(:proposal_double) { instance_double('Proposal') }
+    let(:transaction_double) { instance_double('Transaction') }
+
+    before do
+      allow(transaction_double).to receive(:result).and_return('mocked result')
+      allow(transaction_double).to receive(:submit)
+      allow(proposal_double).to receive(:endorse).and_return(transaction_double)
+      allow(Fabric::Proposal).to receive(:new).and_return(proposal_double)
+    end
+
+    context 'when no arguments are passed' do
+      it 'creates a new proposal with the expected arguments' do # rubocop:disable RSpec
+        contract.submit_transaction('test_transaction')
+
+        expect(Fabric::Proposal).to have_received(:new) do |proposed_transaction|
+          expect(proposed_transaction.transaction_name).to eql('testcontract:test_transaction')
+          expect(proposed_transaction.arguments).to eql([])
+          expect(proposed_transaction.transient_data).to eql({})
+          expect(proposed_transaction.endorsing_organizations).to eql(%w[])
+        end
+      end
+
+      it 'returns the transaction result' do
+        expect(contract.submit_transaction('test_transaction')).to eql('mocked result')
+      end
+    end
+
+    context 'when arguments are passed' do
+      it 'creates a new proposal with the expected arguments' do # rubocop:disable RSpec
+        contract.submit_transaction('test_transaction', ['some arg'])
+
+        expect(Fabric::Proposal).to have_received(:new) do |proposed_transaction|
+          expect(proposed_transaction.transaction_name).to eql('testcontract:test_transaction')
+          expect(proposed_transaction.arguments).to eql(['some arg'])
+          expect(proposed_transaction.transient_data).to eql({})
+          expect(proposed_transaction.endorsing_organizations).to eql(%w[])
+        end
+      end
+
+      it 'returns the transaction result' do
+        expect(contract.submit_transaction('test_transaction', ['some arg'])).to eql('mocked result')
+      end
+    end
   end
 
   describe '#new_proposal' do

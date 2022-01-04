@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Fabric::ProposedTransaction do
+RSpec.describe Fabric::ProposedTransaction do # rubocop:disable RSpec/FilePath
   subject(:proposed_transaction) do
     described_class.new(contract, 'testTransaction', **extra_args)
   end
@@ -93,102 +93,44 @@ RSpec.describe Fabric::ProposedTransaction do
     end
   end
 
-  describe '#network' do
-    it 'returns the network of the contract' do
-      expect(proposed_transaction.network).to eql(contract.network)
-    end
-  end
-
-  describe '#client' do
-    it 'returns the client from gateway' do
-      expect(proposed_transaction.client).to eql(contract.client)
-    end
-  end
-
-  describe '#signer' do
-    it 'returns the signer from gateway' do
-      expect(proposed_transaction.signer).to eql(contract.signer)
-    end
-  end
-
-  describe '#gateway' do
-    it 'returns the signer from gateway' do
-      expect(proposed_transaction.gateway).to eql(contract.gateway)
-    end
-  end
-
-  describe '#network_name' do
-    it 'returns the network_name from the network' do
-      expect(contract.network_name).to eql('testnet')
-    end
-  end
-
-  describe '#contract_name' do
-    it 'returns the contract_name from the contract' do
-      expect(contract.contract_name).to eql('testcontract')
-    end
-  end
-
-  describe '#chaincode_name' do
-    it 'returns the chaincode_name from the contract' do
-      expect(contract.chaincode_name).to eql('testchaincode')
-    end
-  end
+  it_behaves_like 'a contract accessor'
 
   describe '#generate_proposed_transaction' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     # consider testing this individually in the future
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#signed_proposal' do # rubocop:disable RSpec/RepeatedExampleGroupBody
     # consider testing this individually in the future
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#proposal' do # rubocop:disable RSpec/RepeatedExampleGroupBody
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#header' do # rubocop:disable RSpec/RepeatedExampleGroupBody
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#channel_header' do # rubocop:disable RSpec/RepeatedExampleGroupBody
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#channel_header_extension' do # rubocop:disable RSpec/RepeatedExampleGroupBody
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#chaincode_id' do # rubocop:disable RSpec/RepeatedExampleGroupBody
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#chaincode_proposal_payload' do # rubocop:disable RSpec/RepeatedExampleGroupBody
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#timestamp' do # rubocop:disable RSpec/RepeatedExampleGroupBody
-    it 'is already tested', skip: 'Tested in #new' do
-      skip
-    end
+    it('is already tested', { skip: 'Tested in #new' }) {} # rubocop:disable Lint/EmptyBlock
   end
 
   describe '#nonce' do

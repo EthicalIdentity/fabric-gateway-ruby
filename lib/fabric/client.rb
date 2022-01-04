@@ -10,22 +10,34 @@ module Fabric
     #
     # Initializes a client
     #
-    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:initialize
     #
-    # @param [Gateway::Gateway::Stub] grpc_client grpc gateway client stub
-    # @param [string] host hostname and port of the gateway
-    # @param [GRPC::Core::ChannelCredentials|GRPC::Core::XdsChannelCredentials|Symbol] creds channel credentials
-    #                                                                                  (usually the CA certificate)
-    # @param [Hash] default_call_options call options to use by default for different operations
-    # @option default_call_options [Hash] :endorse_options default options for endorse call; @see keyword arguments in https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
-    # @option default_call_options [Hash] :evaluate_options default options for evaluate call; @see keyword arguments in
-    #                                              https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
-    # @option default_call_options [Hash] :submit_options default options for submit call; @see keyword arguments in https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
-    # @option default_call_options [Hash] :commit_status_options default options for commit_status call;
-    #                                     @see keyword arguments in https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
-    # @option default_call_options [Hash] :chaincode_events_options default options for chaincode_events call;
-    #                                     @see keyword arguments in https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
-    # @param [Hash] **client_opts client initialization options; @see keyword arguments at https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:initialize
+    # @overload initialize(grpc_client: client, default_call_options: {}, **client_opts)
+    #   Initializes a client from a gRPC Gateway client stub
+    #   @param [Gateway::Gateway::Stub] grpc_client grpc gateway client stub
+    #   @param [Hash] default_call_options call options to use by default for different operations
+    #   @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Keyword Argument call options for
+    #     *_options default_call_options
+    #   @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:initialize Keyword arguments for **client_opts
+    #   @option default_call_options [Hash] :endorse_options default options for endorse call
+    #   @option default_call_options [Hash] :evaluate_options default options for evaluate call
+    #   @option default_call_options [Hash] :submit_options default options for submit call
+    #   @option default_call_options [Hash] :commit_status_options default options for commit_status call
+    #   @option default_call_options [Hash] :chaincode_events_options default options for chaincode_events call
+    #   @param [Hash] **client_opts client initialization options
+    # @overload initialize(host: host, creds: creds, default_call_options: {}, **client_opts)
+    #   Instantiates a new gRPC Gateway client stub from the parameters
+    #   @param [string] host hostname and port of the gateway
+    #   @param [GRPC::Core::ChannelCredentials|GRPC::Core::XdsChannelCredentials|Symbol] creds channel credentials
+    #     (usually the CA certificate)
+    #   @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Keyword Argument call options for
+    #     *_options default_call_options
+    #   @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:initialize Keyword arguments for **client_opts
+    #   @option default_call_options [Hash] :endorse_options default options for endorse call
+    #   @option default_call_options [Hash] :evaluate_options default options for evaluate call
+    #   @option default_call_options [Hash] :submit_options default options for submit call
+    #   @option default_call_options [Hash] :commit_status_options default options for commit_status call
+    #   @option default_call_options [Hash] :chaincode_events_options default options for chaincode_events call
+    #   @param [Hash] **client_opts client initialization options
     #
     def initialize(grpc_client: nil, host: nil, creds: nil, default_call_options: {}, **client_opts)
       if grpc_client
@@ -89,8 +101,8 @@ module Fabric
     #
     # Subscribe to chaincode events
     #
-    # @NOTE: This function has never been utilized or tested. This function is probably wrong, missing a block.
-    # @TODO: add testing!
+    # @note This function has never been utilized or tested. This function is probably wrong, missing a block.
+    # @todo add testing!
     #
     # @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
     # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer

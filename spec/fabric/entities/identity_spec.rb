@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Fabric::Identity do
+RSpec.describe Fabric::Identity do # rubocop:disable RSpec/FilePath
   describe '#new' do
     context 'when no params are passed' do
       subject(:identity) { described_class.new }

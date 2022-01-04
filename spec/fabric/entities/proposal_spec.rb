@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Fabric::Proposal do
+RSpec.describe Fabric::Proposal do # rubocop:disable RSpec/FilePath
   subject(:proposal) { described_class.new(proposed_transaction) }
 
   let(:proposed_transaction) { build(:proposed_transaction) }
@@ -22,6 +22,8 @@ RSpec.describe Fabric::Proposal do
 
     it { is_expected.to have_attributes(expected_attributes) }
   end
+
+  it_behaves_like 'a contract accessor'
 
   describe '#to_proto' do
     it 'calls to_proto of the proposed transaction' do
@@ -191,7 +193,130 @@ RSpec.describe Fabric::Proposal do
         expect(proposed_transaction.client).to have_received(:evaluate)
       end
 
+      it 'sends call options' do
+        expect(sent_call_options).to eql({ some: 'option' })
+      end
+    end
+  end
+
+  describe '#endorse' do
+    # please refer to support/shared_context/client_mocks - it is where all the magic is happening!
+    include_context 'client mocks'
+
+    before do
+      setup_endorse_mock(proposed_transaction.client, nil)
+    end
+
+    context 'when endorse_response missing prepared_transaction' do
+      before do
+        setup_endorse_mock(proposed_transaction.client, nil)
+      end
+
+      it 'raises an error' do
+        expect { proposal.endorse }
+          .to raise_error(Fabric::Error).with_message('Missing transaction envelope')
+      end
+    end
+
+    context 'when the proposal is not signed' do
+      before do
+        allow(Fabric::Transaction).to receive(:new).and_return(:mocked_transaction)
+        setup_endorse_mock(proposed_transaction.client, expected_envelope)
+      end
+
+      let(:expected_envelope) { Common::Envelope.new(payload: 'fake payload') }
+      let!(:response) { proposal.endorse }
+
+      it 'sets the signature' do
+        expect(proposed_transaction.signed_proposal.signature).not_to be_empty
+      end
+
+      it 'returns a new transaction' do
+        expect(response).to be(:mocked_transaction)
+      end
+
+      it 'passes the right arguments to the transaction constructor' do
+        expect(Fabric::Transaction).to have_received(:new).with(
+          proposed_transaction.network,
+          Gateway::PreparedTransaction.new(transaction_id: proposed_transaction.transaction_id,
+                                           envelope: expected_envelope)
+        )
+      end
+
+      it 'calls client endorse' do
+        expect(proposed_transaction.client).to have_received(:endorse)
+      end
+
       it 'sends no call options' do
+        expect(sent_call_options).to eql({})
+      end
+    end
+
+    context 'when the proposal is signed' do
+      before do
+        proposal.signature = 'a fake signature'
+        allow(Fabric::Transaction).to receive(:new).and_return(:mocked_transaction)
+        setup_endorse_mock(proposed_transaction.client, expected_envelope)
+      end
+
+      let(:expected_envelope) { Common::Envelope.new(payload: 'fake payload') }
+      let!(:response) { proposal.endorse }
+
+      it 'does not change the signature' do
+        expect(proposed_transaction.signed_proposal.signature).to eql('a fake signature')
+      end
+
+      it 'returns a new transaction' do
+        expect(response).to be(:mocked_transaction)
+      end
+
+      it 'passes the right arguments to the transaction constructor' do
+        expect(Fabric::Transaction).to have_received(:new).with(
+          proposed_transaction.network,
+          Gateway::PreparedTransaction.new(transaction_id: proposed_transaction.transaction_id,
+                                           envelope: expected_envelope)
+        )
+      end
+
+      it 'calls client evaluate' do
+        expect(proposed_transaction.client).to have_received(:endorse)
+      end
+
+      it 'sends no call options' do
+        expect(sent_call_options).to eql({})
+      end
+    end
+
+    context 'when options are passed' do
+      before do
+        allow(Fabric::Transaction).to receive(:new).and_return(:mocked_transaction)
+        setup_endorse_mock(proposed_transaction.client, expected_envelope)
+      end
+
+      let(:expected_envelope) { Common::Envelope.new(payload: 'fake payload') }
+      let!(:response) { proposal.endorse({ some: 'option' }) }
+
+      it 'sets the signature' do
+        expect(proposed_transaction.signed_proposal.signature).not_to be_empty
+      end
+
+      it 'returns a new transaction' do
+        expect(response).to be(:mocked_transaction)
+      end
+
+      it 'passes the right arguments to the transaction constructor' do
+        expect(Fabric::Transaction).to have_received(:new).with(
+          proposed_transaction.network,
+          Gateway::PreparedTransaction.new(transaction_id: proposed_transaction.transaction_id,
+                                           envelope: expected_envelope)
+        )
+      end
+
+      it 'calls client endorse' do
+        expect(proposed_transaction.client).to have_received(:endorse)
+      end
+
+      it 'sends call options' do
         expect(sent_call_options).to eql({ some: 'option' })
       end
     end
@@ -214,6 +339,43 @@ RSpec.describe Fabric::Proposal do
 
     it 'sets the target_organizations' do
       expect(response.target_organizations).to eql([])
+    end
+  end
+
+  describe '#new_endorse_request' do
+    let!(:response) { proposal.new_endorse_request }
+
+    it 'returns an EndorseRequest' do
+      expect(response).to be_a(::Gateway::EndorseRequest)
+    end
+
+    it 'sets the channel_id' do
+      expect(response.channel_id).to eql('testnet')
+    end
+
+    it 'sets the proposed_transaction' do
+      expect(response.proposed_transaction).to eql(proposed_transaction.proposed_transaction.proposal)
+    end
+
+    it 'sets the target_organizations' do
+      expect(response.endorsing_organizations).to eql([])
+    end
+  end
+
+  describe '#new_prepared_transaction' do
+    let(:expected_envelope) { Common::Envelope.new(payload: 'fake payload') }
+    let!(:response) { proposal.new_prepared_transaction(expected_envelope) }
+
+    it 'returns a PreparedTransaction' do
+      expect(response).to be_a(::Gateway::PreparedTransaction)
+    end
+
+    it 'sets the transaction_id' do
+      expect(response.transaction_id).to eql(proposed_transaction.transaction_id)
+    end
+
+    it 'sets the envelope' do
+      expect(response.envelope).to eql(expected_envelope)
     end
   end
 end
