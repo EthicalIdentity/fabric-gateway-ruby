@@ -86,8 +86,28 @@ puts contract.evaluate_transaction('GetAllAssets')
 puts contract.submit_transaction('CreateAsset', ['asset13', 'yellow', '5', 'Tom', '1300'])
 puts contract.submit_transaction('UpdateAsset', %w[asset999 yellow 5 Tom 5555])
 
-# Chaincode Events - Not Yet Implemented!
+# Chaincode Events - simple (blocking until deadline is reached or connection closed)
+contract.chaincode_events do |event|
+  puts event
+end
 
+# Chaincode Events - advanced
+# chaincode events are blocking and run indefinitely, so this is probably the more typical use case to give 
+# more control over the connection
+
+op = contract.chaincode_events(call_options: { return_op: true }) do |event|
+  puts event
+end
+
+t = Thread.new do
+  call = op.execute
+rescue GRPC::Cancelled => e
+  puts 'We cancelled the operation outside of this thread.'
+end
+
+op.status
+op.cancelled?
+op.cancel
 ```
 
 Please refer to the [full reference documentation](https://rubydoc.info/github/EthicalIdentity/fabric-gateway-ruby) for complete usage information.
@@ -135,7 +155,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Implement, Document & Test Endorse
 - [x] Implement, Document & Test Submit
 - [x] Implement, Document & Test CommitStatus
-- [ ] Implement, Document & Test ChaincodeEvents
+- [x] Implement, Document & Test ChaincodeEvents
 - [ ] Support Submit Async (currently blocks waiting for the transaction to be committed)
 - [ ] Consider adding error handling, invalid transaction proposals will result in random GRPC::FailedPrecondition type errors
 - [ ] Consider adding transaction_id information to Fabric::Errors that are raised; would help a lot for debugging.

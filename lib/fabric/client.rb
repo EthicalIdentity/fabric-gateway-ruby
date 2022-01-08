@@ -53,8 +53,9 @@ module Fabric
     #
     # Submits an evaluate_request to the gateway to be evaluted.
     #
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Call options for options parameter
     # @param [Gateway::EvaluateRequest] evaluate_request
-    # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
+    # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
     #
     # @return [Gateway::EvaluateResponse] evaluate_response
     #

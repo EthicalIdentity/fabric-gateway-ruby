@@ -36,8 +36,8 @@ module Fabric
     #
     # @return [ #<Enumerator: #<GRPC::ActiveCall>] ?
     #
-    def new_chaincode_events(contract, start_block: nil, &block)
-      new_chaincode_events_request(contract, start_block: start_block).get_events({}, &block)
+    def new_chaincode_events(contract, start_block: nil, call_options: {}, &block)
+      new_chaincode_events_request(contract, start_block: start_block).get_events(call_options, &block)
     end
 
     #
