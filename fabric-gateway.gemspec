@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Jonathan Chan']
   spec.email         = ['jonathan.chan@ethicalidentity.com']
 
-  spec.summary       = 'Hyperledger Fabric Gateway gRPC SDK'
-  spec.description   = 'Hyperledger Fabric Gateway gRPC SDK generated directly from protos found at: https://github.com/hyperledger/fabric-protos.'
+  spec.summary       = 'Hyperledger Fabric Gateway SDK'
+  spec.description   = 'Ruby port of the Hyperledger Fabric Gateway SDK'
   spec.homepage      = 'https://github.com/ethicalidentity/fabric-gateway-ruby'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.6.0')

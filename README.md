@@ -4,7 +4,7 @@
 
 
 
-Hyperledger Fabric Gateway gRPC SDK generated directly from protos found at: https://github.com/hyperledger/fabric-protos.
+[Hyperledger Fabric Gateway SDK](https://hyperledger-fabric.readthedocs.io/en/latest/gateway.html) ported to idiomatic ruby.
 
 ## Installation
 
