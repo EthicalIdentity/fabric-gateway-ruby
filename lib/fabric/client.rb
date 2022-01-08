@@ -92,6 +92,7 @@ module Fabric
     # @param [Gateway::CommitStatusRequest] commit_status_request
     # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
     #
+    # Returns an enum or if you pass a block, use the block.
     # @return [Gateway::CommitStatusResponse] commit_status_response
     #
     def commit_status(commit_status_request, options = {})
@@ -101,13 +102,14 @@ module Fabric
     #
     # Subscribe to chaincode events
     #
-    # @note This function has never been utilized or tested. This function is probably wrong, missing a block.
-    # @todo add testing!
+    # @todo describe all 4 ways to call this.
     #
     # @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
     # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer
     #
-    # @return [Gateway::ChaincodeEventsResponse] commit_status_response (probably wrong, this is a stream.)
+    # TODO: document overloaded usage of this.
+    # @overload initialize(host: host, creds: creds, default_call_options: {}, **client_opts)
+    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] commit_status_response (probably wrong, this is a stream.)
     #
     def chaincode_events(chaincode_events_request, options = {}, &block)
       @grpc_client.chaincode_events(chaincode_events_request,

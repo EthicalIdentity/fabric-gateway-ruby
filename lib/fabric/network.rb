@@ -32,25 +32,26 @@ module Fabric
     end
 
     #
-    # @todo original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
-    # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
-    # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
+    # Get chaincode events emitted by transaction functions of a specific chaincode.
     #
-    # @return [?] ?
+    # @return [ #<Enumerator: #<GRPC::ActiveCall>] ?
     #
-    def new_chaincode_events
-      raise NotYetImplemented
+    def new_chaincode_events(contract, start_block: nil, &block)
+      new_chaincode_events_request(contract, start_block: start_block).get_events({}, &block)
     end
 
     #
-    # @todo original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
-    # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
-    # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
+    # Create a request to receive chaincode events emitted by transaction functions of a specific chaincode. Supports
+    # off-line signing flow.
     #
-    # @return [?] ?
+    # @note I'm lying. I just copy and pasted the description from the node SDK. Offline signing should work, but it has
+    #   not been explicitly tested.
+    # @todo Test off-line signing flow.
     #
-    def new_chaincode_events_request
-      raise NotImplementedError
+    # @return [Fabric::ChaincodeEventsRequest] Encapsulated ChaincodeEventsRequest
+    #
+    def new_chaincode_events_request(contract, start_block: nil)
+      ChaincodeEventsRequest.new(contract, start_block: start_block)
     end
   end
 end
