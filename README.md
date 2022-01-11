@@ -95,7 +95,10 @@ end
 # chaincode events are blocking and run indefinitely, so this is probably the more typical use case to give 
 # more control over the connection
 
-op = contract.chaincode_events(call_options: { return_op: true }) do |event|
+last_processed_block = nil # store this in something persistent 
+
+op = contract.chaincode_events(start_block: last_processed_block, call_options: { return_op: true }) do |event|
+  last_processed_block = event.block_number # update the last_processed_block so we can resume from this point
   puts event
 end
 
