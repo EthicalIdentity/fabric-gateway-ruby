@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Fabric
   #
   # Encapsulates a Chaincode Events Request protobuf message
@@ -103,13 +105,14 @@ module Fabric
     #
     # @see Fabric::Client#chaincode_events Fabric::Client#chaincode_events - explanation of the different return types
     #   and example usage.
-    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Call options for options parameter
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer Call options for options parameter
     #
     # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
     # @yield [chaincode_event] loops through the chaincode events
     # @yieldparam [Gateway::ChaincodeEventsResponse] chaincode_event the chaincode event
     #
-    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed; please see Fabric::Client#get_chaincode_events
+    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed;
+    #   please see Fabric::Client#get_chaincode_events
     #
     def get_events(options = {}, &block)
       sign

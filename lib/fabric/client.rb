@@ -103,7 +103,8 @@ module Fabric
     #
     # Subscribe to chaincode events
     #
-    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer GRPC::ClientStub#server_streamer  - gRPC Underlying Call Reference
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer GRPC::ClientStub#server_streamer
+    #   - gRPC Underlying Call Reference
     #
     #
     # @overload chaincode_events(chaincode_events_request)
@@ -128,7 +129,7 @@ module Fabric
     # @overload chaincode_events(chaincode_events_request, {return_op: true})
     #   @example Utilizing an operation control object and a enumerator
     #     op = client.chaincode_events(chaincode_events_request, {return_op: true})
-    #     
+    #
     #     t = Thread.new do
     #       call = op.execute
     #       call.each do |event|
@@ -151,7 +152,7 @@ module Fabric
     #     t = Thread.new do
     #       call = op.execute
     #     end
-    #     
+    #
     #     op.status
     #     op.cancelled?
     #     op.cancel

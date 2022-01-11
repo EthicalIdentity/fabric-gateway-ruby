@@ -30,7 +30,7 @@ RSpec.describe Fabric::ChaincodeEventsRequest do # rubocop:disable RSpec/FilePat
       end
     end
   end
-  
+
   it_behaves_like 'a contract accessor'
 
   describe '#signed_request' do
@@ -177,7 +177,8 @@ RSpec.describe Fabric::ChaincodeEventsRequest do # rubocop:disable RSpec/FilePat
 
     context 'when the proposal is not signed' do
       before do
-        allow(chaincode_events_request.signer).to receive(:sign).with(chaincode_events_request.request_bytes).and_return('test generated signature')
+        allow(chaincode_events_request.signer).to receive(:sign).with(chaincode_events_request.request_bytes)
+                                                                .and_return('test generated signature')
         chaincode_events_request.sign
       end
 
@@ -275,7 +276,8 @@ RSpec.describe Fabric::ChaincodeEventsRequest do # rubocop:disable RSpec/FilePat
 
     context 'when the request is not signed' do
       before do
-        allow(chaincode_events_request.signer).to receive(:sign).with(chaincode_events_request.request_bytes).and_return('test generated signature')
+        allow(chaincode_events_request.signer).to receive(:sign).with(chaincode_events_request.request_bytes)
+                                                                .and_return('test generated signature')
         chaincode_events_request.get_events
       end
 

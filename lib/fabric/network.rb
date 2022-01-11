@@ -36,7 +36,7 @@ module Fabric
     #
     # @see Fabric::Client#chaincode_events Fabric::Client#chaincode_events - explanation of the different return types
     #   and example usage.
-    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Call options for options parameter
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer Call options for options parameter
     #
     # @param [Fabric::Contract] contract the chaincode to listen for events on
     # @param [Integer] start_block Block number at which to start reading chaincode events.
@@ -44,7 +44,8 @@ module Fabric
     # @yield [chaincode_event] loops through the chaincode events
     # @yieldparam chaincode_event [Gateway::ChaincodeEventsResponse] the chaincode event
     #
-    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed; please see Fabric::Client#get_chaincode_events
+    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed;
+    #   please see Fabric::Client#get_chaincode_events
     #
     def chaincode_events(contract, start_block: nil, call_options: {}, &block)
       new_chaincode_events_request(contract, start_block: start_block).get_events(call_options, &block)

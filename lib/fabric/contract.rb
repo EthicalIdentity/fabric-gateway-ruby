@@ -122,14 +122,15 @@ module Fabric
     #
     # @see Fabric::Client#chaincode_events Fabric::Client#chaincode_events - explanation of the different return types
     #   and example usage.
-    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Call options for options parameter
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer Call options for options parameter
     #
     # @param [Integer] start_block Block number at which to start reading chaincode events.
     # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
     # @yield [chaincode_event] loops through the chaincode events
     # @yieldparam [Gateway::ChaincodeEventsResponse] chaincode_event the chaincode event
     #
-    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed; please see Fabric::Client#get_chaincode_events
+    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed;
+    #   please see Fabric::Client#get_chaincode_events
     #
     def chaincode_events(start_block: nil, call_options: {}, &block)
       network.chaincode_events(
