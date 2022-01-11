@@ -33,6 +33,7 @@ module Fabric
   #
   # CommitError
   #
+  # TODO: Add RSpec Tests for CommitError
   # @todo TEST ME!
   #
   class CommitError < Error

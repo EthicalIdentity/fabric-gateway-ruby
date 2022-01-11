@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/BlockLength
-# rubocop:disable Rspec/ContextWording
-RSpec.shared_context 'client mocks' do
+RSpec.shared_context 'client mocks' do # rubocop:disable Rspec/ContextWording
   attr_reader :sent_evaluate_request, :sent_endorse_request, :sent_submit_request
   attr_reader :sent_proposal
   attr_reader :sent_chaincode_proposal_payload
@@ -66,4 +65,3 @@ RSpec.shared_context 'client mocks' do
   end
 end
 # rubocop:enable Metrics/BlockLength
-# rubocop:enable Rspec/ContextWording
