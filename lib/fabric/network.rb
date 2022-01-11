@@ -40,7 +40,7 @@ module Fabric
     #
     # @param [Fabric::Contract] contract the chaincode to listen for events on
     # @param [Integer] start_block Block number at which to start reading chaincode events.
-    # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
+    # @param [Hash] call_options gRPC call options (merged with default_call_options from initializer)
     # @yield [chaincode_event] loops through the chaincode events
     # @yieldparam chaincode_event [Gateway::ChaincodeEventsResponse] the chaincode event
     #

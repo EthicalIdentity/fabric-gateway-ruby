@@ -55,6 +55,11 @@ module Fabric
       envelope.signature = signature
     end
 
+    #
+    # Returns the results from the transaction result payload.
+    #
+    # @return [Payload] transaction result payload
+    #
     def result
       @result ||= parse_result_from_payload
     end
@@ -113,7 +118,7 @@ module Fabric
     private
 
     #
-    # Parse the transaction actinos from the payload looking for the transaction result payload.
+    # Parse the transaction actions from the payload looking for the transaction result payload.
     #
     # @return [String] result payload
     # @raise [Fabric::Error] if the transaction result payload is not found

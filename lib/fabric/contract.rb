@@ -125,7 +125,7 @@ module Fabric
     # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer Call options for options parameter
     #
     # @param [Integer] start_block Block number at which to start reading chaincode events.
-    # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
+    # @param [Hash] call_options gRPC call options (merged with default_call_options from initializer)
     # @yield [chaincode_event] loops through the chaincode events
     # @yieldparam [Gateway::ChaincodeEventsResponse] chaincode_event the chaincode event
     #

@@ -1,2 +1,8 @@
+--exclude lib/gateway
+--exclude lib/msp
+--exclude lib/gossip
+--exclude lib/orderer
+--exclude lib/peer
+--exclude lib/common
 --markup-provider=redcarpet
 --markup=markdown
