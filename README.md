@@ -32,7 +32,7 @@ Will update to new version of grpc when fix is released.
 
 ## Usage
 
-This is an alpha stage library suitable for early adopters. The basic evaluate and submit gateway functions are implemented. Chaincode events monitoring is not yet implemented.
+This is a beta stage library with all the main hyperledger gateway calls implemented. Although this library has good unit test coverage, it is fairly new and has not yet been run in production environments. The library will be updated to 1.0.0 when the library has proven to be stable.
 
 ```ruby
 $ bin/console
@@ -86,8 +86,32 @@ puts contract.evaluate_transaction('GetAllAssets')
 puts contract.submit_transaction('CreateAsset', ['asset13', 'yellow', '5', 'Tom', '1300'])
 puts contract.submit_transaction('UpdateAsset', %w[asset999 yellow 5 Tom 5555])
 
-# Chaincode Events - Not Yet Implemented!
+# Chaincode Events - simple (blocking until deadline is reached or connection closed)
+contract.chaincode_events do |event|
+  puts event
+end
 
+# Chaincode Events - advanced
+# chaincode events are blocking and run indefinitely, so this is probably the more typical use case to give 
+# more control over the connection
+
+last_processed_block = nil # store this in something persistent 
+
+op = contract.chaincode_events(start_block: last_processed_block, call_options: { return_op: true }) do |event|
+  last_processed_block = event.block_number # update the last_processed_block so we can resume from this point
+  puts event
+end
+
+t = Thread.new do
+  call = op.execute
+rescue GRPC::Cancelled => e
+  puts 'We cancelled the operation outside of this thread.'
+end
+
+sleep 1 
+op.status
+op.cancelled?
+op.cancel
 ```
 
 Please refer to the [full reference documentation](https://rubydoc.info/github/EthicalIdentity/fabric-gateway-ruby) for complete usage information.
@@ -135,7 +159,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ethica
 - [x] Implement, Document & Test Endorse
 - [x] Implement, Document & Test Submit
 - [x] Implement, Document & Test CommitStatus
-- [ ] Implement, Document & Test ChaincodeEvents
+- [x] Implement, Document & Test ChaincodeEvents
 - [ ] Support Submit Async (currently blocks waiting for the transaction to be committed)
 - [ ] Consider adding error handling, invalid transaction proposals will result in random GRPC::FailedPrecondition type errors
 - [ ] Consider adding transaction_id information to Fabric::Errors that are raised; would help a lot for debugging.

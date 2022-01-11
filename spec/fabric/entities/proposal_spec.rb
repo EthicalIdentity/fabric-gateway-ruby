@@ -87,13 +87,13 @@ RSpec.describe Fabric::Proposal do # rubocop:disable RSpec/FilePath
     end
   end
 
-  describe 'sign' do
+  describe '#sign' do
     context 'when the proposal is already signed' do
       before do
         proposed_transaction.signed_proposal.signature = 'test signature'
       end
 
-      it 'returns true' do
+      it 'returns nil' do
         expect(proposal.sign).to be_nil
       end
 

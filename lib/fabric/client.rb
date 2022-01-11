@@ -53,8 +53,9 @@ module Fabric
     #
     # Submits an evaluate_request to the gateway to be evaluted.
     #
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Call options for options parameter
     # @param [Gateway::EvaluateRequest] evaluate_request
-    # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
+    # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
     #
     # @return [Gateway::EvaluateResponse] evaluate_response
     #
@@ -92,6 +93,7 @@ module Fabric
     # @param [Gateway::CommitStatusRequest] commit_status_request
     # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response
     #
+    # Returns an enum or if you pass a block, use the block.
     # @return [Gateway::CommitStatusResponse] commit_status_response
     #
     def commit_status(commit_status_request, options = {})
@@ -101,13 +103,64 @@ module Fabric
     #
     # Subscribe to chaincode events
     #
-    # @note This function has never been utilized or tested. This function is probably wrong, missing a block.
-    # @todo add testing!
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer GRPC::ClientStub#server_streamer
+    #   - gRPC Underlying Call Reference
     #
-    # @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
-    # @param [Hash] options gRPC call options (merged with default options) @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer
     #
-    # @return [Gateway::ChaincodeEventsResponse] commit_status_response (probably wrong, this is a stream.)
+    # @overload chaincode_events(chaincode_events_request)
+    #   @example Utilizing Blocking Enumerator
+    #     call = client.chaincode_events(chaincode_events_request)
+    #     call.each do |event|
+    #       pp event
+    #     end
+    #   @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
+    #   @param [Hash] options gRPC call options (merged with default options)
+    #   @return [Enumerator] enumerator with Gateway::ChaincodeEventsResponse objects
+    # @overload chaincode_events(chaincode_events_request)
+    #   @example Utilizing a blocking block
+    #     client.chaincode_events(chaincode_events_request) do |event|
+    #       pp event
+    #     end
+    #   @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
+    #   @param [Hash] options gRPC call options (merged with default options)
+    #   @yield [event] Blocking call that yields Gateway::ChaincodeEventsResponse objects when received from the server
+    #   @yieldparam event [Gateway::ChaincodeEventsResponse] chaincode event
+    #   @return [nil]
+    # @overload chaincode_events(chaincode_events_request, {return_op: true})
+    #   @example Utilizing an operation control object and a enumerator
+    #     op = client.chaincode_events(chaincode_events_request, {return_op: true})
+    #
+    #     t = Thread.new do
+    #       call = op.execute
+    #       call.each do |event|
+    #         pp event
+    #       end
+    #     end
+    #
+    #     op.status
+    #     op.cancelled?
+    #     op.cancel
+    #   @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
+    #   @param [Hash] options gRPC call options (merged with default options)
+    #   @return [GRPC::ActiveCall::Operation]
+    # @overload chaincode_events(chaincode_events_request, {return_op: true})
+    #   @example Utilizing an operation control object and a block
+    #     op = client.chaincode_events(chaincode_events_request, {return_op: true}) do |event|
+    #       pp event
+    #     end
+    #
+    #     t = Thread.new do
+    #       call = op.execute
+    #     end
+    #
+    #     op.status
+    #     op.cancelled?
+    #     op.cancel
+    #   @param [Gateway::ChaincodeEventsRequest] chaincode_events_request
+    #   @param [Hash] options gRPC call options (merged with default options)
+    #   @yield [event] Blocking call that yields Gateway::ChaincodeEventsResponse objects when received from the server
+    #   @yieldparam event [Gateway::ChaincodeEventsResponse] chaincode event
+    #   @return [GRPC::ActiveCall::Operation]
     #
     def chaincode_events(chaincode_events_request, options = {}, &block)
       @grpc_client.chaincode_events(chaincode_events_request,

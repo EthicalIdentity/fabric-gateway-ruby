@@ -32,25 +32,39 @@ module Fabric
     end
 
     #
-    # @todo original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
-    # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
-    # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
+    # Get chaincode events emitted by transaction functions of a specific chaincode.
     #
-    # @return [?] ?
+    # @see Fabric::Client#chaincode_events Fabric::Client#chaincode_events - explanation of the different return types
+    #   and example usage.
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:server_streamer Call options for options parameter
     #
-    def new_chaincode_events
-      raise NotYetImplemented
+    # @param [Fabric::Contract] contract the chaincode to listen for events on
+    # @param [Integer] start_block Block number at which to start reading chaincode events.
+    # @param [Hash] call_options gRPC call options (merged with default_call_options from initializer)
+    # @yield [chaincode_event] loops through the chaincode events
+    # @yieldparam chaincode_event [Gateway::ChaincodeEventsResponse] the chaincode event
+    #
+    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed;
+    #   please see Fabric::Client#get_chaincode_events
+    #
+    def chaincode_events(contract, start_block: nil, call_options: {}, &block)
+      new_chaincode_events_request(contract, start_block: start_block).get_events(call_options, &block)
     end
 
     #
-    # @todo original SDK has getChaincodeEvents and newChaincodeEventsRequest methods
-    # @see https://github.com/hyperledger/fabric-gateway/blob/08118cf0a792898925d0b2710b0a9e7c5ec23228/node/src/network.ts
-    # @see https://github.com/hyperledger/fabric-gateway/blob/main/pkg/client/network.go
+    # Create a request to receive chaincode events emitted by transaction functions of a specific chaincode. Supports
+    # off-line signing flow.
     #
-    # @return [?] ?
+    # @note I'm lying. I just copy and pasted the description from the node SDK. Offline signing should work, but it has
+    #   not been explicitly tested.
+    # @todo Test off-line signing flow.
     #
-    def new_chaincode_events_request
-      raise NotImplementedError
+    # @param [Fabric::Contract] contract the chaincode to listen for events on
+    # @param [Integer] start_block Block number at which to start reading chaincode events.
+    # @return [Fabric::ChaincodeEventsRequest] Encapsulated ChaincodeEventsRequest
+    #
+    def new_chaincode_events_request(contract, start_block: nil)
+      ChaincodeEventsRequest.new(contract, start_block: start_block)
     end
   end
 end

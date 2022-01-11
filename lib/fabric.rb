@@ -13,6 +13,7 @@ require 'fabric/entities/proposal'
 require 'fabric/entities/proposed_transaction'
 require 'fabric/entities/status'
 require 'fabric/entities/transaction'
+require 'fabric/entities/chaincode_events_requests'
 
 require 'fabric/constants'
 require 'fabric/contract'

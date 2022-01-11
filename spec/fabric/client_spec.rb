@@ -215,4 +215,40 @@ RSpec.describe Fabric::Client do
       end
     end
   end
+
+  describe '#chaincode_events' do
+    subject(:client) { build(:simple_client) }
+
+    before do
+      allow(client.grpc_client).to receive(:chaincode_events)
+    end
+
+    context 'when options and block are not passed' do
+      it 'calls chaincode_events on the grpc_client' do # rubocop:disable RSpec/MultipleExpectations
+        client.chaincode_events('chaincode_events_request')
+        expect(client.grpc_client).to have_received(:chaincode_events).with('chaincode_events_request', {}) do |&block|
+          expect(block).to be_nil
+        end
+      end
+    end
+
+    context 'when options are passed' do
+      it 'calls chaincode_events on the grpc_client' do
+        client.chaincode_events('chaincode_events_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:chaincode_events).with('chaincode_events_request',
+                                                                            { deadline: 5 })
+      end
+    end
+
+    context 'when block is passed' do
+      let(:passed_block) { proc {} }
+
+      it 'passes the block to the grpc_client' do # rubocop:disable RSpec/MultipleExpectations
+        client.chaincode_events('chaincode_events_request', &passed_block)
+        expect(client.grpc_client).to have_received(:chaincode_events).with('chaincode_events_request', {}) do |&block|
+          expect(block).to eql(passed_block)
+        end
+      end
+    end
+  end
 end
