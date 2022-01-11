@@ -274,6 +274,61 @@ RSpec.describe Fabric::Contract do
     end
   end
 
+  describe '#chaincode_events' do
+    before do
+      allow(network).to receive(:chaincode_events)
+    end
+
+    context 'when no parameters are passed' do
+      before do
+        contract.chaincode_events
+      end
+
+      it 'calls the network chaincode_events with the right parameters' do # rubocop:disable RSpec/MultipleExpectations
+        expect(network).to have_received(:chaincode_events).with(contract, start_block: nil,
+                                                                           call_options: {}) do |&block|
+          expect(block).to be_nil
+        end
+      end
+    end
+
+    context 'when start_block is passed' do
+      before do
+        contract.chaincode_events(start_block: 321)
+      end
+
+      it 'calls the network chaincode_events with the right parameters' do
+        expect(network).to have_received(:chaincode_events).with(contract, start_block: 321, call_options: {})
+      end
+    end
+
+    context 'when call_options is passed' do
+      before do
+        contract.chaincode_events(call_options: { some: 'option' })
+      end
+
+      it 'calls the network chaincode_events with the right parameters' do
+        expect(network).to have_received(:chaincode_events)
+          .with(contract, start_block: nil, call_options: { some: 'option' })
+      end
+    end
+
+    context 'when a block is passed' do
+      let(:passed_block) { proc {} }
+
+      before do
+        contract.chaincode_events(&passed_block)
+      end
+
+      it 'calls the network chaincode_events with the right parameters' do # rubocop:disable RSpec/MultipleExpectations
+        expect(network).to have_received(:chaincode_events)
+          .with(contract, start_block: nil, call_options: {}) do |&block|
+            expect(block).to eql(passed_block)
+          end
+      end
+    end
+  end
+
   describe '#new_proposal' do
     context 'when only transaction name is passed' do
       let(:proposal) { contract.new_proposal('some_transaction') }

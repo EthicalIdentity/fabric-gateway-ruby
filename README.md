@@ -32,7 +32,7 @@ Will update to new version of grpc when fix is released.
 
 ## Usage
 
-This is an alpha stage library suitable for early adopters. The basic evaluate and submit gateway functions are implemented. Chaincode events monitoring is not yet implemented.
+This is a beta stage library with all the main hyperledger gateway calls implemented. Although this library has good unit test coverage, it is fairly new and has not yet been run in production environments. The library will be updated to 1.0.0 when the library has proven to be stable.
 
 ```ruby
 $ bin/console
@@ -105,6 +105,7 @@ rescue GRPC::Cancelled => e
   puts 'We cancelled the operation outside of this thread.'
 end
 
+sleep 1 
 op.status
 op.cancelled?
 op.cancel

@@ -30,6 +30,8 @@ RSpec.describe Fabric::ChaincodeEventsRequest do # rubocop:disable RSpec/FilePat
       end
     end
   end
+  
+  it_behaves_like 'a contract accessor'
 
   describe '#signed_request' do
     let(:expected_signed_request) do

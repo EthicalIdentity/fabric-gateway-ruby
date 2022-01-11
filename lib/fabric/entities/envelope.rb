@@ -49,7 +49,7 @@ module Fabric
     #
     # @param [String] signature
     #
-    # @return [Void]
+    # @return [void]
     #
     def signature=(signature)
       envelope.signature = signature

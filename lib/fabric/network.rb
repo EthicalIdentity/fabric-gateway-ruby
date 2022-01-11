@@ -34,9 +34,19 @@ module Fabric
     #
     # Get chaincode events emitted by transaction functions of a specific chaincode.
     #
-    # @return [ #<Enumerator: #<GRPC::ActiveCall>] ?
+    # @see Fabric::Client#chaincode_events Fabric::Client#chaincode_events - explanation of the different return types
+    #   and example usage.
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Call options for options parameter
     #
-    def new_chaincode_events(contract, start_block: nil, call_options: {}, &block)
+    # @param [Fabric::Contract] contract the chaincode to listen for events on
+    # @param [Integer] start_block Block number at which to start reading chaincode events.
+    # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
+    # @yield [chaincode_event] loops through the chaincode events
+    # @yieldparam chaincode_event [Gateway::ChaincodeEventsResponse] the chaincode event
+    #
+    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed; please see Fabric::Client#get_chaincode_events
+    #
+    def chaincode_events(contract, start_block: nil, call_options: {}, &block)
       new_chaincode_events_request(contract, start_block: start_block).get_events(call_options, &block)
     end
 
@@ -48,6 +58,8 @@ module Fabric
     #   not been explicitly tested.
     # @todo Test off-line signing flow.
     #
+    # @param [Fabric::Contract] contract the chaincode to listen for events on
+    # @param [Integer] start_block Block number at which to start reading chaincode events.
     # @return [Fabric::ChaincodeEventsRequest] Encapsulated ChaincodeEventsRequest
     #
     def new_chaincode_events_request(contract, start_block: nil)

@@ -118,6 +118,29 @@ module Fabric
     end
 
     #
+    # Get chaincode events emitted by transaction functions of the chaincode.
+    #
+    # @see Fabric::Client#chaincode_events Fabric::Client#chaincode_events - explanation of the different return types
+    #   and example usage.
+    # @see https://www.rubydoc.info/gems/grpc/GRPC%2FClientStub:request_response Call options for options parameter
+    #
+    # @param [Integer] start_block Block number at which to start reading chaincode events.
+    # @param [Hash] options gRPC call options (merged with default_call_options from initializer)
+    # @yield [chaincode_event] loops through the chaincode events
+    # @yieldparam [Gateway::ChaincodeEventsResponse] chaincode_event the chaincode event
+    #
+    # @return [Enumerator|GRPC::ActiveCall::Operation|nil] Dependent on parameters passed; please see Fabric::Client#get_chaincode_events
+    #
+    def chaincode_events(start_block: nil, call_options: {}, &block)
+      network.chaincode_events(
+        self,
+        start_block: start_block,
+        call_options: call_options,
+        &block
+      )
+    end
+
+    #
     # Creates a transaction proposal that can be evaluated or endorsed. Supports off-line signing flow.
     #
     # @param [String] transaction_name transaction name (first argument unshifted into the argument array)
