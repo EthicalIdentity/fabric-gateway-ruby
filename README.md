@@ -65,13 +65,13 @@ default_call_options = {
   chaincode_events_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(60) }
 }
 creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
-client=Fabric::Client.new('localhost:7051', creds, default_call_options: default_call_options, **client_opts)
+client=Fabric::Client.new(host: 'localhost:7051', creds, default_call_options: default_call_options, **client_opts)
 
-identity = Fabric::Gateway::Identity.new(
+identity = Fabric::Identity.new(
   {
     msp_id: 'Org1MSP',
-    private_key: Fabric::Gateway.crypto_suite.key_from_pem(load_certs[1]),
-    pem_certificate: load_certs[2],
+    private_key: Fabric.crypto_suite.key_from_pem(load_certs[1]),
+    certificate: load_certs[2],
   }
 )
 
