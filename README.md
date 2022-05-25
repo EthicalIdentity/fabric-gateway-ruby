@@ -44,8 +44,8 @@ def load_certs
   data_dir ='/your/certs/directory' # aka test-network/organizations
   files = [
       'peerOrganizations/org1.example.com/ca/ca.org1.example.com-cert.pem',
-      'peerOrganizations/org1.example.com/users/Admin\@org1.example.com/msp/keystore/9f7c67dd4dd6562d258593c0d5011a3bff9121e65e67ff7fd3212919ae400a88_sk',
-      'peerOrganizations/org1.example.com/users/Admin\@org1.example.com/msp/signcerts/cert.pem'
+      'peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/9f7c67dd4dd6562d258593c0d5011a3bff9121e65e67ff7fd3212919ae400a88_sk',
+      'peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/signcerts/cert.pem'
     ]
   files.map { |f| File.open(File.join(data_dir, f)).read }
 end
@@ -65,7 +65,7 @@ default_call_options = {
   chaincode_events_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(60) }
 }
 creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
-client=Fabric::Client.new(host: 'localhost:7051', creds, default_call_options: default_call_options, **client_opts)
+client=Fabric::Client.new(host: 'localhost:7051', creds: creds, default_call_options: default_call_options, **client_opts)
 
 identity = Fabric::Identity.new(
   {
