@@ -198,10 +198,8 @@ module Fabric
 
     def final_call_options(call_type, call_options)
       options = @default_call_options["#{call_type}_options".to_sym].merge(call_options || {})
-      if deadline = options[:deadline]
-        unless deadline.is_a? Time
-          options[:deadline] = GRPC::Core::TimeConsts.from_relative_time(deadline)
-        end
+      if (deadline = options[:deadline]) && !(deadline.is_a? Time)
+        options[:deadline] = GRPC::Core::TimeConsts.from_relative_time(deadline)
       end
       options
     end

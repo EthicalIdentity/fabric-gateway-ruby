@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.describe Fabric::Client do
-
   before do
     Timecop.freeze
   end
@@ -220,7 +219,8 @@ RSpec.describe Fabric::Client do
     context 'when options are passed' do
       it 'calls commit_status on the grpc_client' do
         client.commit_status('commit_status_request', { deadline: 5 })
-        expect(client.grpc_client).to have_received(:commit_status).with('commit_status_request', { deadline: Time.now + 5 })
+        expect(client.grpc_client).to have_received(:commit_status)
+          .with('commit_status_request', { deadline: Time.now + 5 })
       end
     end
   end
