@@ -60,7 +60,7 @@ module Fabric
     # @return [Gateway::EvaluateResponse] evaluate_response
     #
     def evaluate(evaluate_request, options = {})
-      @grpc_client.evaluate(evaluate_request, @default_call_options[:evaluate_options].merge(options))
+      @grpc_client.evaluate(evaluate_request, final_call_options(:evaluate, options))
     end
 
     #
@@ -72,7 +72,7 @@ module Fabric
     # @return [Gateway::EndorseResponse] endorse_response
     #
     def endorse(endorse_request, options = {})
-      @grpc_client.endorse(endorse_request, @default_call_options[:endorse_options].merge(options))
+      @grpc_client.endorse(endorse_request, final_call_options(:endorse, options))
     end
 
     #
@@ -84,7 +84,7 @@ module Fabric
     # @return [Gateway::SubmitResponse] submit_response
     #
     def submit(submit_request, options = {})
-      @grpc_client.submit(submit_request, @default_call_options[:submit_options].merge(options))
+      @grpc_client.submit(submit_request, final_call_options(:submit, options))
     end
 
     #
@@ -97,7 +97,7 @@ module Fabric
     # @return [Gateway::CommitStatusResponse] commit_status_response
     #
     def commit_status(commit_status_request, options = {})
-      @grpc_client.commit_status(commit_status_request, @default_call_options[:commit_status_options].merge(options))
+      @grpc_client.commit_status(commit_status_request, final_call_options(:commit_status, options))
     end
 
     #
@@ -164,7 +164,7 @@ module Fabric
     #
     def chaincode_events(chaincode_events_request, options = {}, &block)
       @grpc_client.chaincode_events(chaincode_events_request,
-                                    @default_call_options[:chaincode_events_options].merge(options), &block)
+                                    final_call_options(:chaincode_events, options), &block)
     end
 
     private
@@ -194,6 +194,14 @@ module Fabric
       @default_call_options[:submit_options] ||= {}
       @default_call_options[:commit_status_options] ||= {}
       @default_call_options[:chaincode_events_options] ||= {}
+    end
+
+    def final_call_options(call_type, call_options)
+      options = @default_call_options["#{call_type}_options".to_sym].merge(call_options || {})
+      if (deadline = options[:deadline]) && !(deadline.is_a? Time)
+        options[:deadline] = GRPC::Core::TimeConsts.from_relative_time(deadline)
+      end
+      options
     end
   end
 end

@@ -22,14 +22,6 @@ Or install it yourself as:
 
     $ gem install fabric-gateway
 
-### ISSUES
-
-Note, there is an issue with the grpc library for MacOS (https://github.com/grpc/grpc/issues/28271). It results in a segfault in ruby when trying to make a connection. 
-
-Workaround: Either run on linux or use a docker container as a workaround.
-
-Will update to new version of grpc when fix is released.
-
 ## Usage
 
 This is a beta stage library with all the main hyperledger gateway calls implemented. Although this library has good unit test coverage, it is fairly new and has not yet been run in production environments. The library will be updated to 1.0.0 when the library has proven to be stable.
@@ -56,7 +48,7 @@ client_opts = {
     GRPC::Core::Channel::SSL_TARGET => 'peer0.org1.example.com'
   }
 }
-# optional, if you want to set deadlines to the individual calls (in seconds)
+# optional, if you want to set an absolute deadline for each of the individual calls (in seconds)
 default_call_options = {
   endorse_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
   evaluate_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
@@ -64,6 +56,16 @@ default_call_options = {
   commit_status_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(5) },
   chaincode_events_options: { deadline: GRPC::Core::TimeConsts.from_relative_time(60) }
 }
+
+# for a relative time from when the call is made, pass an integer instead of a GRPC::Core::TimeConsts (still in seconds)
+default_call_options = {
+  endorse_options: { deadline: 5 },
+  evaluate_options: { deadline: 5 },
+  submit_options: { deadline: 5 },
+  commit_status_options: { deadline: 5 },
+  chaincode_events_options: { deadline: 60 }
+}
+
 creds = GRPC::Core::ChannelCredentials.new(load_certs[0])
 client=Fabric::Client.new(host: 'localhost:7051', creds: creds, default_call_options: default_call_options, **client_opts)
 
