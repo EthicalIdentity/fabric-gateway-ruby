@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 RSpec.describe Fabric::Client do
+
+  before do
+    Timecop.freeze
+  end
+
+  after do
+    Timecop.return
+  end
+
   describe 'Initialization' do
     context 'when no params are passed' do
       it 'raises an error' do
@@ -145,7 +154,7 @@ RSpec.describe Fabric::Client do
     context 'when options are passed' do
       it 'calls evaluate on the grpc_client' do
         client.evaluate('evaluate_request', { deadline: 5 })
-        expect(client.grpc_client).to have_received(:evaluate).with('evaluate_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:evaluate).with('evaluate_request', { deadline: Time.now + 5 })
       end
     end
   end
@@ -167,7 +176,7 @@ RSpec.describe Fabric::Client do
     context 'when options are passed' do
       it 'calls endorse on the grpc_client' do
         client.endorse('endorse_request', { deadline: 5 })
-        expect(client.grpc_client).to have_received(:endorse).with('endorse_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:endorse).with('endorse_request', { deadline: Time.now + 5 })
       end
     end
   end
@@ -189,7 +198,7 @@ RSpec.describe Fabric::Client do
     context 'when options are passed' do
       it 'calls submit on the grpc_client' do
         client.submit('submit_request', { deadline: 5 })
-        expect(client.grpc_client).to have_received(:submit).with('submit_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:submit).with('submit_request', { deadline: Time.now + 5 })
       end
     end
   end
@@ -211,7 +220,7 @@ RSpec.describe Fabric::Client do
     context 'when options are passed' do
       it 'calls commit_status on the grpc_client' do
         client.commit_status('commit_status_request', { deadline: 5 })
-        expect(client.grpc_client).to have_received(:commit_status).with('commit_status_request', { deadline: 5 })
+        expect(client.grpc_client).to have_received(:commit_status).with('commit_status_request', { deadline: Time.now + 5 })
       end
     end
   end
@@ -236,7 +245,7 @@ RSpec.describe Fabric::Client do
       it 'calls chaincode_events on the grpc_client' do
         client.chaincode_events('chaincode_events_request', { deadline: 5 })
         expect(client.grpc_client).to have_received(:chaincode_events).with('chaincode_events_request',
-                                                                            { deadline: 5 })
+                                                                            { deadline: Time.now + 5 })
       end
     end
 
