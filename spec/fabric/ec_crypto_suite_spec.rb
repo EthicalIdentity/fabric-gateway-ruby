@@ -12,7 +12,7 @@ RSpec.describe Fabric::ECCryptoSuite do
   describe '#initialize' do
     context 'when no parameters are passed' do
       it 'utilizes default options' do
-        expect(crypto_suite.key_size).to eql(256)
+        expect(crypto_suite.key_size).to be(256)
         expect(crypto_suite.digest_algorithm).to eql('SHA256')
         expect(crypto_suite.curve).to eql('prime256v1')
         expect(crypto_suite.cipher).to eql('aes-256-cbc')
@@ -31,7 +31,7 @@ RSpec.describe Fabric::ECCryptoSuite do
       end
 
       it 'utilizes options passed' do
-        expect(crypto_suite.key_size).to eql(384)
+        expect(crypto_suite.key_size).to be(384)
         expect(crypto_suite.digest_algorithm).to eql('SHA224')
         expect(crypto_suite.curve).to eql('secp384r1')
         expect(crypto_suite.cipher).to eql('aes-128-cbc')
@@ -42,7 +42,7 @@ RSpec.describe Fabric::ECCryptoSuite do
   describe '#sign' do
     it 'creates a valid signature' do
       signature = crypto_suite.sign(private_key, 'this is a test')
-      expect(crypto_suite.verify(public_key, 'this is a test', signature)).to eql(true)
+      expect(crypto_suite.verify(public_key, 'this is a test', signature)).to be(true)
     end
   end
 
@@ -56,14 +56,14 @@ RSpec.describe Fabric::ECCryptoSuite do
     context 'when the signature matches the key and the message' do
       it 'returns true' do
         signature = crypto_suite.sign(private_key, 'this is a test')
-        expect(crypto_suite.verify(public_key, 'this is a test', signature)).to eql(true)
+        expect(crypto_suite.verify(public_key, 'this is a test', signature)).to be(true)
       end
     end
 
     context 'when the signature does not match the key and the message' do
       it 'return false' do
         signature = crypto_suite.sign(private_key, 'this is a test')
-        expect(crypto_suite.verify(public_key, 'this is not a test', signature)).to eql(false)
+        expect(crypto_suite.verify(public_key, 'this is not a test', signature)).to be(false)
       end
     end
   end
@@ -92,7 +92,7 @@ RSpec.describe Fabric::ECCryptoSuite do
 
       pkey = OpenSSL::PKey::EC.new(asn1.to_der)
 
-      expect(pkey.private?).to eql(true)
+      expect(pkey.private?).to be(true)
       expect(pkey.private_key.to_s(16).downcase).to eql(private_key)
     end
   end
@@ -109,13 +109,13 @@ RSpec.describe Fabric::ECCryptoSuite do
   describe '#generate_nonce' do
     context 'when no parameters pass' do
       it 'generates a random 24 byte string' do
-        expect(crypto_suite.generate_nonce.length).to eql(24)
+        expect(crypto_suite.generate_nonce.length).to be(24)
       end
     end
 
     context 'when passing byte length' do
       it 'generates a random byte string the size passed in' do
-        expect(crypto_suite.generate_nonce(50).length).to eql(50)
+        expect(crypto_suite.generate_nonce(50).length).to be(50)
       end
     end
   end

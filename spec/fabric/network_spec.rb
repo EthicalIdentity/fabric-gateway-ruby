@@ -68,7 +68,7 @@ RSpec.describe Fabric::Network do
 
   describe '#new_chaincode_events' do
     let(:contract) { build(:contract) }
-    let(:spied_chaincode_events_request) { instance_double('ChaincodeEventsRequest') }
+    let(:spied_chaincode_events_request) { instance_double(ChaincodeEventsRequest) }
 
     before do
       allow(Fabric::ChaincodeEventsRequest).to receive(:new).and_return(spied_chaincode_events_request)

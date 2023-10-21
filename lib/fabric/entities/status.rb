@@ -6,9 +6,9 @@ module Fabric
   #
   class Status
     TRANSACTION_STATUSES = ::Protos::TxValidationCode.constants.map(&::Protos::TxValidationCode.method(:const_get))
-                                                     .collect do |i|
+                                                     .to_h do |i|
       [::Protos::TxValidationCode.lookup(i), i]
-    end.to_h
+    end
 
     # @return [Integer] Block number in which the transaction committed.
     attr_reader :block_number
