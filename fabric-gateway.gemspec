@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('rubocop', '~> 1.57', '>= 1.57.1')
   spec.add_development_dependency('rubocop-rspec', '~> 2.24.1')
   spec.add_development_dependency('simplecov', '~> 0.22.0')
+  spec.add_development_dependency('simplecov-cobertura', '~> 2.1')
   spec.add_development_dependency('timecop', '~> 0.9.8')
   spec.add_development_dependency('yard', '~> 0.9.34')
   spec.metadata = {
