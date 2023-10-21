@@ -28,17 +28,16 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
-  spec.add_dependency('google-protobuf', '>= 3.19.1')
+  spec.add_dependency('google-protobuf', '~> 3.24', '>= 3.24.4')
   spec.add_dependency('grpc', '~> 1.42')
-  spec.add_development_dependency('codecov', '~> 0.6.0')
-  spec.add_development_dependency('factory_bot', '~> 6.2.0')
-  spec.add_development_dependency('grpc-tools', '~> 1.46.2')
+  spec.add_development_dependency('factory_bot', '~> 6.3.0')
+  spec.add_development_dependency('grpc-tools', '~> 1.59.0')
   spec.add_development_dependency('rake-notes', '~> 0.2.0')
-  spec.add_development_dependency('rubocop', '~> 1.23.0')
-  spec.add_development_dependency('rubocop-rspec', '~> 2.6.0')
-  spec.add_development_dependency('simplecov', '~> 0.21.2')
-  spec.add_development_dependency('timecop', '~> 0.9.4')
-  spec.add_development_dependency('yard', '~> 0.9.27')
+  spec.add_development_dependency('rubocop', '~> 1.57', '>= 1.57.1')
+  spec.add_development_dependency('rubocop-rspec', '~> 2.24.1')
+  spec.add_development_dependency('simplecov', '~> 0.22.0')
+  spec.add_development_dependency('timecop', '~> 0.9.8')
+  spec.add_development_dependency('yard', '~> 0.9.34')
   spec.metadata = {
     'rubygems_mfa_required' => 'true'
   }
