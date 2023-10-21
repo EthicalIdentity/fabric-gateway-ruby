@@ -3,13 +3,13 @@
 RSpec.shared_examples 'a gateway accessor' do
   describe '#gateway' do
     it 'returns the gateway' do
-      expect(subject.gateway).to be_a(::Fabric::Gateway)
+      expect(subject.gateway).to be_a(Fabric::Gateway)
     end
   end
 
   describe '#client' do
     it 'returns a Fabric::Client' do
-      expect(subject.client).to be_a(::Fabric::Client)
+      expect(subject.client).to be_a(Fabric::Client)
     end
 
     it 'returns the client from gateway' do
@@ -19,7 +19,7 @@ RSpec.shared_examples 'a gateway accessor' do
 
   describe '#signer' do
     it 'returns a Fabric::Identity' do
-      expect(subject.signer).to be_a(::Fabric::Identity)
+      expect(subject.signer).to be_a(Fabric::Identity)
     end
 
     it 'returns the signer from the gateway' do
@@ -39,7 +39,7 @@ RSpec.shared_examples 'a network accessor' do
 
   describe '#gateway' do
     it 'returns the gateway' do
-      expect(subject.gateway).to be_a(::Fabric::Gateway)
+      expect(subject.gateway).to be_a(Fabric::Gateway)
     end
 
     it 'returns the gateway from the network' do
@@ -53,7 +53,7 @@ RSpec.shared_examples 'a contract accessor' do
 
   describe '#network' do
     it 'returns the network' do
-      expect(subject.network).to be_a(::Fabric::Network)
+      expect(subject.network).to be_a(Fabric::Network)
     end
 
     it 'returns the network from the contract' do

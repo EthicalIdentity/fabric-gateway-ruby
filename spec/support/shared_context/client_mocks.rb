@@ -14,15 +14,15 @@ RSpec.shared_context 'client mocks' do # rubocop:disable Rspec/ContextWording
   attr_reader :sent_call_options
 
   def decode_proposal(request)
-    @sent_proposal = ::Protos::Proposal.decode(request)
-    @sent_chaincode_proposal_payload = ::Protos::ChaincodeProposalPayload.decode(sent_proposal.payload)
-    @sent_chaincode_proposal_input = ::Protos::ChaincodeInvocationSpec.decode(sent_chaincode_proposal_payload.input)
+    @sent_proposal = Protos::Proposal.decode(request)
+    @sent_chaincode_proposal_payload = Protos::ChaincodeProposalPayload.decode(sent_proposal.payload)
+    @sent_chaincode_proposal_input = Protos::ChaincodeInvocationSpec.decode(sent_chaincode_proposal_payload.input)
   end
 
   def mock_evaluate_response(return_payload)
-    mock_protos_response = object_double(::Protos::Response.new)
+    mock_protos_response = object_double(Protos::Response.new)
     allow(mock_protos_response).to receive(:payload).and_return(return_payload)
-    mock_evaluate_response = object_double(::Gateway::EvaluateResponse.new)
+    mock_evaluate_response = object_double(Gateway::EvaluateResponse.new)
     allow(mock_evaluate_response).to receive(:result).and_return(mock_protos_response)
 
     mock_evaluate_response
@@ -33,7 +33,7 @@ RSpec.shared_context 'client mocks' do # rubocop:disable Rspec/ContextWording
   # end
 
   def mock_endorse_response(return_payload)
-    mock_endorse_response = object_double(::Gateway::EndorseResponse.new)
+    mock_endorse_response = object_double(Gateway::EndorseResponse.new)
     allow(mock_endorse_response).to receive(:prepared_transaction).and_return(return_payload)
 
     mock_endorse_response
@@ -41,7 +41,7 @@ RSpec.shared_context 'client mocks' do # rubocop:disable Rspec/ContextWording
 
   def setup_evaluate_mock(client, return_payload)
     allow(client).to receive(:evaluate) do |arg, arg2|
-      expect(arg).to be_a(::Gateway::EvaluateRequest)
+      expect(arg).to be_a(Gateway::EvaluateRequest)
       decode_proposal(arg.proposed_transaction.proposal_bytes)
       @sent_evaluate_request = arg
       @sent_call_options = arg2
@@ -58,7 +58,7 @@ RSpec.shared_context 'client mocks' do # rubocop:disable Rspec/ContextWording
 
   def setup_endorse_mock(client, return_payload)
     allow(client).to receive(:endorse) do |arg, arg2|
-      expect(arg).to be_a(::Gateway::EndorseRequest)
+      expect(arg).to be_a(Gateway::EndorseRequest)
       @sent_endorse_request = arg
       @sent_call_options = arg2
     end.and_return(mock_endorse_response(return_payload))

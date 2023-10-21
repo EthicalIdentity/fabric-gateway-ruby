@@ -157,7 +157,7 @@ module Fabric
     end
 
     def pem_from_private_key(private_key)
-      pkey=pkey_from_private_key(private_key)
+      pkey = pkey_from_private_key(private_key)
 
       pkey.to_pem
     end
@@ -180,8 +180,6 @@ module Fabric
     end
 
     private
-
-
 
     # barely understand this code - this link provides a good explanation:
     # http://coders-errand.com/malleability-ecdsa-signatures/

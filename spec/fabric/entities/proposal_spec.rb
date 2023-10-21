@@ -326,7 +326,7 @@ RSpec.describe Fabric::Proposal do # rubocop:disable RSpec/FilePath
     let!(:response) { proposal.new_evaluate_request }
 
     it 'returns an EvaluateRequest' do
-      expect(response).to be_a(::Gateway::EvaluateRequest)
+      expect(response).to be_a(Gateway::EvaluateRequest)
     end
 
     it 'sets the channel_id' do
@@ -346,7 +346,7 @@ RSpec.describe Fabric::Proposal do # rubocop:disable RSpec/FilePath
     let!(:response) { proposal.new_endorse_request }
 
     it 'returns an EndorseRequest' do
-      expect(response).to be_a(::Gateway::EndorseRequest)
+      expect(response).to be_a(Gateway::EndorseRequest)
     end
 
     it 'sets the channel_id' do
@@ -367,7 +367,7 @@ RSpec.describe Fabric::Proposal do # rubocop:disable RSpec/FilePath
     let!(:response) { proposal.new_prepared_transaction(expected_envelope) }
 
     it 'returns a PreparedTransaction' do
-      expect(response).to be_a(::Gateway::PreparedTransaction)
+      expect(response).to be_a(Gateway::PreparedTransaction)
     end
 
     it 'sets the transaction_id' do

@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 RSpec.describe Fabric::ECCryptoSuite do
+  subject(:crypto_suite) { described_class.new }
+
   let(:private_key) { 'd62e76ab4a907d7634ada0d9709b4ed2bfc7c51c421127b7fc93c0141e461797' }
-  let(:public_key) { '04a01f01fa942d2233a64aebe0b36c16ebdfd1c453ac5297591f20e2bfaba869e17e15f5f7367ee6f16121c64cac3ecdd517920a36f5145dc2a881ae9371873ac6' }
+  let(:public_key) do
+    '04a01f01fa942d2233a64aebe0b36c16ebdfd1c453ac5297591f20e2bfaba869e17e15f5f7367ee6f16121c64cac3ecdd517920a36f5145dc2a881ae9371873ac6'
+  end
   let(:random_secret) { 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' }
 
-  subject(:crypto_suite) { described_class.new }
   describe '#initialize' do
     context 'when no parameters are passed' do
       it 'utilizes default options' do
@@ -16,16 +19,17 @@ RSpec.describe Fabric::ECCryptoSuite do
       end
     end
 
-    context 'when options are passed' do 
+    context 'when options are passed' do
       subject(:crypto_suite) do
         described_class.new(
-          {  
+          {
             key_size: 384,
             digest_algorithm: 'SHA224',
             cipher: 'aes-128-cbc'
           }
         )
       end
+
       it 'utilizes options passed' do
         expect(crypto_suite.key_size).to eql(384)
         expect(crypto_suite.digest_algorithm).to eql('SHA224')
@@ -52,14 +56,14 @@ RSpec.describe Fabric::ECCryptoSuite do
     context 'when the signature matches the key and the message' do
       it 'returns true' do
         signature = crypto_suite.sign(private_key, 'this is a test')
-        expect(crypto_suite.verify(public_key, 'this is a test', signature)).to eql(true)  
+        expect(crypto_suite.verify(public_key, 'this is a test', signature)).to eql(true)
       end
     end
 
     context 'when the signature does not match the key and the message' do
       it 'return false' do
         signature = crypto_suite.sign(private_key, 'this is a test')
-        expect(crypto_suite.verify(public_key, 'this is not a test', signature)).to eql(false)  
+        expect(crypto_suite.verify(public_key, 'this is not a test', signature)).to eql(false)
       end
     end
   end
@@ -70,7 +74,6 @@ RSpec.describe Fabric::ECCryptoSuite do
       expect(private_key).to be_a(String)
 
       public_key = crypto_suite.restore_public_key private_key
-      
 
       group = OpenSSL::PKey::EC::Group.new(crypto_suite.curve)
 
@@ -88,7 +91,7 @@ RSpec.describe Fabric::ECCryptoSuite do
       )
 
       pkey = OpenSSL::PKey::EC.new(asn1.to_der)
-      
+
       expect(pkey.private?).to eql(true)
       expect(pkey.private_key.to_s(16).downcase).to eql(private_key)
     end
@@ -155,15 +158,16 @@ RSpec.describe Fabric::ECCryptoSuite do
     end
   end
 
-  # TODO - it might be useful to test that the shared key can be properly utilized as well
+  # TODO: - it might be useful to test that the shared key can be properly utilized as well
   describe '#build_shared_key' do
     let(:random_public_key) do
       '04293ed1ea547c079f06f7bc6aa8adec39fd465ba839323a262fc7abab7714ba6' \
         'e680305dcfdf97043bfb1817a932cd7f4883d255b03ef303cf6651d765b9b3418'
     end
+
     it 'returns a shared key' do
       shared_key = crypto_suite.build_shared_key(private_key, random_public_key)
-      expect(shared_key).to eql('f1388005817ef6c5f0e8d4f655b000c083a67926c991eaea3da4adf1fc20ceb5')  
+      expect(shared_key).to eql('f1388005817ef6c5f0e8d4f655b000c083a67926c991eaea3da4adf1fc20ceb5')
     end
   end
 
@@ -177,7 +181,8 @@ RSpec.describe Fabric::ECCryptoSuite do
 
   describe '#encrypt/#decrypt' do
     it 'properly able to encrypte and decrypt strings' do
-      expect(crypto_suite.decrypt(random_secret, crypto_suite.encrypt(random_secret, 'this is a test'))).to eql('this is a test')
+      expect(crypto_suite.decrypt(random_secret,
+                                  crypto_suite.encrypt(random_secret, 'this is a test'))).to eql('this is a test')
     end
   end
 
@@ -197,6 +202,7 @@ RSpec.describe Fabric::ECCryptoSuite do
         "8WEhxkysPs3VF5IKNvUUXcKoga6TcYc6xg==\n" \
         "-----END EC PRIVATE KEY-----\n"
     end
+
     it 'returns a pem from private key' do
       pem = crypto_suite.pem_from_private_key(private_key)
       expect(pem).to eql(expected_pem)
@@ -213,18 +219,19 @@ RSpec.describe Fabric::ECCryptoSuite do
         "RrASfUCHD7SjAjAAMAoGCCqGSM49BAMCA0gAMEUCIQDRLQTSSeqjsxsb+q4exLSt\n" \
         "EM7f7/ymBzoUzbXU7wI9AgIgXCWaI++GkopGT8T2qV/3+NL0U+fYM0ZjSNSiwaK3\n" \
         "+kA=\n" \
-        "-----END CERTIFICATE-----"
+        '-----END CERTIFICATE-----'
     end
-    let(:random_certificate_public_key) { '04ca2509600ed223fbb645ff28b8d0f4229e3a81d8ca70607c571dd591a8c5c79f9886d68c7c76f5e588df19616e34bab2c4b186bc352ae87946b0127d40870fb4' }
+    let(:random_certificate_public_key) do
+      '04ca2509600ed223fbb645ff28b8d0f4229e3a81d8ca70607c571dd591a8c5c79f9886d68c7c76f5e588df19616e34bab2c4b186bc352ae87946b0127d40870fb4'
+    end
 
-    it 'returns public_key from x509 certificate' do      
-      public_key=crypto_suite.public_key_from_x509_certificate(random_certificate)
+    it 'returns public_key from x509 certificate' do
+      public_key = crypto_suite.public_key_from_x509_certificate(random_certificate)
       expect(public_key).to eql(random_certificate_public_key)
     end
   end
 
   describe '#pkey_from_public_key' do
-
     let(:random_public_key) do
       '04293ed1ea547c079f06f7bc6aa8adec39fd465ba839323a262fc7abab7714ba6' \
         'e680305dcfdf97043bfb1817a932cd7f4883d255b03ef303cf6651d765b9b3418'

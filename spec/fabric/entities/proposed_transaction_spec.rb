@@ -46,7 +46,7 @@ RSpec.describe Fabric::ProposedTransaction do # rubocop:disable RSpec/FilePath
       end
 
       it 'produces a proposed_transaction' do
-        expect(proposed_transaction.proposed_transaction).to be_a(::Gateway::ProposedTransaction)
+        expect(proposed_transaction.proposed_transaction).to be_a(Gateway::ProposedTransaction)
       end
 
       it 'produces a valid proposed_transaction' do
