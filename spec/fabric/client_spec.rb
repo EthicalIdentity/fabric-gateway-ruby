@@ -57,7 +57,7 @@ RSpec.describe Fabric::Client do
 
     context 'when grpc_client host and creds are passed' do
       let(:expected_args) do
-        if RUBY_VERSION.start_with?('2.6')
+        if RUBY_VERSION.start_with?('2')
           ['localhost:1234', :this_channel_is_insecure, {}]
         else
           ['localhost:1234', :this_channel_is_insecure]
