@@ -245,5 +245,20 @@ RSpec.describe Fabric::ECCryptoSuite do
       expect(crypto_suite.pkey_from_public_key(random_public_key).public_key.to_bn.to_s(16).downcase)
         .to eql(random_public_key)
     end
+
+    it 'should be a public key' do
+      expect(crypto_suite.pkey_from_public_key(random_public_key).public?).to be(true)
+      expect(crypto_suite.pkey_from_public_key(random_public_key).private?).to be(false)
+    end
+
+    it 'creates a matching public key' do
+      private_pkey = OpenSSL::PKey::EC.generate(crypto_suite.curve)
+      public_pem = private_pkey.public_to_pem
+
+      public_key = crypto_suite.restore_public_key(private_pkey.private_key.to_s(16).downcase)
+      public_pkey = crypto_suite.pkey_from_public_key(public_key)
+
+      expect(public_pem).to eql(public_pkey.to_pem)
+    end
   end
 end

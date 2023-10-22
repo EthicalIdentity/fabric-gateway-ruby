@@ -48,8 +48,7 @@ module Fabric
     end
 
     def generate_private_key
-      key = OpenSSL::PKey::EC.new curve
-      key.generate_key!
+      key = OpenSSL::PKey::EC.generate(curve)
 
       key.private_key.to_s(16).downcase
     end
@@ -173,10 +172,22 @@ module Fabric
     end
 
     def pkey_from_public_key(public_key)
-      pkey = OpenSSL::PKey::EC.new curve
-      pkey.public_key = OpenSSL::PKey::EC::Point.new(pkey.group, OpenSSL::BN.new(public_key, 16))
+      group = OpenSSL::PKey::EC::Group.new(curve)
 
-      pkey
+      public_key_bn    = OpenSSL::BN.new(public_key, 16)
+      public_key_point = OpenSSL::PKey::EC::Point.new(group, public_key_bn)
+
+      asn1 = OpenSSL::ASN1::Sequence.new(
+        [
+          OpenSSL::ASN1::Sequence.new([
+            OpenSSL::ASN1::ObjectId.new('id-ecPublicKey'),
+            OpenSSL::ASN1::ObjectId.new(group.curve_name)
+          ]),
+          OpenSSL::ASN1::BitString.new(public_key_point.to_octet_string(:uncompressed))
+        ]
+      )
+
+      OpenSSL::PKey::EC.new(asn1.to_der)
     end
 
     private
