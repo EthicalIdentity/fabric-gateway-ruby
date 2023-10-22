@@ -252,6 +252,7 @@ RSpec.describe Fabric::ECCryptoSuite do
     end
 
     it 'creates a matching public key' do
+      skip('Test unsupported on ruby 2.x') if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.0.0')
       private_pkey = OpenSSL::PKey::EC.generate(crypto_suite.curve)
       public_pem = private_pkey.public_to_pem
 
