@@ -134,6 +134,8 @@ module Fabric
 
     # when https://github.com/ruby/openssl/pull/555 gets merged, consider refactoring
     # the code here
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/MethodLength
     def pkey_from_private_key(private_key)
       public_key = restore_public_key private_key
 
@@ -154,6 +156,8 @@ module Fabric
 
       OpenSSL::PKey::EC.new(asn1.to_der)
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/MethodLength
 
     def pem_from_private_key(private_key)
       pkey = pkey_from_private_key(private_key)
@@ -171,6 +175,7 @@ module Fabric
       cert.public_key.public_key.to_bn.to_s(16).downcase
     end
 
+    # rubocop:disable Metrics/MethodLength
     def pkey_from_public_key(public_key)
       group = OpenSSL::PKey::EC::Group.new(curve)
 
@@ -180,15 +185,16 @@ module Fabric
       asn1 = OpenSSL::ASN1::Sequence.new(
         [
           OpenSSL::ASN1::Sequence.new([
-            OpenSSL::ASN1::ObjectId.new('id-ecPublicKey'),
-            OpenSSL::ASN1::ObjectId.new(group.curve_name)
-          ]),
+                                        OpenSSL::ASN1::ObjectId.new('id-ecPublicKey'),
+                                        OpenSSL::ASN1::ObjectId.new(group.curve_name)
+                                      ]),
           OpenSSL::ASN1::BitString.new(public_key_point.to_octet_string(:uncompressed))
         ]
       )
 
       OpenSSL::PKey::EC.new(asn1.to_der)
     end
+    # rubocop:enable Metrics/MethodLength
 
     private
 

@@ -20,4 +20,6 @@ AllCops:
     - 'lib/orderer/*'
     - 'lib/peer/*'
 
-
+RSpec/SpecFilePathFormat:
+  Exclude:
+    - spec/fabric/entities/*

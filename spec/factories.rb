@@ -30,8 +30,8 @@ FactoryBot.define do
 
   factory :gateway, class: 'Fabric::Gateway' do
     transient do
-      signer { build(:identity) }
-      client { build(:simple_client) }
+      signer { association :identity }
+      client { association :simple_client }
     end
 
     initialize_with { Fabric::Gateway.new(signer, client) }
@@ -39,7 +39,7 @@ FactoryBot.define do
 
   factory :network, class: 'Fabric::Network' do
     transient do
-      gateway { build(:gateway) }
+      gateway { association :gateway }
       name { 'testnet' }
     end
 
@@ -48,7 +48,7 @@ FactoryBot.define do
 
   factory :contract, class: 'Fabric::Contract' do
     transient do
-      network { build(:network) }
+      network { association :network }
       chaincode_name { 'testchaincode' }
       contract_name { 'testcontract' }
     end
@@ -58,7 +58,7 @@ FactoryBot.define do
 
   factory :proposed_transaction, class: 'Fabric::ProposedTransaction' do
     transient do
-      contract { build(:contract) }
+      contract { association :contract }
       transaction_name { 'testtransaction' }
       arguments { [] }
       transient_data { {} }
