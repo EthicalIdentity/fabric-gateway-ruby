@@ -10,7 +10,6 @@ gem 'rspec', '~> 3.0'
 
 gem 'factory_bot', '~> 6.3.0'
 gem 'grpc-tools', '~> 1.59.0'
-gem 'rake-notes', '~> 0.2.0'
 gem 'rubocop', '~> 1.57', '>= 1.57.1'
 gem 'rubocop-rspec', '~> 2.24.1'
 gem 'simplecov', '~> 0.22.0'
