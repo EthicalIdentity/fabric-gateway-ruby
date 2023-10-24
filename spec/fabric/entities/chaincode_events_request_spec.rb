@@ -269,7 +269,7 @@ RSpec.describe Fabric::ChaincodeEventsRequest do # rubocop:disable RSpec/FilePat
 
         expect(contract.client).to have_received(:chaincode_events)
           .with(chaincode_events_request.signed_request, {}) do |&block|
-          expect(block).to be(nil)
+          expect(block).to be_nil
         end
       end
     end

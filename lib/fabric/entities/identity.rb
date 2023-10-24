@@ -42,7 +42,7 @@ module Fabric
     # @return [boolean] true if valid, false otherwise
     #
     def validate_key_integrity
-      cert_pubkey = @crypto_suite.pkey_from_x509_certificate(certificate)
+      cert_pubkey = @crypto_suite.public_key_from_x509_certificate(certificate)
       priv_pubkey = @crypto_suite.restore_public_key(@private_key)
 
       @public_key == cert_pubkey && @public_key == priv_pubkey

@@ -176,8 +176,8 @@ RSpec.describe Fabric::Contract do
   end
 
   describe '#submit' do
-    let(:proposal_double) { instance_double('Proposal') }
-    let(:transaction_double) { instance_double('Transaction') }
+    let(:proposal_double) { instance_double(Fabric::Proposal) }
+    let(:transaction_double) { instance_double(Fabric::Transaction) }
 
     before do
       allow(transaction_double).to receive(:result).and_return('mocked result')
@@ -229,8 +229,8 @@ RSpec.describe Fabric::Contract do
   end
 
   describe '#submit_transaction' do
-    let(:proposal_double) { instance_double('Proposal') }
-    let(:transaction_double) { instance_double('Transaction') }
+    let(:proposal_double) { instance_double(Fabric::Proposal) }
+    let(:transaction_double) { instance_double(Fabric::Transaction) }
 
     before do
       allow(transaction_double).to receive(:result).and_return('mocked result')

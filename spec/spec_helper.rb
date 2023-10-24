@@ -8,8 +8,8 @@ if ENV['CI'] == 'true'
   require 'simplecov'
   SimpleCov.start
 
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  require 'simplecov-cobertura'
+  SimpleCov.formatter = SimpleCov::Formatter::CoberturaFormatter
 end
 
 require 'fabric'
