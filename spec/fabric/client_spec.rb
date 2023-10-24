@@ -33,11 +33,7 @@ RSpec.describe Fabric::Client do
 
     context 'when passing invalid client_opts' do
       let(:expected_message) do
-        if RUBY_VERSION.start_with?('2.6')
-          'unknown keyword: bad_arg'
-        else
-          'unknown keyword: :bad_arg'
-        end
+        'unknown keyword: :bad_arg'
       end
 
       it 'raises an error' do
@@ -57,11 +53,7 @@ RSpec.describe Fabric::Client do
 
     context 'when grpc_client host and creds are passed' do
       let(:expected_args) do
-        if RUBY_VERSION.start_with?('2')
-          ['localhost:1234', :this_channel_is_insecure, {}]
-        else
-          ['localhost:1234', :this_channel_is_insecure]
-        end
+        ['localhost:1234', :this_channel_is_insecure]
       end
 
       before do
